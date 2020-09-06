@@ -1,3 +1,4 @@
 /RotarApp_VENV/*
 /.vscode/*
 /venv/*
+/RotarApp/static*
