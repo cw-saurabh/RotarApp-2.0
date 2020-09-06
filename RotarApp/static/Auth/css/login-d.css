@@ -1,0 +1,122 @@
+@media screen and (min-width: 1000px) {
+  .authSection {
+    margin-top: 1vw;
+    text-align: justify;
+    text-justify: inter-word;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2vw 10vw 2vw 10vw;
+  }
+  .authSection .heading {
+    padding-left: 2vw;
+    color: #D41367;
+    font-size: 2vw;
+  }
+  .authSection input, .authSection button {
+    width: 80%;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    margin-top: 2vw;
+    height: 2.6vw;
+    outline: none;
+    color: #337ab7;
+  }
+  .authSection button {
+    color: white;
+  }
+  .authSection input[type=text], .authSection input[type=Password] {
+    border: none;
+    border-radius: 4px;
+    color: #337ab7;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    box-shadow: 2px 2px 2px #555;
+    outline: none;
+  }
+  .authSection input[type=text]:hover, .authSection input[type=text]:focus, .authSection input[type=Password]:hover, .authSection input[type=Password]:focus {
+    border: 2px solid #337ab7;
+    border-radius: 4px;
+    outline: none;
+    color: #337ab7;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    box-shadow: none;
+  }
+  .authSection .error p {
+    width: 80%;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+    height: 2.6vw;
+    color: black;
+    font-size: 1vw;
+    font-weight: bold;
+  }
+  .authSection .error input[type=text]:hover, .authSection .error input[type=text]:focus, .authSection .error input[type=Password]:hover, .authSection .error input[type=Password]:focus, .authSection .error input[type=text], .authSection .error input[type=Password] {
+    color: red;
+    border: solid red;
+    box-shadow: none;
+  }
+  .authSection .error ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: red;
+    opacity: 1;
+    /* Firefox */
+  }
+  .authSection .error :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: red;
+  }
+  .authSection .error ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: red;
+  }
+  .authSection ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #337ab7;
+    opacity: 1;
+    /* Firefox */
+  }
+  .authSection :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #337ab7;
+  }
+  .authSection ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #337ab7;
+  }
+  .authSection #formText {
+    width: 80%;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    color: #337ab7;
+  }
+  .authSection input[type=submit] {
+    color: white;
+  }
+  #loginImage1 {
+    float: none;
+    display: block;
+    height: 7vw;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #loginButton1 {
+    background-color: #337ab7;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-top: 3vw;
+    height: 3.5vw;
+    border: 2px solid #337ab7;
+    width: 80%;
+    box-shadow: 3px 3px 2px #555;
+  }
+}

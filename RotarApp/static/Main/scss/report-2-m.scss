@@ -1,0 +1,487 @@
+@import 'Main/scss/globals';
+
+@media screen and (max-width: 1000px) {
+
+//pagination
+
+#tabs {
+    overflow: hidden;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0vw;
+    z-index:999;
+    background-color: $bgcolor;
+    overflow: hidden;
+    padding:0;
+    margin:0;
+    width:100%;
+    // border-bottom:solid $pinkcolor;
+    // border-top:solid $pinkcolor;
+}
+
+#tabs .row {
+    height:10vw;
+    line-height:10vw;
+}
+
+.tablinks {
+    color: $pinkcolor;
+    font-size:$m-small;
+}
+
+.tablinks.active {
+    font-weight: bolder;
+    font-size:$m-extraMedium;
+}
+
+.tabcontent {
+    display: none;
+    padding-left:5%;
+    padding-right:5%;
+}
+
+.tabcontent.active {
+    display:block;
+}
+
+//Heading Section
+
+#reportHeading1 {
+    color: $pinkcolor;
+    font-size: $m-extraMedium;
+}
+
+#reportImage1 {
+    height: auto;
+    width: 30vw;
+}
+
+#reportHeading2 {
+    color: $textcolor1;
+    font-size: $m-medium;
+}
+
+//Form
+
+#reportForm {
+
+    #errorMessages {
+        color : red;
+        font-weight : bold;
+        font-size : $m-small;
+
+        p {
+            margin-top: 4vw;
+            margin-bottom: 0vw;
+        }
+    }
+
+    .heading {
+        width: 100%;
+        background-color: $textcolor1;
+        border-radius: 4px;
+        height: 9vw;
+        line-height: 9vw;
+        border:solid black;
+        border: 2px solid $textcolor1;
+        box-shadow: 3px 3px 2px #555;
+        padding-left: 1vw;
+        font-size:$m-small;
+        font-weight: bold;
+        color: white;
+        margin:0;
+    }
+
+    .container-fluid {
+        padding:8vw;
+    }
+
+    .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-8, .col-lg-9, .col-lg-12 {
+
+        input,button {
+            margin-top:5vw;
+            margin-bottom:5vw;
+            width:100%;
+            height:7vw;
+        }
+        button {
+            width:100%;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+            border : solid $pinkcolor;
+            background-color: $pinkcolor;
+            box-shadow: 2px 2px 2px #555;
+            margin:1vw 0vw 1vw 0vw;
+        }
+        select {
+            margin-top:5vw;
+            margin-bottom:5vw;
+            height: 7vw;
+            width:100%;
+            border: 1px solid lightgrey;
+            border-radius: 4px;
+            color: $textcolor1;
+            background-color: $bgcolor;
+            padding-left:1vw;
+            padding-right:1vw;
+            box-shadow: 2px 2px 2px #555;    
+        }
+        
+        select.empty {
+            outline : none;
+            box-shadow: none;
+            border: 2px solid red;
+            color : red;
+            font-weight: bold;
+        }
+
+        select.empty:hover, select.empty:focus, select.empty:after {
+            outline : none;
+            box-shadow: none;
+            border: 1px solid red;
+            color : red;
+            font-weight: bold;
+        }
+    }
+    
+    .label {
+        color : $textcolor1;
+        font-size: $m-small;    ;
+        font-weight: bold;
+        margin-top: 10vw;
+        margin-bottom: 10vw;
+        padding:0;
+    }
+    
+    hr {
+        width:90%;
+        margin:10vw auto 10vw auto;
+    }
+    
+    .m-subHeading {
+        color: $pinkcolor;
+        font-weight: bold;
+        font-size: $m-medium;
+    }
+    
+    input[type=text], input[type=date], input[type=month],  input[type=password], input[type=number], input[type=url], textarea {
+        height : 7vw;
+        width:100%;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        color: $textcolor1;
+        background-color: $bgcolor;
+        padding-left:3vw;
+        padding-right:1vw;
+        box-shadow: 2px 2px 2px #555;
+        
+    }
+    
+    input[type=text]:hover, input[type=date]:hover, input[type=month]:hover,  input[type=password]:hover, input[type=number]:hover, input[type=url]:hover, textarea:hover, input[type=text]:focus, input[type=date]:focus, input[type=month]:focus,  input[type=password]:focus, input[type=number]:focus, input[type=url]:focus, textarea:focus {
+        border: 2px solid $textcolor1;
+        border-radius: 4px;
+        outline: none;
+        color: $textcolor1;
+        background-color: $bgcolor;
+        padding-left:3vw;
+        padding-right:1vw;
+        box-shadow: none;
+    }
+    
+    .addRow {
+        height: 7vw;
+        width: 100%;
+        margin:1vw 0 1vw 0 ;
+        color: white;
+        font-weight: bold;
+        border-radius: 4px;
+        border : solid $pinkcolor;
+        background-color: $pinkcolor;
+        box-shadow: 2px 2px 2px #555;
+    }
+    
+    #member1Del:disabled,#gbm1Del:disabled,#bod1Del:disabled,#futureEvent1Del:disabled,#event1Del:disabled {
+        // display: none;
+        background-color: #555;
+        border: 2px solid #555;
+
+    }
+    
+    .m-memberMatrix {
+        
+        line-height:7vw;
+        margin-top:3vw;
+        
+        input[type=number]:focus, input[type=number]:hover, input[type=number], input {
+            font-size: $m-small;
+            padding-left:2vw;
+            font-weight: bold;
+            width:7vw;
+        }
+    }
+    
+    
+    textarea {
+        width:100%;
+        height:20vw;
+    }
+    
+    
+    button:focus {
+        outline:none; 
+    }
+    
+    #reportButton00,#reportButton01,#reportButton02,#reportButton10,#reportButton11,#reportButton12,#reportButton20,#reportButton21,#reportButton22 {
+        background-color: $textcolor1;
+        color:white;
+        font-weight: bold;
+        border: 2px solid $textcolor1;
+        border-radius: 4px;
+        height : 11vw;
+        width:100%;
+        box-shadow: 3px 3px 2px #555;
+        font-size: $m-small;
+    }
+
+    #reportButtons {
+        padding:0;
+        margin:0;
+        width:100%;
+        padding-bottom:20vw;
+    }
+
+    #reportButton00:disabled, #reportButton01:disabled, #reportButton02:disabled,#reportButton10:disabled, #reportButton11:disabled, #reportButton12:disabled#reportButton20:disabled, #reportButton21:disabled, #reportButton22:disabled{
+        background-color: #555;
+        border: 2px solid #555;
+    }
+
+    #reportButton00:focus, #reportButton01:focus, #reportButton02:focus,#reportButton10:focus, #reportButton11:focus, #reportButton12:focus, #reportButton20:focus, #reportButton21:focus, #reportButton22:focus{
+        outline: none;
+    }
+
+    input.empty{
+        outline : none;
+        box-shadow: none;
+        border: 1px solid red;
+        color : red;    
+    }
+
+    input[type=text].empty:hover, input[type=date].empty:hover, input[type=month].empty:hover,  input[type=password].empty:hover, input[type=number].empty:hover, input[type=url].empty:hover, textarea.empty:hover, input[type=text].empty:focus, input[type=date].empty:focus, input[type=month].empty:focus,  input[type=password].empty:focus, input[type=number].empty:focus, input[type=url].empty:focus, textarea.empty:focus {
+        outline : none;
+        box-shadow: none;
+        border: 2px solid red;
+        color : red;
+        font-weight: bold;
+    }
+
+    input[type=text]:read-only, input[type=month]:read-only,input[type=number]:read-only {
+        background-color: #f1f1f1f1;
+    }
+    
+}
+
+.container-fluid{
+    border: 2px solid $textcolor1;
+    border-radius: 10px;
+    outline: none;
+    color: $textcolor1;
+}
+
+
+#reportFormView {
+    .heading {
+        width: 100%;
+        background-color: $textcolor1;
+        border-radius: 4px;
+        height: 9vw;
+        line-height: 9vw;
+        border:solid black;
+        border: 2px solid $textcolor1;
+        box-shadow: 3px 3px 2px #555;
+        padding-left: 1vw;
+        font-size:$m-small;
+        font-weight: bold;
+        color: white;
+        margin:0;
+    }
+
+    .container-fluid {
+        padding:8vw;
+    }
+
+    .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-8, .col-lg-9, .col-lg-12 {
+
+        input,button {
+            margin-top:5vw;
+            margin-bottom:5vw;
+            width:100%;
+            height:7vw;
+        }
+    }
+    
+    .label {
+        color : $textcolor1;
+        font-size: $m-small;    ;
+        font-weight: bold;
+        margin-top: 10vw;
+        margin-bottom: 10vw;
+        padding:0;
+    }
+    
+    hr {
+        width:90%;
+        margin:10vw auto 10vw auto;
+    }
+    
+    .m-subHeading {
+        color: $pinkcolor;
+        font-weight: bold;
+        font-size: $m-medium;
+    }
+    
+    input[type=text], input[type=date], input[type=month],  input[type=password], input[type=number], input[type=url], textarea {
+        height : 7vw;
+        width:100%;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        color: $textcolor1;
+        background-color: $bgcolor;
+        padding-left:3vw;
+        padding-right:1vw;
+        box-shadow: 2px 2px 2px #555;
+        
+    }
+
+    input[type=text]:hover, input[type=date]:hover, input[type=month]:hover,  input[type=password]:hover, input[type=number]:hover, input[type=url]:hover, textarea:hover, input[type=text]:focus, input[type=date]:focus, input[type=month]:focus,  input[type=password]:focus, input[type=number]:focus, input[type=url]:focus, textarea:focus {
+        border: 2px solid $textcolor1;
+        border-radius: 4px;
+        outline: none;
+        color: $textcolor1;
+        background-color: $bgcolor;
+        padding-left:3vw;
+        padding-right:1vw;
+        box-shadow: none;
+    }
+    
+    .m-memberMatrix {
+        
+        line-height:7vw;
+        margin-top:3vw;
+        
+        input[type=number]:focus, input[type=number]:hover, input[type=number], input {
+            font-size: $m-small;
+            padding-left:2vw;
+            font-weight: bold;
+            width:7vw;
+        }
+    }
+    
+    
+    textarea {
+        width:100%;
+        height:20vw;
+    }
+    
+}
+
+#listSection {
+    #reportHeading1 {
+        color: $pinkcolor;
+        font-size: $m-extraMedium;
+    }
+
+    #reportImage1 {
+        height: auto;
+        width: 30vw;
+    }
+
+    #reportHeading2 {
+        color: $textcolor1;
+        font-size: $m-medium;
+    }
+
+    #clublogo {
+        display: none;
+    }
+
+    .row {
+        text-align: center;
+        margin-top:10vw;
+    }
+
+    #member, #member1 {
+        height: 7vw;
+        width: 90%;
+        margin:3vw 0 3vw 0 ;
+        color: white;
+        font-weight: bold;
+        border-radius: 4px;
+        border : solid $pinkcolor;
+        background-color: $pinkcolor;
+        box-shadow: 2px 2px 2px #555; 
+    }
+
+    #member1 {
+        margin:0 0 2vw 0 ;
+    }
+
+}
+
+
+
+.blueButton {
+    background-color: $textcolor1;
+    color:white;
+    font-weight: bold;
+    border: 2px solid $textcolor1;
+    border-radius: 4px;
+    height : 11vw;
+    width:100%;
+    box-shadow: 3px 3px 2px #555;
+    font-size: $m-small;
+}
+ 
+
+
+.collapsible {
+    cursor: pointer;
+    border: none;
+    text-align: left;
+    outline: none;
+    width: 98%;
+    background-color: $textcolor1;
+    border-radius: 4px;
+    height: 9vw;
+    border: 2px solid $textcolor1;
+    box-shadow: 3px 3px 2px #555;
+    padding: 1vw;
+    font-size:$m-small;
+    font-weight: bold;
+    color: white;
+  }
+  
+.collapsible:after {
+content: '\002B';
+color: white;
+font-weight: bold;
+float: right;
+margin-left: 5px;
+margin-right: 1vw;
+
+}
+
+.active2:after {
+content: "\2212";
+}
+
+.collapsedContent {
+width:98%;
+margin-top:5vw;
+padding: 0 18px;
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.2s ease-out;
+background-color: #f1f1f1;
+}
+}

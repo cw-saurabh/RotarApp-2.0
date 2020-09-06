@@ -1,0 +1,130 @@
+@media screen and (max-width: 1000px) {
+  .authSection {
+    margin-top: 5vw;
+    margin-top: 10vw;
+    text-align: justify;
+    text-justify: inter-word;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+  }
+  .authSection .heading {
+    color: #D41367;
+    font-size: 4vw;
+  }
+  .authSection input[type=text], .authSection input[type=Password] {
+    border: none;
+    border-radius: 4px;
+    color: #337ab7;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    box-shadow: 2px 2px 2px #555;
+  }
+  .authSection input[type=text]:hover, .authSection input[type=text]:focus {
+    border: 2px solid #337ab7;
+    border-radius: 4px;
+    outline: none;
+    color: #337ab7;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    box-shadow: none;
+  }
+  .authSection input[type=Password]:hover, .authSection input[type=Password]:focus {
+    border: 2px solid #337ab7;
+    border-radius: 4px;
+    outline: none;
+    color: #337ab7;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    box-shadow: none;
+  }
+  .authSection ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #337ab7;
+    opacity: 1;
+    /* Firefox */
+  }
+  .authSection :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #337ab7;
+  }
+  .authSection ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #337ab7;
+  }
+  .authSection .error p {
+    width: 80%;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+    height: 2.6vw;
+    color: black;
+    font-size: 3vw;
+    font-weight: bold;
+  }
+  .authSection .error input[type=text]:hover, .authSection .error input[type=text]:focus, .authSection .error input[type=Password]:hover, .authSection .error input[type=Password]:focus, .authSection .error input[type=text], .authSection .error input[type=Password] {
+    color: red;
+    border: solid red;
+    box-shadow: none;
+  }
+  .authSection .error ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: red;
+    opacity: 1;
+    /* Firefox */
+  }
+  .authSection .error :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: red;
+  }
+  .authSection .error ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: red;
+  }
+  .authSection #formText {
+    width: 80%;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    color: #337ab7;
+  }
+  .authSection input, .authSection button {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5vw;
+    height: 10vw;
+    font-size: 3vw;
+  }
+  .authSection button {
+    color: white;
+  }
+  #loginImage1 {
+    float: none;
+    display: block;
+    height: 18vw;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5vw;
+  }
+  #loginButton1 {
+    background-color: #337ab7;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #337ab7;
+    border-radius: 4px;
+    margin-top: 11vw;
+    margin-bottom: 11vw;
+    height: 11vw;
+    box-shadow: 3px 3px 2px #555;
+    font-size: 3vw;
+  }
+}

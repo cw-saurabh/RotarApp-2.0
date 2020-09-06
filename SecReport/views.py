@@ -16,17 +16,17 @@ from django.core.mail import EmailMessage
 from .decorators import is_Club, has_Access
 
 def migrate_data(request):
-    pass    
-    # p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Members added")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Members left")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Prospective")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
-    # p.save()
+
+    p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Members added")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Members left")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Prospective")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
+    p.save()
 
     p = FeedbackQuestion(questionText="Whether you have received acknowledgement from the District Reporting Secretary ?")
     p.save()
@@ -36,7 +36,7 @@ def migrate_data(request):
     p.save()
     p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
     p.save()
-    
+
     return redirect('login')
 
 reportingMonth = str((datetime.now().month)-1) if ((datetime.now().month)-1)>9 else "0"+str((datetime.now().month)-1)
@@ -75,13 +75,13 @@ def get_report(request,reportId,club):
     eventMappings = ReportEventMapping.objects.filter(report=reportId).filter( event__eventType = "1").all().order_by('event__eventStartDate')
     for eventMapping in eventMappings :
         eventData[eventMapping.event.eventId]=model_to_dict(eventMapping.event)
-    data['EventData'] = eventData    
+    data['EventData'] = eventData
 
     # Bulletin
     bulletinMapping = ReportBulletinMapping.objects.filter(report=report).first()
     bulletin = model_to_dict(bulletinMapping.bulletin)
     data['Bulletin'] = bulletin
-    
+
     # Future Event
     feventData = {}
     feventMappings = ReportEventMapping.objects.filter(report=reportId).filter( event__eventType = "2").all().order_by('event__eventStartDate')
@@ -89,7 +89,7 @@ def get_report(request,reportId,club):
         feventData[feventMapping.event.eventId]=model_to_dict(feventMapping.event)
     data['FEventData'] = feventData
 
-    # Feedback 
+    # Feedback
     feedback = Feedback.objects.filter(reportId=reportId).values('feedbackQuestion__questionText','feedbackQuestion__id','booleanResponse')
     data['Questions'] = feedback
 
@@ -114,7 +114,7 @@ def present_report(request):
             try :
                 with transaction.atomic() :
                     newReport = Report(reportId=reportId, reportingMonth=reportingMonth, reportingClub=club, status = 0)
-                    newReport.save() 
+                    newReport.save()
 
                     newBulletin = Bulletin(bulletinId=reportId+'-B',hostClub = club)
                     newBulletin.save()
@@ -125,7 +125,7 @@ def present_report(request):
                     for attribute in attributes :
                         newMatrixRow = MemberMatrix(reportId = newReport, attribute=attribute)
                         newMatrixRow.save()
-                    
+
                     questions = FeedbackQuestion.objects.all()
                     for question in questions :
                         newFeedback = Feedback(reportId = newReport, feedbackQuestion=question)
@@ -136,27 +136,27 @@ def present_report(request):
                     Report.objects.filter(reportId=reportId).update(duesPaidAlready=duesPaidAlreadyVar)
 
 
-                    
+
             except :
                 return redirect('presentReport')
-            
+
             data = get_report(request,reportId,club)
-            return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})            
+            return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
     else :
         return render(request, 'SecReport/deadlineMissed.html',{'Title':'Reporting','Tab':'Reporting'})
 
 def upload_report(request, data, deletedData, status) :
-    
+
     #Essentials
     club = Club.objects.filter(login=request.user).first()
     reportId = str(club.rotaryId)+"-"+str(reportingMonth)+"-"+str(year)
-    
+
     #Populate Dictionaries
     reportData = dict()
     for key in data.keys() :
         if not (type(data.get(key)) == dict) :
             reportData[key]=data.get(key)
-    
+
     gbmsData = data['gbm'] if 'gbm' in data.keys() else None
     gbmsDeletedData = deletedData['gbm'] if 'gbm' in data.keys() else None
 
@@ -174,7 +174,7 @@ def upload_report(request, data, deletedData, status) :
     bulletinData = data['bulletin'] if 'bulletin' in data.keys() else None
 
     matrixData = data['matrix'] if 'matrix' in data.keys() else None
-    
+
     incomingReport = Report.objects.filter(reportId=reportId)
 
     if incomingReport.exists() :
@@ -186,7 +186,7 @@ def upload_report(request, data, deletedData, status) :
         #Update meetings
         if gbmsData :
             for gbm in gbmsData.keys() :
-                
+
                 incomingGBM = Meeting.objects.filter(meetingId=gbm)
 
                 if incomingGBM.exists():
@@ -201,7 +201,7 @@ def upload_report(request, data, deletedData, status) :
                         newGBM.save()
                         newMap = ReportMeetingMapping(meeting = newGBM, report = incomingReport.first())
                         newMap.save()
-                
+
         if gbmsDeletedData :
             for gbm in gbmsDeletedData:
                 if Meeting.objects.filter(meetingId=gbm).exists() :
@@ -224,7 +224,7 @@ def upload_report(request, data, deletedData, status) :
                         newBOD.save()
                         newMap = ReportMeetingMapping(meeting = newBOD, report = incomingReport.first())
                         newMap.save()
-            
+
         if bodsDeletedData :
             for bod in bodsDeletedData:
                 if Meeting.objects.filter(meetingId=bod).exists() :
@@ -247,7 +247,7 @@ def upload_report(request, data, deletedData, status) :
                         newEvent.save()
                         newMap = ReportEventMapping(event = newEvent, report = incomingReport.first())
                         newMap.save()
-                
+
         if eventsDeletedData :
             for event in eventsDeletedData:
                 if Event.objects.filter(eventId=event).exists() :
@@ -270,7 +270,7 @@ def upload_report(request, data, deletedData, status) :
                         newFEvent.save()
                         newMap = ReportEventMapping(event = newFEvent, report = incomingReport.first())
                         newMap.save()
-            
+
         if feventsDeletedData :
             for fevent in feventsDeletedData:
                 if Event.objects.filter(eventId=fevent).exists() :
@@ -281,13 +281,13 @@ def upload_report(request, data, deletedData, status) :
             for feedback in feedbackData :
                 feedbackInstance = FeedbackQuestion.objects.get(id=feedback)
                 incomingFeedback = Feedback.objects.filter(reportId=incomingReport.first(),feedbackQuestion=feedbackInstance)
-                
+
                 if incomingFeedback.exists():
                     print("Feedback exists")
                     incomingFeedback.update(**feedbackData[feedback])
                 else :
                     raise Exception("Feedback object not found")
-        
+
         if bulletinData :
             print(bulletinData)
             for bulletin in bulletinData :
@@ -301,20 +301,20 @@ def upload_report(request, data, deletedData, status) :
                     raise Exception("Bulletin object not found")
 
         if matrixData :
-            print(matrixData)       
+            print(matrixData)
             for attribute in matrixData :
                 rowAttribute = MemberMatrixAttribute.objects.get(id=attribute)
                 incomingRow = MemberMatrix.objects.filter(reportId=incomingReport.first(),attribute=rowAttribute)
-                
+
                 if incomingRow.exists():
                     print("Matrix Row exists")
                     incomingRow.update(**matrixData[attribute])
                 else :
                     raise Exception("Member Matrix object not found")
-        
+
     else :
         raise Exception("Report Object Not Found")
-        
+
 def save_report(request) :
 
     data = json.loads(request.POST.get('data'))
@@ -325,7 +325,7 @@ def save_report(request) :
         data = {
             'success': True
         }
-    except Exception as Error : 
+    except Exception as Error :
         print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
@@ -383,7 +383,7 @@ def email_report(request,reportId):
     Month = Report1.reportingMonth
 
     wb = xlwt.Workbook(encoding='utf-8')
-    
+
     #Reports
     ws = wb.add_sheet('Reports')
     row_num = 0
@@ -434,7 +434,7 @@ def email_report(request,reportId):
         for row in rows :
             for col_num in range(5):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
+
     #Events
     ws = wb.add_sheet('Events')
     row_num = 0
@@ -451,7 +451,7 @@ def email_report(request,reportId):
         for row in rows :
             for col_num in range(9):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
+
     #Future Events
     ws = wb.add_sheet('Future Events')
     row_num = 0
@@ -468,7 +468,7 @@ def email_report(request,reportId):
         for row in rows :
             for col_num in range(5):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
+
     #Feedback
     ws = wb.add_sheet('Feedback')
     row_num = 0
@@ -515,21 +515,21 @@ def email_report(request,reportId):
         for row in rows :
             for col_num in range(6):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
-    
-    f = BytesIO() # create a file-like object 
+
+
+    f = BytesIO() # create a file-like object
     wb.save(f)
     subject = 'Secretarial Report Received'
     message = 'We have received your report for the previous month. Attaching it herewith.<br><br>For any queries, Contact - <br><br>Rtr. Prasad Seth (District Secretary - Reporting)<br>Call : +91 - 9623134392<br>Whatsapp : +91 - 9623134392<br>Mail Id: rtrprasadseth@gmail.com'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = ['rtrprasadseth@gmail.com']
     # send_mail( subject, message, email_from, recipient_list )
-    
-    
+
+
     message = EmailMessage(subject=subject, body=message,
-        from_email=email_from, 
+        from_email=email_from,
         to=recipient_list)
-    message.content_subtype = "html"  
+    message.content_subtype = "html"
     filename=str(Club)+"-"+str(Month)+".xls"
     message.attach(filename, f.getvalue(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") #get the stream and set the correct mimetype
     message.send()
@@ -597,7 +597,7 @@ def export_report(request,reportId):
         for row in rows :
             for col_num in range(5):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
+
     #Events
     ws = wb.add_sheet('Events')
     row_num = 0
@@ -614,7 +614,7 @@ def export_report(request,reportId):
         for row in rows :
             for col_num in range(9):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
+
     #Future Events
     ws = wb.add_sheet('Future Events')
     row_num = 0
@@ -631,7 +631,7 @@ def export_report(request,reportId):
         for row in rows :
             for col_num in range(5):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
+
     #Feedback
     ws = wb.add_sheet('Feedback')
     row_num = 0
@@ -678,7 +678,7 @@ def export_report(request,reportId):
         for row in rows :
             for col_num in range(6):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
-    
+
 
     wb.save(response)
     return response

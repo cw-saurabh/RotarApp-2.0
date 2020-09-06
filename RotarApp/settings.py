@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'h5l%fev*eb22%3!2wf0e^&57-c^ke5c__5ea8kj-phdabqs)4p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','ss0506.pythonanywhere.com','www.rotaractdistrict3131.org']
 
@@ -97,9 +97,9 @@ if not (settings.DEBUG) :
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'ss0506$default',
+            'NAME': 'ss0506$prasad',
             'USER': 'ss0506',
-            'PASSWORD':'district@3131',
+            'PASSWORD':'babubhaiya',
             'HOST': 'ss0506.mysql.pythonanywhere-services.com',
             'PORT': '3306',
             'OPTIONS': {
@@ -161,7 +161,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = '/home/ss0506/RotarApp/static'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')

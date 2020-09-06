@@ -1,0 +1,79 @@
+#trial2 {
+  display: none;
+}
+
+/* Sass Testing */
+body, html {
+  width: 100%;
+  height: 100%;
+  background: #F8F9FA;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+p, div, h1, h2, h3, h4, h5, h6, a, span {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.blur {
+  filter: blur(15px);
+  z-index: 0;
+}
+
+@media screen and (min-width: 1000px) {
+  .mobile {
+    display: none;
+  }
+  .container {
+    width: 90vw;
+    margin: 0 auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    padding: 2em;
+    border-radius: 4px;
+  }
+  #mainWrapperContainer {
+    min-height: 39vw;
+    background: white;
+    box-shadow: -3px -3px 10px grey;
+  }
+  #homeSection1 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+  .homeText1 {
+    font-size: 5vw;
+    color: #D41367;
+  }
+  .homeText2 {
+    font-size: 2vw;
+    color: #337ab7;
+  }
+  .homeImage1 {
+    margin-left: 5vw;
+    width: 35vw;
+    height: auto;
+  }
+  .footer {
+    margin-top: 20vw;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #555555;
+    color: white;
+    text-align: center;
+    padding: 2vw;
+    z-index: 9999;
+  }
+}
