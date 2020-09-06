@@ -1,0 +1,94 @@
+<div class="heading">
+    <b>General Body Meeting</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div id="generalBodyMeetings">
+
+    </div>
+    <button type="button" class="addRow" onclick="appendGeneralBodyMeeting()">Add Row</button>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+     
+</div>
+<br>
+<div class="heading">
+    <b>BOD Meeting</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div id="boardOfDirectorsMeetings">
+        
+    </div>
+    <button type="button" class="addRow" onclick="appendBODMeeting()">Add Row</button>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+</div>
+<br>
+<div class="heading">
+    <b>Club Membership Details</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div class="text-center mobile m-subHeading">
+        Member-Matrix
+        <br>
+        <p style="font-size:2.2vw;color:#337ab7">{ 1 : Intial Count, 2 : Added this month, 3 : Left, 4 : Prospective, 5 : Guest, T : Total }<br>
+        <br>
+    </div>
+    <div class ="m-memberMatrix" id="memberMatrix">
+
+    </div>
+    <div class ="m-memberMatrix" id="memberMatrixTotal">
+
+    </div>
+    <hr>
+</div>
+<br>
+<div class="heading">
+    <b>Dues paid to District</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div class="row">
+        <div class="col-lg-6">
+            <p class="label" id="duesLabel01">Total number of members at the <br>beginning of this month (N)</p><br>
+            <input tab="Admin" type="text" id="totalNumberOfMembers" readonly>
+          </div>
+          <div class="col-lg-6">
+            <p class="label" id="duesLabel02">Number of members inducted <br>in this month (n)</p><br>
+            <input tab="Admin" type="text" id="totalNumberOfAddedMembers" readonly>
+          </div>
+          <div class="col-lg-6">
+          <p class="label">Dues paid upto the last month <br>@ INR 300
+            Per member (P)<b style="color:red"></b>
+            </p><br>
+          <input tab="Admin" type="text" id="paidAlready" readonly>
+          </div>
+          <div class="col-lg-6">
+            <p class="label" id="duesLabel03">District dues paid in this month<b style="color:red"> *</b><br>(p)</p><br>
+            <input tab="Admin" type="number" min=0 step=1 oninput="validity.valid||(value='');updateList(this.id,null,null);updatePending(this.value);" name="duesPaidInThisMonth" id="duesPaidInThisMonth">
+          </div>
+          <div class="col-lg-6">
+            <p class="label">The fees amount that the district<br>owes : (N + n) * 300</p><br>
+            <input tab="Admin" type="text" id="owed" readonly>
+          </div>
+          <div class="col-lg-6">
+            <p class="label">Pending dues<br>(N + n) * 300 - (P + p)</p>
+            <input tab="Admin" type="text" id="pending" readonly>
+          </div>
+    </div>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+</div> 
+
+<div class="container" id="reportButtons" style="padding-bottom:0">
+    <div class="row" style="width:100%;margin:0">
+        <div class="col-4">
+            <button type="button" id="reportButton00" onclick="openSection()" disabled>Previous</button>
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton01" onclick="save()">Save<span id="loader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton02" onclick="openSection('Avenue')">Next</button>
+        </div>
+    </div>
+</div>

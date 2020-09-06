@@ -1,0 +1,57 @@
+@import 'Main/scss/globals';
+
+@media screen and (max-width: 1000px) {
+
+
+.desktop {
+    display : none;
+}
+
+// Main wrapper container - Touch at your own risk
+
+.container {
+    width:85%;
+    margin: 0 auto;
+    margin-top:2em;
+    margin-bottom:6em;
+    padding-top:0;
+    padding:2em;
+}
+
+
+#mainWrapperContainer {
+    // border:solid black;
+    background-color:white;
+    box-shadow: 3px 3px 10px grey;
+}
+// HomePage - Touch at your own risk
+
+.homeText1 {
+    font-size: $m-extraLarge;
+    color: $pinkcolor;
+}
+
+.homeText2 {
+    font-size: $m-extraMedium;
+    color: $textcolor1;
+}
+
+.homeImage1 {
+    width: 70vw;
+    height:auto;
+}
+
+.footer {
+    font-size:$m-small;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    line-height:7vw;
+    background-color:#555555;
+    color: white;
+    text-align: center;
+    z-index: 9999;
+ }
+
+}

@@ -1,0 +1,243 @@
+{% extends "Main/base.html" %}
+    
+{% load static %}
+
+{% block javascript %}
+    
+    <script src="{% static 'Main/javascript/memberMatrix.js' %}"></script>
+    <script src="{% static 'Main/javascript/populateFields.js' %}"></script>
+    <script src="{% static 'Main/javascript/updateProgress.js' %}"></script>
+    <script src="{% static 'Main/javascript/validation.js' %}"></script>
+    <script src="{% static 'Main/javascript/main.js' %}"></script>
+
+    <script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active2");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+        content.style.maxHeight = null;
+        } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        } 
+    });
+    }
+
+    </script>
+
+    <script>
+    
+    function save() {
+        console.log("Saving initialised !");
+        console.log(data);
+        console.log(deletedData);
+        $('#errorMessages').html('');
+        $("#loader").show();
+        $.post( "{% url 'saveReport' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data),'deletedData':JSON.stringify(deletedData)}, function(response, status){
+            $("#loader").hide();
+            if(response['error'])
+            {
+                $('#errorMessages').html(response['error']);
+                console.log("Saving failed !");
+                console.log(data);
+                console.log(deletedData);
+            }
+            if(response['success'])
+            {
+                console.log("Saving successful !");
+                $("#successMessages").show().delay(5000).fadeOut();
+                data={'gbm':{},'bod':{},'event':{},'fevent':{},'feedback':{},'bulletin':{},'matrix':{}};
+                deletedData={'gbm':[],'bod':[],'event':[],'fevent':[]};
+                console.log(data);
+                console.log(deletedData);
+            }
+        });
+    }
+    
+    $(document).ready(function(){
+        updateProgress();
+        updateMonth("{{Report.ReportingMonth}}");
+        {% if Error %}
+            $('#errorMessages').html("<p>{{Error}}</p>");
+        {% endif %}
+        $("#dues04").val('{{Report.duesPaidInThisMonth}}');
+        $("#suggestion00").val('{{Report.suggestions}}');
+
+        {% for key, value in Report.GBMData.items %}
+            appendGeneralBodyMeeting("{{value.meetingId}}","{{value.meetingNo}}","{{value.meetingDate|date:"Y-m-d"}}","{{value.meetingAgenda}}","{{value.bylawsBoolean}}","{{value.budgetBoolean}}","{{value.meetingAttendance}}");
+        {% endfor %}
+        {% if not Report.GBMData %}
+            appendGeneralBodyMeeting();
+        {% endif %}
+        
+        {% for key, value in Report.BODData.items %}
+            appendBODMeeting("{{value.meetingId}}","{{value.meetingNo}}","{{value.meetingDate|date:"Y-m-d"}}","{{value.meetingAgenda}}","{{value.bylawsBoolean}}","{{value.budgetBoolean}}","{{value.meetingAttendance}}");
+        {% endfor %}
+        {% if not Report.BODData %}
+            appendBODMeeting();
+        {% endif %}
+        
+        {% for key, value in Report.EventData.items %}
+            appendEvent("{{value.eventId}}","{{value.eventName}}","{{value.eventStartDate|date:"Y-m-d"}}","{{value.eventEndDate|date:"Y-m-d"}}","{{value.eventAvenue}}","{{value.eventAttendance}}","{{value.eventHours}}","{{value.eventFundRaised}}","{{value.eventDescription}}","{{value.eventLink}}");
+        {% endfor %}
+        {% if not Report.EventData %}
+            appendEvent();
+        {% endif %}
+
+        {% for key, value in Report.FEventData.items %}
+            appendFEvent("{{value.eventId}}","{{value.eventName}}","{{value.eventStartDate|date:"Y-m-d"}}","{{value.eventEndDate|date:"Y-m-d"}}","{{value.eventAvenue}}","{{value.eventDescription}}");
+        {% endfor %}
+        {% if not Report.FEventData %}
+            appendFEvent();
+        {% endif %}
+
+        {% for Question in Report.Questions %}
+            appendFeedback("{{Question.feedbackQuestion__questionText}}","{{Question.feedbackQuestion__id}}","{{Question.booleanResponse}}");
+        {% endfor %}
+
+        {% if Report.Bulletin %}
+            appendBulletin("{{Report.Bulletin.bulletinId}}","{{Report.Bulletin.bulletinName}}","{{Report.Bulletin.bulletinType}}","{{Report.Bulletin.bulletinLink}}","{{Report.Bulletin.bulletinIssuedOn|date:"Y-m-d"}}","{{Report.Bulletin.lastBulletinIssuedOn|date:"Y-m-d"}}","{{Report.Bulletin.bulletinFrequency}}");
+        {% else %}
+            appendBulletin();
+        {% endif %}
+
+        {% for MemberMatrixRow in Report.MemberMatrix %}
+            appendMemberMatrixRow("{{MemberMatrixRow.attribute__id}}","{{MemberMatrixRow.attribute__attribute}}","{{MemberMatrixRow.attribute__operation}}","{{MemberMatrixRow.maleCount}}","{{MemberMatrixRow.femaleCount}}","{{MemberMatrixRow.othersCount}}");
+            updateMatrix();
+        {% endfor %}     
+        
+        {% if not Edit %}
+            $("input").attr("disabled", true);
+            $("select").attr("disabled", true);
+            $("textarea").attr("disabled", true);
+            $("button").not("#reportButton00,#reportButton02,#reportButton10,#reportButton12,#reportButton20,#reportButton22").attr("disabled", true).hide();
+            $(".addRow").hide();
+            $("#submitButton").html(`<button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'submitReport' %}'" style="float:right;width:100%">Submit</button>`);
+            $(".instructions").hide();
+        {% endif %}
+
+        updateTotalNumberOfMembers();
+        updateTotalNumberOfInductedMembers();
+        updateDuesAlreadyPaid("{{Report.DuesPaid}}");
+        updatePaid("{{Report.duesPaidInThisMonth|default:0}}");
+        updateOwedMoney();
+        updatePending();
+
+
+        
+    });
+    
+    </script>
+    <script>
+    function customSubmit() {
+        var flag = true;
+        var empty = [];
+        
+        $("input").each(function() {
+        var element = $(this);
+        element.removeClass("empty");
+        if (element.val() == "") {
+            flag = false;
+            element.addClass("empty");
+            if (empty.includes(element.attr('tab')));
+            else empty.push(element.attr('tab'));
+        }
+        });
+        $("select").each(function() {
+            var element = $(this);
+            element.removeClass("empty");
+            if (element.val() == null) {
+                flag = false;
+                element.addClass("empty");
+                if (empty.includes(element.attr('tab')));
+                else
+                empty.push(element.attr('tab'));
+            }
+            });
+        if(empty.length!=0) {
+            $("#errorMessages").html("<p>You may have missed some of the input fields, in the following tabs : "+empty.toString()+"</p>");
+            openSection(empty[0]);
+        }
+        if(flag)
+        {
+        location.href = "{% url 'finishReport' %}";
+        }
+    }
+    </script>
+
+{% endblock javascript %}
+
+
+{% block content %}
+
+<div id="reportForm">
+
+<div id="reportHeadingSection" class="text-center">
+    <h4 id="reportHeading1" onclick="AutoFill()"><b>Secretarial Reporting</b></h4>
+</div>
+
+<div class="container" id="tabs">
+    <br>
+    <div class="progress" style="margin:0;height:1vw">
+        <div class="progress-bar" id="bar"></div>
+    </div>
+    <div class="row" style="margin:0">
+        <div class="col-lg-4 col-xs-4 text-center">
+            <p class="tablinks active" id="AdminLink" onclick="openSection('Admin')">Admin</p>
+        </div>
+        <div class="col-lg-4 col-xs-4 text-center">
+            <p class="tablinks" id="AvenueLink" onclick="openSection('Avenue')">Avenue</p>
+        </div>
+        <div class="col-lg-4 col-xs-4 text-center">
+            <p class="tablinks" id="OthersLink" onclick="openSection('Others')">Others</p>
+        </div>
+    </div>
+    <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%">
+    {% if Edit %}
+    <div class="instructions" style="padding:2%;">
+        <h6><small style="color:red"><b>*&nbsp;&nbsp;:&nbsp;&nbsp;Numeric Fields,&nbsp;&nbsp;All fields are compulsory.</b></small></h6>
+    </div>
+    <div id="errorMessages" style="padding:0;margin:0">
+        
+    </div>
+    <div id="successMessages" style="padding-left:2%;margin:0;color:green;display:none">
+        <b>Saved changes !</b>
+    </div>
+    {% endif %}
+    <br>
+</div>
+
+<form action="" method="POST" id="theForm">
+{% csrf_token %}
+
+<div id="Admin" class="tabcontent active" style="padding-bottom:0">
+    
+<div class="row" style="margin:0">
+    <div class="col-lg-3">
+        <p class="label" id = "">Reporting for the month of :</p>
+    </div>
+    <br class="mobile"><br class="mobile">
+    <div class="col-lg-3" >
+        <input  oninput="updateMonth()" type="month" style="margin:0" id="month" name="month" readonly>
+    </div>
+</div>
+    <br><br>
+    {% include "SecReport/admin.html" %}
+</div>
+
+<div id="Avenue" class="tabcontent">
+    {% include "SecReport/avenue.html" %}
+</div>
+
+<div id="Others" class="tabcontent">
+    {% include "SecReport/others.html" %}
+</div>
+
+
+</div>
+</form>
+
+{% endblock content%}

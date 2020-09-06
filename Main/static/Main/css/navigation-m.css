@@ -1,0 +1,49 @@
+@media screen and (max-width: 1000px) {
+  .navigation {
+    position: static;
+    overflow: hidden;
+    background-color: #D41367;
+    z-index: 999;
+  }
+  .navigation a {
+    display: none;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 4vw;
+  }
+  .navigation a.active {
+    background-color: #D41367;
+    color: white;
+  }
+  .navigation a.icon {
+    float: right;
+    display: inline-block;
+    color: white;
+  }
+  .navigation.responsive {
+    position: static;
+    background-color: #FFFFFF;
+    border-bottom: solid black;
+    z-index: 999;
+  }
+  .navigation.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: black;
+  }
+  .navigation.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+    transition: 0.5s;
+  }
+  #logo {
+    display: none;
+  }
+  .desktop {
+    display: none;
+  }
+}

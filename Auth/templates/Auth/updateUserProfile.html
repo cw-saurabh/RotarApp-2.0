@@ -1,0 +1,149 @@
+{% extends "Main/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+  #member, #member1 {
+    line-height: normal;
+    height: 2.5vw;
+    width: 10vw;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    border: solid #D41367;
+    background-color: #D41367;
+    box-shadow: 2px 2px 2px #555;
+  }
+  @media screen and (max-width: 1000px) {
+  #member, #member1 {
+    height: 7vw;
+    width: 90%;
+    margin: 3vw 0 3vw 0;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    border: solid #D41367;
+    background-color: #D41367;
+    box-shadow: 2px 2px 2px #555;
+  }
+}
+</style>
+<div id="listSection" style="padding-bottom:0">
+<div class="row"  style="padding:5%;margin:0">
+  <div class="col-lg-4" style="padding:0">
+    <img id="reportImage1" src="{{STATIC_URL}}{{ profile.photo.url }}" alt="Rotaract">
+    <br class="mobile"><br class="mobile">
+  </div>
+  
+  <div class="col-lg-8" style="padding:0">
+    <span class="homeText2" style="color:#D41367"><b>Rtr. {{profile.firstName}} {{profile.lastName}}&nbsp;&nbsp;&nbsp;</b></span>
+    {% if club %}
+    <br class="mobile">
+    <span class="homeText2" style="color:#337ab7"><small><b>({{club}})</b></small></span>
+    {% endif %}
+    {% if profile.joiningDate %}
+    <br><br>
+    <span>
+      <b style="color:#337ab7">Rotaracting since {{profile.joiningDate|date:"M, Y"}}</b>
+    </span>
+    {% endif %}
+    
+    {% if club %}
+    {% if clubRole %}
+    <br>
+    <span>
+      <b style="color:#337ab7">Currently serving as the {{clubRole}} of {{club}}.</b>
+    </span>
+    <br class="mobile"><br class="mobile">
+    {% endif %}
+    {% endif %}
+    
+    <hr class="mobile" style="margin:0;border-width: medium;border-color: #D41367;width:100%;margin-top:1vw;float:left"><br><br>
+    <div class="row" style="padding:0;margin:0;;text-align:left">
+      <div class="col-lg-3" style="padding:0;margin:0">
+        <span style="color:#337ab7"><b>Contact</b></span>
+      </div>
+      <div class="col-lg-9" style="padding:0;margin:0">
+        {% if profile.contact %}
+          {% if user.email %}
+            {{ profile.contact }} / {{ user.email }}
+          {% else %}
+            {{ profile.contact }}
+          {% endif %}
+        {% else %}
+        Not given
+        {% endif %}
+      </div>
+    </div>
+    <br class="mobile">
+    <div class="row" style="padding:0;margin:0;;text-align:left">
+      <div class="col-lg-3" style="padding:0;margin:0">
+        <span style="color:#337ab7"><b>Blood Group </b></span>
+      </div>
+      <div class="col-lg-9" style="padding:0;margin:0">
+        {% if profile.bloodGroup %}
+          {{profile.bloodGroup}}
+        {% else %}
+        Not given
+        {% endif %}
+      </div>
+    </div>
+    <br class="mobile">
+    <div class="row" style="padding:0;margin:0;;text-align:left">
+      <div class="col-lg-3" style="padding:0;margin:0">
+        <span style="color:#337ab7"><b>Birth Date</b></span>
+      </div>
+      <div class="col-lg-9" style="padding:0;margin:0">
+        {% if profile.birthDate %}
+          {{profile.birthDate|date:"l, d F Y."}}
+        {% else %}
+        Not given
+        {% endif %}
+      </div>
+    </div>
+    {% if districtRole %}
+    <br class="mobile">
+    <div class="row" style="padding:0;margin:0;;text-align:left">
+      <div class="col-lg-3" style="padding:0;margin:0">
+        <span style="color:#337ab7"><b>District Council</b></span>
+      </div>
+      <div class="col-lg-9" style="padding:0;margin:0">
+          {{districtRole}}
+      </div>
+    </div>
+    {% endif %}
+    {% if not club %}
+    {% if edit %}
+    <br>
+    <small class="alert-danger">Club information is not available. Contact your secretary.</small>
+    {% endif %}
+    {% endif %}
+  </div>
+  </div>
+</div>
+{% if edit %}
+<br class="mobile">
+<hr style="margin:0;border-width: medium;border-color: #D41367;width:100%;margin-top:1vw;float:left"><br><br>
+<div class="heading">
+  <span class="homeText2" style="color:#D41367"><small><b>Update your profile</b></small>
+</div>
+<br><br>
+<form method="post" action="{% url 'updateUserProfile' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ pform|crispy }}
+    <br>
+    <div class="row" style="padding:0">
+      <div class="col-lg-6">
+        <input type="submit" id="member" style="width:100%;" value="Update"></input>    
+      </div>
+      <div class="col-lg-6">
+        <button class="text-center" type="button" onclick="window.location.href = `{% url 'passwordChange' %}`;" style="color:white;width:100%;margin:0"  id="member1">Change Password</button> 
+      </div>
+    </div>
+</form>
+
+{% endif %}
+</div>
+  
+{% endblock content%}

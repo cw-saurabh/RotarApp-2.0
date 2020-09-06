@@ -1,0 +1,59 @@
+@media screen and (min-width: 1000px) {
+  .navigation {
+    overflow: hidden;
+    background-color: #FFFFFF;
+    padding-left: 5%;
+    padding-right: 5%;
+    border-bottom: solid #f1f1f1;
+    z-index: 999;
+    opacity: 1;
+    width: 100%;
+    height: 3vw;
+  }
+  .desktop {
+    float: right;
+  }
+  .mobile {
+    display: none;
+  }
+  .navigation a {
+    float: left;
+    right: 0;
+    display: block;
+    color: #337ab7;
+    text-align: center;
+    padding: 0.8vw 1.2vw;
+    text-decoration: none;
+    font-size: 1.1vw;
+    height: 3vw;
+    font-weight: bold;
+  }
+  .navigation a:hover {
+    color: black;
+  }
+  .navigation a.active {
+    border-bottom: solid #D41367;
+    border-bottom-width: 3px;
+    font-weight: bolder;
+    background-color: #D41367;
+    color: white;
+  }
+  .navigation .icon {
+    display: none;
+  }
+  .sticky {
+    position: static;
+    top: 0;
+    width: 100%;
+  }
+  #logo {
+    margin-top: 0.5vw;
+    margin-bottom: 0.5vw;
+    height: 2vw;
+    width: auto;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

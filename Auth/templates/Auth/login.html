@@ -1,0 +1,42 @@
+{% extends "Main/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags }
+{% block content %}
+
+<div class="authSection">
+
+  <div class="heading ">
+    <b>Login</b>
+    <hr class="desktop" style="margin:0;border-width: medium;border-color: #D41367;width:85%;margin-top:1vw;float:left">
+    <br class="desktop"><br class="desktop">
+    <hr class="mobile" style="margin:0;border-width: medium;border-color: #D41367;width:100%;margin-top:1vw">
+  </div>
+
+  
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    
+    {% if form.errors %}
+    <div class="error">
+      <p>{{ form.non_field_errors.as_text }}</p><br class="mobile">
+      {{ form.username }}
+      {{ form.username.errors }}
+      {{ form.password }}
+      {{ form.password.errors }}
+    </div>
+    {% else %}
+    {{ form.username }}
+    {{ form.username.errors }}
+    {{ form.password }}
+    {{ form.password.errors }}
+    
+    {% endif %}
+    
+    <input  type="submit" id="loginButton1" value="Login"></input>
+    
+  </form>
+  <br class="desktop"><br class="desktop"><br class="desktop">
+</div>
+  
+{% endblock content%}

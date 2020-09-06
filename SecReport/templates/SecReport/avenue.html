@@ -1,0 +1,31 @@
+<div class="heading">
+    <b>Events Carried Out</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div class="instructions" style="padding:2%;color:#337ab7;">
+        <h6><b>In the 'Instagram Link' field, you have to copy and paste the link.</b></h6>
+        <h6><b>Type '-' in case you don't have one.</b></h6>
+        <hr>
+    </div>
+    
+    <div id="events">
+
+    </div>
+    <button type="button" class="addRow" onclick="appendEvent()">Add Row</button>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+</div>
+
+<div class="container" id="reportButtons">
+    <div class="row" style="width:100%;margin:0">
+        <div class="col-4">
+            <button type="button" id="reportButton10" onclick="openSection('Admin')">Previous</button>
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton11" onclick="save()">Save<span id="loader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton12" onclick="openSection('Others')">Next</button>
+        </div>
+    </div>
+</div>

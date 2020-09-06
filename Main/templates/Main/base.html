@@ -1,0 +1,83 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#D41367"/>
+    <link rel="icon" href="{% static 'Main/images/district_logo.png' %}" type="image/icon type">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+          
+    function openNav() {
+        let x = document.getElementById("mynavigation");
+        if (x.className === "navigation sticky") 
+        {
+            x.className += " responsive";
+        } 
+        else 
+        {
+            x.className = "navigation sticky";
+        }
+        x = document.getElementById("mainWrapperContainer");
+        if (x.className === "container") 
+        {
+            x.className += " blur";
+        } 
+        else 
+        {
+            x.className = "container";
+        }
+    }
+
+    </script>
+
+    <!-- External javascript file, that does everything needed for this webApp -->
+
+    <!-- External css files -->
+    <link rel="stylesheet" href="{% static 'Main/css/main-d.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/css/main-m.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/css/navigation-d.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/css/navigation-m.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'Main/css/report-2-d.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/css/report-2-m.css' %}">
+
+    <link rel="stylesheet" href="{% static 'Auth/css/login-d.css' %}">
+    <link rel="stylesheet" href="{% static 'Auth/css/login-m.css' %}">
+
+
+    {% if Title %}
+        <title>Rotaract D3131 -  {{ Title }}</title>
+    {% else %}
+        <title>Rotaract District 3131</title>
+    {% endif %}
+    
+  </head>
+  
+  <body onresize="resize()">
+     
+    {% include "Main/navbar.html" %}
+    
+    <div class="container" id="mainWrapperContainer">
+      {% block content %}{% endblock %}
+    </div>  
+    <br class="mobile">
+    <br class="mobile">
+
+    {% if not Title %}
+      {% include "Main/footer.html" %}
+    {% endif %}
+  </body>
+  {% block javascript %}{% endblock %}
+</html>

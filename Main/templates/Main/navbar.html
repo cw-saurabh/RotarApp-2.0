@@ -1,0 +1,55 @@
+{% load static %}
+
+{% if Tab %}
+<script>
+  $(document).ready(function() {
+      $(".mobile a").removeClass("active");
+      $(".desktop a").removeClass("active");
+      $("#desktop-{{Tab}}").addClass("active");
+      $("#mobile-{{Tab}}").addClass("active");      
+  });
+</script>
+{% endif %}
+
+<div class="navigation sticky" id="mynavigation">
+  
+  <img id="logo" src="{% static 'Main/images/Rotaract Logo-min.png' %}" alt="Rotaract">
+  <div class="desktop">
+  
+    <a href="{% url 'main-home' %}" id="desktop-home">Home</a>
+    {% if user.is_authenticated %}
+    <a href="{% url 'updateClubProfile' %}" id="desktop-clubProfile">My Club</a>
+    {% if user.loginType == '0' %}
+    <a href="{% url 'updateUserProfile' %}" id="desktop-userProfile">My Profile</a>
+    {% elif user.loginType == '1' %}
+    <a href="{% url 'presentReport' %}" id="desktop-Reporting">Reporting</a>
+    {% endif %}
+    <a href="{% url 'logout' %}" id="desktop-logout">Logout</a>
+    {% else %}
+    <a href="{% url 'login' %}" id="desktop-login">Login</a>
+    <a href="{% url 'signup' %}" id="desktop-signup">Sign up</a>
+    {% endif %}
+
+  </div>  
+  <div class="mobile">
+      <a href="{% url 'main-home' %}" id="mobile-home">Home</a>
+      
+      {% if user.is_authenticated %}
+      <a href="{% url 'updateClubProfile' %}" id="mobile-clubProfile">My Club</a>
+      {% if user.loginType == '0' %}
+      <a href="{% url 'updateUserProfile' %}" id="mobile-userProfile">My Profile</a>
+      {% elif user.loginType == '1' %}
+      <a href="{% url 'presentReport' %}" id="mobile-Reporting">Reporting</a>
+      {% endif %}
+      <a href="{% url 'logout' %}" id="mobile-logout">Logout</a>
+      {% else %}
+      <a href="{% url 'login' %}" id="mobile-login">Login</a>
+      <a href="{% url 'signup' %}" id="mobile-signup">Sign up</a>
+      {% endif %}
+      <a href="javascript:void(0);" class="icon" onclick="openNav()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>  
+
+</div>
+

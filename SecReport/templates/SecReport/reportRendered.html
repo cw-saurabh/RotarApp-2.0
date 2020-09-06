@@ -1,0 +1,540 @@
+{% extends "Main/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<script>
+
+
+$(document).ready(function(){
+
+let value03 = 0,value13 = 0, value23 = 0, value33 = 0, value43 = 0,value50 = 0,value51 = 0,value52 = 0,value53 = 0;
+
+value03 = {{Report.memberMatrix00}} + {{Report.memberMatrix01}} + {{Report.memberMatrix02}};
+value13 = {{Report.memberMatrix10}} + {{Report.memberMatrix11}} + {{Report.memberMatrix12}};
+value23 = {{Report.memberMatrix20}} + {{Report.memberMatrix21}} + {{Report.memberMatrix22}};
+value33 = {{Report.memberMatrix30}} + {{Report.memberMatrix31}} + {{Report.memberMatrix32}};
+value43 = {{Report.memberMatrix40}} + {{Report.memberMatrix41}} + {{Report.memberMatrix42}};
+
+value50 = {{Report.memberMatrix00}} + {{Report.memberMatrix10}} - {{Report.memberMatrix20}};
+value51 = {{Report.memberMatrix01}} + {{Report.memberMatrix11}} - {{Report.memberMatrix21}};
+value52 = {{Report.memberMatrix02}} + {{Report.memberMatrix12}} - {{Report.memberMatrix22}};
+value53 = value03 + value13 - value23;
+
+console.log(value03);
+
+$("#value03").val(value03);
+$("#value13").val(value13);
+$("#value23").val(value23);
+$("#value33").val(value33);
+$("#value43").val(value43);
+$("#value50").val(value50);
+$("#value51").val(value51);
+$("#value52").val(value52);
+$("#value53").val(value53);
+
+$("#dues01").val(value03);
+$("#dues02").val(value13);
+$("#dues03").val((value03+value13)*300);
+$("#dues05").val(((value03+value13)*300)-{{Report.dues04}});
+
+if($(window).width()>1000)
+    {
+        $("#data01").html("<p class=\"text-center\">Male");
+        $("#data02").html("<p class=\"text-center\">Female");
+        $("#data03").html("<p class=\"text-center\">Other");
+        $("#data04").html("<p class=\"text-center\">Total");
+        $("#data10").html("<p>Members at the beginning of this month");
+        $("#data20").html("<p>Members Added");
+        $("#data30").html("<p>Members Left");
+        $("#data40").html("<p>Prospective");
+        $("#data50").html("<p>Guests (RYE /NGSE /Family)");
+        $("#data60").html("<p>Total");
+    }
+
+});
+
+</script>
+
+<div id="reportFormView">
+    <div class="row" style="padding:0;margin:0">
+        <div class="col-lg-1 col-xs-3" style="padding:0;margin:0">
+            <button type="button" class="blueButton" onclick="window.history.back()">Back</button>
+        </div>
+    </div>
+    <hr>
+
+<div id="reportHeadingSection" class="text-center">
+    <h4 id="reportHeading1"><b>Secretarial Report : {{ Report.month }}</b></h4>
+    {% if Profile.zone %}
+    <h4 id="reportHeading2"><b>{{ Club.name }}<br><h4>Zone {{ Profile.zone }} - {{ Club.rotaryId }}</h4></b></h4>
+    {% else %}
+    <h4 id="reportHeading2"><b>{{ Club.name }}<br><h4>{{ Club.rotaryId }}</h4></b></h4>
+    {% endif %}
+</div>
+<br>
+<hr style="margin:0;border-width: medium;border-color: #D41367;width:100%">
+<br>
+<div class="row" style="margin:0">
+    <br><br><br>
+    <div class="heading">
+        <b>General Body Meeting</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div id="generalBodyMeetingsView">
+            {% for GBM in GBMs %}
+            <script>
+                $("#gbm_bylaws").val("{{GBM.gbm3}}");
+                $("#gbm_budget").val("{{GBM.gbm4}}");
+            </script>
+            <div class="row">
+                <div class="col-lg-3">
+                    <p class="label"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;Meeting No. </p><br>
+                    <input readonly="true" type="text" value="{{ GBM.gbm0 }}">
+                </div>
+                <div class="col-lg-3">
+                    <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Date</p><br>
+                    <input readonly="true" type="text" value="{{ GBM.gbm1.date }}">
+                </div>
+                <div class="col-lg-3">
+                    <p class="label">ByLaws Passed?</p><br>
+                    {% if GBM.gbm3 %}
+                    <input readonly="true" type="text" value="Yes">
+                    {% else %}
+                    <input readonly="true" type="text" value="No">
+                    {% endif %}
+                </div>
+                <div class="col-lg-3">
+                    <p class="label">Budget Passed?</p><br>
+                    {% if GBM.gbm4 %}
+                    <input readonly="true" type="text" value="Yes">
+                    {% else %}
+                    <input readonly="true" type="text" value="No">
+                    {% endif %}
+                </div>
+                <div class="col-lg-8">
+                    <p class="label"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;&nbsp;Agenda of the Meeting (brief)</p><br>
+                    <input readonly="true" type="text"  value="{{ GBM.gbm2 }}">
+                </div>
+                <div class="col-lg-4">
+                    <p class="label"><i class="fa fa-user-times" aria-hidden="true"></i>&nbsp;&nbsp;Attendees</p><br>
+                    <input readonly="true" type="text"  value="{{ GBM.gbm5 }}">
+                </div>
+                <div class="col-lg-12">
+                    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+                </div>
+            </div>
+
+            {% endfor %}
+        <br><br><br>
+        </div>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>BOD Meeting</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div id="boardOfDirectorsMeetingsView">
+            {% for BOD in BODs %}
+            <div class="row">
+                <div class="col-lg-3">
+                    <p class="label"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;Meeting No.</p><br>
+                    <input readonly="true" type="text" value="{{ BOD.bod0 }}">
+                </div>
+                <div class="col-lg-3">
+                    <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Date</p><br>
+                    <input readonly="true" type="text" value="{{ BOD.bod1.date }}">
+                </div>
+                <div class="col-lg-3">
+                    <p class="label">ByLaws Passed?</p><br>
+                    {% if BOD.bod3 %}
+                    <input readonly="true" type="text" value="Yes">
+                    {% else %}
+                    <input readonly="true" type="text" value="No">
+                    {% endif %}
+                </div>
+                <div class="col-lg-3">
+                    <p class="label">Budget Passed?</p><br>
+                    {% if BOD.bod4 %}
+                    <input readonly="true" type="text" value="Yes">
+                    {% else %}
+                    <input readonly="true" type="text" value="No">
+                    {% endif %}
+                </div>
+                <div class="col-lg-8">
+                    <p class="label"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;&nbsp;Agenda of the Meeting (brief)</p><br>
+                    <input readonly="true" type="text" value="{{ BOD.bod2 }}">
+                </div>
+                <div class="col-lg-4">
+                    <p class="label"><i class="fa fa-user-times" aria-hidden="true"></i>&nbsp;&nbsp;Attendees</p><br>
+                    <input readonly="true" type="text" value="{{ BOD.bod5 }}">
+                </div>
+                <div class="col-lg-12">
+                    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+                </div>
+            </div>
+
+            {% endfor %}
+            <br><br><br>
+        </div>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>Club Membership Details</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div class="text-center mobile m-subHeading">
+            Member-Matrix
+            <br>
+            <p style="font-size:2.2vw;color:#337ab7">{ I : Intial Count, II : Added this month, III : Left, IV : Prospective, V : Guest, VI : Total }<br>{ M : Males, F : Females, O : Others, T : Total }
+            <br><br><br>
+        </div>
+        <div class="row m-memberMatrix">
+            <div class="col-xs-2 col-lg-4" id="data00">
+
+            </div>
+            <div class="col-xs-2" id="data01">
+                M
+            </div>
+            <div class="col-xs-2" id="data02">
+                F
+            </div>
+            <div class="col-xs-2" id="data03">
+                O
+            </div>
+            <div class="col-xs-2" id="data04">
+                T
+            </div>
+        </div>
+        <div class="row m-memberMatrix">
+            <div class="col-xs-2 col-lg-4" id="data10">
+                I.
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix00 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix01 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix02 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value03">
+            </div>
+        </div>
+        <div class="row m-memberMatrix">
+            <div class="col-xs-2 col-lg-4" id="data20">
+                II.
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix10 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix11 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix12 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value13">
+            </div>
+        </div>
+        <div class="row m-memberMatrix">
+            <div class="col-xs-2 col-lg-4" id="data30">
+                III.
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix20 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix21 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix22 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value23">
+            </div>
+        </div>
+        <div class="row m-memberMatrix">
+            <div class="col-xs-2 col-lg-4" id="data40">
+                IV.
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix30 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix31 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix32 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value33">
+            </div>
+        </div>
+        <div class="row m-memberMatrix">
+            <div class="col-xs-2 col-lg-4" id="data50">
+                V.
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix40 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix41 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" value="{{ Report.memberMatrix42 }}">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value43">
+            </div>
+        </div>
+        <div class="row m-memberMatrix">
+            <div class="col-xs-2 col-lg-4" id="data60">
+                VI.
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value50">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value51">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value52">
+            </div>
+            <div class="col-xs-2">
+                <input readonly="true" type="text" id="value53">
+            </div>
+        </div>
+    <br><br><br>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>Dues paid to District</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div class="row">
+                <div class="col-lg-6">
+                <p class="label">Dues paid upto last month <br>@ INR 300
+                    Per member
+                    </p><br>
+                    <input readonly="true" type="text" id="dues00" value="{{ Report.dues00 }}">
+                </div>
+                <div class="col-lg-6">
+                    <p class="label" id="duesLabel01">Total number of members at the <br>beginning of this month (N)</p><br>
+                    <input readonly="true" type="text" id="dues01">
+                </div>
+                <div class="col-lg-6">
+                    <p class="label" id="duesLabel02">Number of members inducted <br>in this month (n)</p><br>
+                    <input readonly="true" type="text" id="dues02">
+                </div>
+                <div class="col-lg-6">
+                    <p class="label">The fees amount that the district owes<br>(N + n) * 300</p><br>
+                    <input readonly="true" type="text" id="dues03">
+                </div>
+                <div class="col-lg-6">
+                    <p class="label" id="duesLabel03">District Dues paid in this month</p><br><br>
+                    <input readonly="true" type="text" id="dues04" value="{{ Report.dues04 }}">
+                </div>
+                <div class="col-lg-6">
+                    <p class="label">Pending dues </p><br><br>
+                    <input readonly="true" type="text" id="dues05">
+                </div>
+        </div>
+    <br><br><br>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>Events Carried Out</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div id="eventsView">
+            {% for Event in Events %}
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Date</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event0.date }}">
+                </div>
+                <div class="col-lg-3">
+                    <p class="label"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;&nbsp;Name of the Event</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event1 }}">
+                </div>
+                <div class="col-lg-3">
+                    <p class="label"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;Avenue</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event2 }}">
+                </div>
+                <div class="col-lg-2">
+                    <p class="label"><i class="fa fa-user-times" aria-hidden="true"></i>&nbsp;&nbsp;Attendees</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event3 }}">
+                </div>
+                <div class="col-lg-2">
+                    <p class="label"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Volunteer Hrs</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event4 }}">
+                </div>
+                <div class="col-lg-2">
+                    <p class="label"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;&nbsp;Funds raised</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event5 }}">
+                </div>
+                <div class="col-lg-6">
+                    <p class="label"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Description</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event6 }}">
+                </div>
+                <div class="col-lg-4">
+                    <p class="label"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;&nbsp;Instagram Link of the Event</p><br>
+                    <input readonly="true" type="text" value="{{ Event.event7 }}">
+                </div>
+                <div class="col-lg-12">
+                    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+                </div>
+            </div>
+
+            {% endfor %}
+        <br><br><br>
+        </div>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>Details of Bulletin</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div class="row">
+            <div class="col-lg-4">
+                <p class="label">Name of Bulletin</p><br>
+                <input readonly="true" type="text" value="{{ Report.bulletin00 }}">
+            </div>
+            <div class="col-lg-4">
+                <p class="label">Type of Bulletin</p><br>
+                <input readonly="true" type="text" value="{{ Report.bulletin01 }}">
+            </div>
+            <div class="col-lg-4">
+                <p class="label">Drive Link</p><br>
+                <input readonly="true" type="text" value="{{ Report.bulletin02 }}">
+            </div>
+            <div class="col-lg-4">
+                <p class="label">Issued on</p><br>
+                <input readonly="true" type="text" value="{{ Report.bulletin03.date }}">
+            </div>
+            <div class="col-lg-4">
+                <p class="label">Last Issued on</p><br>
+                <input readonly="true" type="text" value="{{ Report.bulletin04.date }}">
+            </div>
+            <div class="col-lg-4">
+                <p class="label">Frequency</p><br>
+                <input readonly="true" type="text" value="{{ Report.bulletin05 }}">
+            </div>
+        </div>
+    <br><br><br>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>Upcoming Events</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div id="futureEventsView">
+            {% for FutureEvent in FutureEvents %}
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Date</p><br>
+                    <input readonly="true" type="text" value="{{ FutureEvent.futureEvent0.date }}">
+                </div>
+                <div class="col-lg-4">
+                    <p class="label"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;&nbsp;Name</p><br>
+                    <input readonly="true" type="text" value="{{ FutureEvent.futureEvent1 }}">
+                </div>
+                <div class="col-lg-4">
+                    <p class="label"><i class="fa fa-file-text" aria-hidden="true"></i>&nbsp;&nbsp;Details</p><br>
+                    <input readonly="true" type="text" value="{{ FutureEvent.futureEvent2 }}">
+                </div>
+                <div class="col-lg-2">
+                    <p class="label"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;Avenue</p><br>
+                    <input readonly="true" type="text" value="{{ FutureEvent.futureEvent3 }}">
+                </div>
+                <div class="col-lg-12">
+                    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    <br><br><br>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>Feedback</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div class="row">
+            <div class="col-lg-8">
+                <p class="label">Whether you have received <br class="mobile">acknowledgement
+                    from the District <br>Reporting Secretary ?
+            </div>
+            <div class="col-lg-4">
+                {% if Report.feedback00 %}
+                <input readonly="true" type="text" value="Yes">
+                {% else %}
+                <input readonly="true" type="text" value="No">
+                {% endif %}
+            </div>
+            <div class="col-lg-8">
+                <p class="label">Do you get a prompt response from <br>the DZR / AZR ?
+            </div>
+            <div class="col-lg-4">
+                {% if Report.feedback01 %}
+                <input readonly="true" type="text" value="Yes">
+                {% else %}
+                <input readonly="true" type="text" value="No">
+                {% endif %}
+            </div>
+            <div class="col-lg-8">
+                <p class="label">Whether you have received receipt for <br>payment
+                    of Dues ?
+            </div>
+            <div class="col-lg-4">
+                {% if Report.feedback02 %}
+                <input readonly="true" type="text" value="Yes">
+                {% else %}
+                <input readonly="true" type="text" value="No">
+                {% endif %}
+            </div>
+            <div class="col-lg-8">
+                <p class="label">Do you get a timely response from <br>the District ?
+            </div>
+            <div class="col-lg-4">
+                {% if Report.feedback03 %}
+                <input readonly="true" type="text" value="Yes">
+                {% else %}
+                <input readonly="true" type="text" value="No">
+                {% endif %}
+            </div>
+        </div>
+    <br><br><br>
+    </div>
+    <br><br><br>
+    <div class="heading">
+        <b>Suggestions (If any)</b>
+    </div>
+    <br><br><br>
+    <div class="container-fluid table-responsive">
+        <div class="row">
+            <textarea readonly="true" name="suggestion00"  id="suggestion00" >{{ Report.suggestion00 }}</textarea>
+        </div>
+    <br><br><br>
+    </div>
+    <br><br><br>
+</div>
+
+{% endblock content%}
+

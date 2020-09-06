@@ -1,0 +1,106 @@
+<div class="heading">
+    <b>Details of Bulletin</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div id="bulletins">
+        
+    </div>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+</div>
+<br>
+<div class="heading">
+    <b>Upcoming Events</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div id="futureEvents">
+
+    </div>
+    <button type="button" class="addRow" onclick="appendFEvent()">Add Row</button>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+</div>
+<br>
+<div class="heading">
+    <b>Feedback</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div class="row" id = "feedback">
+        <!-- <div class="col-lg-8">
+            <p class="label">Whether you have received <br class="mobile">acknowledgement
+                from the <br>District Reporting Secretary ?
+        </div>
+        <div class="col-lg-4">
+            <select id="byLaws" name="feedback00"  id="feedback00">
+                <option value="True">Yes</option>
+                <option value="False" selected>No</option>
+            </select>
+        </div>
+        <div class="col-lg-8">
+            <p class="label">Do you get a prompt response from <br>the DZR / AZR ?
+        </div>
+        <div class="col-lg-4">
+            <select id="byLaws" name="feedback01"  id="feedback01">
+                <option value="True">Yes</option>
+                <option value="False" selected>No</option>
+            </select>
+        </div>
+        <div class="col-lg-8">
+            <p class="label">Whether you have received receipt <br>for payment
+                of Dues ?
+        </div>
+        <div class="col-lg-4">
+            <select id="byLaws" name="feedback02"  id="feedback02">
+                <option value="True">Yes</option>
+                <option value="False" selected>No</option>
+            </select>
+        </div>
+        <div class="col-lg-8">
+            <p class="label">Do you get a timely response from <br>the District ?
+        </div>
+        <div class="col-lg-4">
+            <select id="byLaws" name="feedback03"  id="feedback03">
+                <option value="True">Yes</option>
+                <option value="False" selected>No</option>
+            </select>
+        </div> -->
+    </div>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+</div>
+<br>
+<div class="heading">
+    <b>Suggestions (If any)</b>
+</div>
+<br>
+<div class="container-fluid table-responsive">
+    <div class="row">
+        <textarea oninput="updateList(this.id,null,null)" maxlength="100" rows="5" name="suggestions"  id="suggestion00"></textarea>
+    </div>
+    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+</div>
+
+<div class="container" id="reportButtons">
+    <div class="row" style="width:100%;margin:0">
+        <div class="col-4">
+            <button id="reportButton20" type="button"  onclick="openSection('Avenue')">Previous</button>
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton21" onclick="save()">Save<span id="loader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
+        </div>
+        <div class="col-4">
+            <button id="reportButton22" type="button"  onclick="openSection('Admin')" disabled>Next</button>
+        </div>
+    </div>
+    <div class="row" style="width:100%;margin:0;padding:0">
+        <div class="col-4">
+        
+        </div>
+        <div class="col-lg-4 col-xs-12" id="submitButton">
+            <button class="addRow" id="submit3" type="button" onclick="customSubmit()" style="float:right;width:100%">Finish</button>
+        </div>
+        <div class="col-4">
+            
+        </div>
+    </div>
+</div>
