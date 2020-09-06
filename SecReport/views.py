@@ -17,25 +17,36 @@ from .decorators import is_Club, has_Access
 
 def migrate_data(request):
 
-    p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
+    p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
     p.save()
-    p = MemberMatrixAttribute(attribute="Members added")
+    p = FAQ(question='Where should we add other avenue events ?',answer='Rotaract Events fall under 4 Categories : PD, ISD, CMD & CSD. If your event is under more than 2 avenues then add a new row and then add the same event again by just changing the avenue.')
     p.save()
-    p = MemberMatrixAttribute(attribute="Members left")
+    p = FAQ(question='What if we don\'t have an Instagram link or a drive link of a particular event/bulletin ?',answer='Just add a hyphen ( - )')
     p.save()
-    p = MemberMatrixAttribute(attribute="Prospective")
+    p = FAQ(question='Which browsers are supported for Reporting ?',answer='You can use Chrome or Firefox Browser on mobile or desktop. Do not use Safari Browser.')
     p.save()
-    p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
+    p = FAQ(question='How can I save the data that I have filled ?',answer='Click on "Save" Button and your data will be saved.')
     p.save()
 
-    p = FeedbackQuestion(questionText="Whether you have received acknowledgement from the District Reporting Secretary ?")
-    p.save()
-    p = FeedbackQuestion(questionText="Do you get a prompt response from the DZR / AZR ?")
-    p.save()
-    p = FeedbackQuestion(questionText="Whether you have received receipt for payment of Dues ?")
-    p.save()
-    p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
-    p.save()
+    # p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Members added")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Members left")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Prospective")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
+    # p.save()
+
+    # p = FeedbackQuestion(questionText="Whether you have received acknowledgement from the District Reporting Secretary ?")
+    # p.save()
+    # p = FeedbackQuestion(questionText="Do you get a prompt response from the DZR / AZR ?")
+    # p.save()
+    # p = FeedbackQuestion(questionText="Whether you have received receipt for payment of Dues ?")
+    # p.save()
+    # p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
+    # p.save()
 
     return redirect('login')
 
@@ -109,6 +120,7 @@ def present_report(request):
             if report.first().status == '1' :
                 return render(request, 'SecReport/reportFoundResponse.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs})
             else :
+                print(FAQs)
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
         else :
             try :

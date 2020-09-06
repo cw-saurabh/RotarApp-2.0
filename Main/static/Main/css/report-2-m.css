@@ -365,6 +365,7 @@
     font-size: 3vw;
     font-weight: bold;
     color: white;
+    margin-top: 20vw;
   }
   .collapsible:after {
     content: '\002B';
@@ -376,6 +377,9 @@
   }
   .active2:after {
     content: "\2212";
+  }
+  .active2 {
+    outline: none;
   }
   .collapsedContent {
     width: 98%;

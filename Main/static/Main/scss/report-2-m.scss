@@ -459,6 +459,7 @@
     font-size:$m-small;
     font-weight: bold;
     color: white;
+    margin-top:20vw;
   }
   
 .collapsible:after {
@@ -474,6 +475,12 @@ margin-right: 1vw;
 .active2:after {
 content: "\2212";
 }
+
+
+.active2 {
+    outline: none;
+}
+  
 
 .collapsedContent {
 width:98%;

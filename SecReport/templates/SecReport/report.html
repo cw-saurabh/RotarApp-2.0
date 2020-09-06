@@ -240,4 +240,17 @@
 </div>
 </form>
 
+
+
+<button class="collapsible" style="outline:none">FAQs</button>
+<div class="collapsedContent">
+    <br>
+    {% for FAQ in FAQs %}
+    <p class="label" style="color:#D41367;white-space:normal;padding:0;margin:0">{{FAQ.question|linebreaksbr}}</p><br>
+    <p class="label" style="color:#337ab7;white-space:normal;padding:0;margin:0;text-align:justify">{{FAQ.answer|linebreaksbr}}</p><br><br>
+    {% endfor %}    
+    <br>
+</div>
+
+
 {% endblock content%}
