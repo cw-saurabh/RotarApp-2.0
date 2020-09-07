@@ -115,29 +115,22 @@ def get_report(request,reportId,club):
 @is_Club
 def present_report(request):
 
+    _club = Club.objects.filter(login=request.user).first()
+    _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
+    report = Report.objects.filter(reportId=_reportId)
+
     if (True) : #Has permission
-        _club = Club.objects.filter(login=request.user).first()
-        _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
-        print(_reportId)
-        report = Report.objects.filter(reportId=_reportId)
+        
         FAQs = FAQ.objects.all()
-        print("12")
+
         if report.exists() :
-            print("1")
             data = get_report(request,_reportId,_club)
-            print(_reportId)
-            print(_club)
             if report.first().status == '1' :
-                print("13")
-                return render(request, 'SecReport/reportFoundResponse.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':_club,'FAQs':FAQs})
+                return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
             else :
-                print("14")
-                print(FAQs)
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':_club,'FAQs':FAQs,'Edit':True})
         else :
-            print("5")
             try :
-                print("6")
                 with transaction.atomic() :
                     newReport = Report(reportId=_reportId, reportingMonth=reportingMonth, reportingClub=_club, status = 0)
                     newReport.save()
@@ -159,20 +152,23 @@ def present_report(request):
                     for question in questions :
                         newFeedback = Feedback(reportId = newReport, feedbackQuestion=question)
                         newFeedback.save()
-                    print("7")
+
                     duesPaid = DuesPaid.objects.get(club=_club)
                     duesPaidAlreadyVar = duesPaid.dues
                     Report.objects.filter(reportId=_reportId).update(duesPaidAlready=duesPaidAlreadyVar)
-                    print("8")
-            except Exception as e :
-                print("9")
-                print(e)
-                return redirect('presentReport') #Change
+                
+                data = get_report(request,_reportId,_club)
+                return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
 
-            data = get_report(request,_reportId,_club)
-            return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
+            except Exception as e :
+                print(e)
+                return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'An error has occurred. Log in again and contact the website coordinators if the error retains.' }}})
+              
     else :
-        return render(request, 'SecReport/deadlineMissed.html',{'Title':'Reporting','Tab':'Reporting'})
+        if report.exists() and report.first().status == '1' :
+            return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
+        else :
+            return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'The form is not accepting any response as of now.'}}})
 
 @login_required
 @has_Access
@@ -369,45 +365,51 @@ def save_report(request) :
 
 @login_required
 @has_Access
+def view_report(request,reportId) :
+    _club = Club.objects.filter(login=request.user).first()
+    report = Report.objects.filter(reportId=reportId)
+
+    if report.exists() :
+        data = get_report(request,reportId,_club)
+        if report.first().status == '1' :
+            return render(request, 'SecReport/reportView.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'Edit':False})
+        else :
+            return redirect('presentReport')
+    else :
+        return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
+
+
+@login_required
+@has_Access
 def finish_report(request,reportId):
-    print("kya tapleek")
     club = Club.objects.filter(login=request.user).first()
     report = Report.objects.filter(reportId=reportId)
     FAQs = FAQ.objects.all()
-    print("yaha")
+    
     if report.exists() :
-        print("vaha")
         data = get_report(request, reportId,club)
-        print("kidhar")
         if report.first().status == '1' :
-            return render(request, 'SecReport/reportFoundResponse.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs})
+            return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
         else :
-            return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':False})
+            return render(request, 'SecReport/reportView.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'Edit':True})
     else :
-        print("idhar")
-        return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','ClubProfile':club,'FAQs':FAQs,'Edit':False,'Error':'Report object not found'})
+        return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
 
 @login_required
 @has_Access
 def submit_report(request, reportId) :
-    print("idhar 1")
     club = Club.objects.filter(login=request.user).first()
     try :
         with transaction.atomic() :
-            print("kidhar 1")
             report = Report.objects.filter(reportId=reportId)
             report.update(status="1")
-            print("kidhar 1")
             totalDues = DuesPaid.objects.get(club=club).dues
             duesPaidInThisMonth = report.first().duesPaidInThisMonth
             duesPaidAlready = report.first().duesPaidAlready
-            print("kidhar 1")
             totalDues = (0 if duesPaidAlready=='' else int(duesPaidAlready)) + (0 if duesPaidInThisMonth=='' else int(duesPaidInThisMonth))
             DuesPaid.objects.filter(club=club).update(dues=totalDues)
-            print("vaha 1")
         return redirect('presentReport')
     except Exception as e:
-        print("yaha 1")
         print(e)
         data = get_report(request, reportId,club)
         FAQs = FAQ.objects.all()

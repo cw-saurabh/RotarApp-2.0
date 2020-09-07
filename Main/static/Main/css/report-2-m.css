@@ -208,13 +208,13 @@
   #reportForm #reportButton00:focus, #reportForm #reportButton01:focus, #reportForm #reportButton02:focus, #reportForm #reportButton10:focus, #reportForm #reportButton11:focus, #reportForm #reportButton12:focus, #reportForm #reportButton20:focus, #reportForm #reportButton21:focus, #reportForm #reportButton22:focus {
     outline: none;
   }
-  #reportForm input.empty {
+  #reportForm input.empty, #reportForm textarea.empty {
     outline: none;
     box-shadow: none;
-    border: 1px solid red;
+    border: 2px solid red;
     color: red;
   }
-  #reportForm input.empty[type=text]:hover, #reportForm input.empty[type=date]:hover, #reportForm input.empty[type=month]:hover, #reportForm input.empty[type=password]:hover, #reportForm input.empty[type=number]:hover, #reportForm input.empty[type=url]:hover, #reportForm textarea.empty:hover, #reportForm input.empty[type=text]:focus, #reportForm input.empty[type=date]:focus, #reportForm input.empty[type=month]:focus, #reportForm input.empty[type=password]:focus, #reportForm input.empty[type=number]:focus, #reportForm input.empty[type=url]:focus, #reportForm textarea.empty:focus {
+  #reportForm textarea.empty:hover, #reportForm textarea.empty:focus, #reportForm input.empty[type=text]:hover, #reportForm input.empty[type=date]:hover, #reportForm input.empty[type=month]:hover, #reportForm input.empty[type=password]:hover, #reportForm input.empty[type=number]:hover, #reportForm input.empty[type=url]:hover, #reportForm textarea.empty:hover, #reportForm input.empty[type=text]:focus, #reportForm input.empty[type=date]:focus, #reportForm input.empty[type=month]:focus, #reportForm input.empty[type=password]:focus, #reportForm input.empty[type=number]:focus, #reportForm input.empty[type=url]:focus, #reportForm textarea.empty:focus {
     outline: none;
     box-shadow: none;
     border: 2px solid red;

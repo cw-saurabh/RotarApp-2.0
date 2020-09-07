@@ -64,7 +64,6 @@
         {% if Error %}
             $('#errorMessages').html("<p>{{Error}}</p>");
         {% endif %}
-        $("#dues04").val('{{Report.duesPaidInThisMonth}}');
         $("#suggestion00").val('{{Report.suggestions}}');
 
         {% for key, value in Report.GBMData.items %}
@@ -157,7 +156,18 @@
                 else
                 empty.push(element.attr('tab'));
             }
-            });
+        });
+        $("textarea").each(function() {
+            var element = $(this);
+            element.removeClass("empty");
+            if (element.val() == "") {
+                flag = false;
+                element.addClass("empty");
+                if (empty.includes(element.attr('tab')));
+                else
+                empty.push(element.attr('tab'));
+            }
+        });
         if(empty.length!=0) {
             $("#errorMessages").html("<p>You may have missed some of the input fields, in the following tabs : "+empty.toString()+"</p>");
             openSection(empty[0]);
@@ -236,6 +246,33 @@
 <div id="Others" class="tabcontent">
     {% include "SecReport/others.html" %}
 </div>
+
+<div class="container" id="reportButtons" style="padding-bottom:0">
+    <div class="row" style="width:100%;margin:0">
+        <div class="col-4">
+            <button type="button" id="reportButton00" onclick="openPrevSection()">Previous</button>
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton01" onclick="save()">Save<span id="loader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton02" onclick="openNextSection()">Next</button>
+        </div>
+    </div>
+    <br class="mobile">
+    <div class="row" style="width:100%;margin:0;padding:0">
+        <div class="col-4">
+        
+        </div>
+        <div class="col-lg-4 col-xs-12" id="submitButton">
+            <button class="addRow" id="submit3" type="button" onclick="customSubmit()" style="float:right;width:100%">Finish</button>
+        </div>
+        <div class="col-4">
+            
+        </div>
+    </div>
+</div>
+
 
 
 </div>

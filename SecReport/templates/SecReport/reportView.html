@@ -1,0 +1,157 @@
+{% extends "Main/base.html" %}
+    
+{% load static %}
+
+{% block javascript %}
+    
+    <script src="{% static 'Main/javascript/memberMatrix.js' %}"></script>
+    <script src="{% static 'Main/javascript/populateFieldsM.js' %}"></script>
+    <script src="{% static 'Main/javascript/validation.js' %}"></script>
+    <script src="{% static 'Main/javascript/main.js' %}"></script>
+
+    <script>
+    
+    $(document).ready(function(){
+        updateMonth("{{Report.ReportingMonth}}");
+        $("#suggestion00").val('{{Report.suggestions}}');
+
+        {% for key, value in Report.GBMData.items %}
+            appendGeneralBodyMeeting("{{value.meetingId}}","{{value.meetingNo}}","{{value.meetingDate|date:"Y-m-d"}}","{{value.meetingAgenda}}","{{value.bylawsBoolean}}","{{value.budgetBoolean}}","{{value.meetingAttendance}}");
+        {% endfor %}
+        
+        {% for key, value in Report.BODData.items %}
+            appendBODMeeting("{{value.meetingId}}","{{value.meetingNo}}","{{value.meetingDate|date:"Y-m-d"}}","{{value.meetingAgenda}}","{{value.bylawsBoolean}}","{{value.budgetBoolean}}","{{value.meetingAttendance}}");
+        {% endfor %}
+        
+        {% for key, value in Report.EventData.items %}
+            appendEvent("{{value.eventId}}","{{value.eventName}}","{{value.eventStartDate|date:"Y-m-d"}}","{{value.eventEndDate|date:"Y-m-d"}}","{{value.eventAvenue}}","{{value.eventAttendance}}","{{value.eventHours}}","{{value.eventFundRaised}}","{{value.eventDescription}}","{{value.eventLink}}");
+        {% endfor %}
+    
+        {% for key, value in Report.FEventData.items %}
+            appendFEvent("{{value.eventId}}","{{value.eventName}}","{{value.eventStartDate|date:"Y-m-d"}}","{{value.eventEndDate|date:"Y-m-d"}}","{{value.eventAvenue}}","{{value.eventDescription}}");
+        {% endfor %}
+    
+        {% for Question in Report.Questions %}
+            appendFeedback("{{Question.feedbackQuestion__questionText}}","{{Question.feedbackQuestion__id}}","{{Question.booleanResponse}}");
+        {% endfor %}
+
+        {% if Report.Bulletin %}
+            appendBulletin("{{Report.Bulletin.bulletinId}}","{{Report.Bulletin.bulletinName}}","{{Report.Bulletin.bulletinType}}","{{Report.Bulletin.bulletinLink}}","{{Report.Bulletin.bulletinIssuedOn|date:"Y-m-d"}}","{{Report.Bulletin.lastBulletinIssuedOn|date:"Y-m-d"}}","{{Report.Bulletin.bulletinFrequency}}");
+        {% else %}
+            appendBulletin();
+        {% endif %}
+
+        {% for MemberMatrixRow in Report.MemberMatrix %}
+            appendMemberMatrixRow("{{MemberMatrixRow.attribute__id}}","{{MemberMatrixRow.attribute__attribute}}","{{MemberMatrixRow.attribute__operation}}","{{MemberMatrixRow.maleCount}}","{{MemberMatrixRow.femaleCount}}","{{MemberMatrixRow.othersCount}}");
+            updateMatrix();
+        {% endfor %}     
+        
+        
+        updateTotalNumberOfMembers();
+        updateTotalNumberOfInductedMembers();
+        updateDuesAlreadyPaid("{{Report.DuesPaid}}");
+        updatePaid("{{Report.duesPaidInThisMonth|default:0}}");
+        updateOwedMoney();
+        updatePending();
+
+        $("input").attr("disabled", true);
+        $("select").attr("disabled", true);
+        $("textarea").attr("disabled", true);
+        
+    });
+    
+    </script>
+
+{% endblock javascript %}
+
+
+{% block content %}
+
+<div id="reportForm">
+
+<div id="reportHeadingSection" class="text-center">
+    <h4 id="reportHeading1" ><b>Secretarial Reporting</b></h4>
+    <h6 id="reportHeading2" >Read-only</h6>
+</div>
+
+<div class="container" id="tabs">
+    <br>
+    <div class="progress" style="margin:0;height:1vw">
+        <div class="progress-bar" id="bar"></div>
+    </div>
+    <div class="row" style="margin:0">
+        <div class="col-lg-4 col-xs-4 text-center">
+            <p class="tablinks active" id="AdminLink" onclick="openSection('Admin')">Admin</p>
+        </div>
+        <div class="col-lg-4 col-xs-4 text-center">
+            <p class="tablinks" id="AvenueLink" onclick="openSection('Avenue')">Avenue</p>
+        </div>
+        <div class="col-lg-4 col-xs-4 text-center">
+            <p class="tablinks" id="OthersLink" onclick="openSection('Others')">Others</p>
+        </div>
+    </div>
+    <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%">
+    <br><br>
+</div>
+
+<form action="" method="POST" id="theForm">
+{% csrf_token %}
+
+<div id="Admin" class="tabcontent active" style="padding-bottom:0">
+    
+<div class="row" style="margin:0">
+    <div class="col-lg-3">
+        <p class="label" id = "">Reporting for the month of :</p>
+    </div>
+    <br class="mobile"><br class="mobile">
+    <div class="col-lg-3" >
+        <input  oninput="updateMonth()" type="month" style="margin:0" id="month" name="month" readonly>
+    </div>
+</div>
+    <br><br>
+    {% include "SecReport/adminM.html" %}
+</div>
+
+<div id="Avenue" class="tabcontent">
+    {% include "SecReport/avenueM.html" %}
+</div>
+
+<div id="Others" class="tabcontent">
+    {% include "SecReport/othersM.html" %}
+</div>
+
+<div class="container" id="reportButtons" style="padding-bottom:0">
+    <div class="row" style="width:100%;margin:0">
+        <div class="col-4">
+            <button type="button" id="reportButton00" onclick="openPrevSection()">Previous</button>
+        </div>
+        <div class="col-4">
+            {% if Edit %}
+            <button type="button" id="reportButton01" onclick="location.href = '{% url 'presentReport' %}'">Edit</button>
+            {% endif %}
+        </div>
+        <div class="col-4">
+            <button type="button" id="reportButton02" onclick="openNextSection()">Next</button>
+        </div>
+    </div>
+    <br class="mobile">
+    <div class="row" style="width:100%;margin:0;padding:0">
+        <div class="col-4">
+        
+        </div>
+        
+        <div class="col-lg-4 col-xs-12" id="submitButton">
+            {% if Edit %}
+            <button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'submitReport' reportId=Report.ReportId %}'" style="float:right;width:100%">Submit</button>
+            {% endif %}
+        </div>
+        <div class="col-4">
+            
+        </div>
+    </div>
+</div>
+
+</div>
+</form>
+
+{% endblock content%}

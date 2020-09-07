@@ -9,6 +9,7 @@ urlpatterns = [
     path('saveReport/', views.save_report, name = 'saveReport'),
     url(r'^finishReport/(?P<reportId>.+?)/$', views.finish_report, name='finishReport'),
     url(r'^submitReport/(?P<reportId>.+?)/$', views.submit_report, name='submitReport'),
-    url(r'^exportReport/(?P<reportId>[\-0-9]+)/$', views.export_report, name='exportReport'),
+    url(r'^exportReport/(?P<reportId>.+?)/$', views.export_report, name='exportReport'),
+    url(r'^viewReport/(?P<reportId>.+?)/$', views.view_report, name='viewReport'),
     url(r'^mailReport/(?P<reportId>[\-0-9]+)/$', views.email_report, name='emailReport'),
 ]

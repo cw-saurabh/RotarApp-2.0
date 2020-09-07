@@ -260,14 +260,14 @@
         outline: none;
     }
 
-    input.empty{
+    input.empty, textarea.empty{
         outline : none;
         box-shadow: none;
-        border: 1px solid red;
+        border: 2px solid red;
         color : red;    
     }
 
-    input[type=text].empty:hover, input[type=date].empty:hover, input[type=month].empty:hover,  input[type=password].empty:hover, input[type=number].empty:hover, input[type=url].empty:hover, textarea.empty:hover, input[type=text].empty:focus, input[type=date].empty:focus, input[type=month].empty:focus,  input[type=password].empty:focus, input[type=number].empty:focus, input[type=url].empty:focus, textarea.empty:focus {
+    textarea.empty:hover, textarea.empty:focus, input[type=text].empty:hover, input[type=date].empty:hover, input[type=month].empty:hover,  input[type=password].empty:hover, input[type=number].empty:hover, input[type=url].empty:hover, textarea.empty:hover, input[type=text].empty:focus, input[type=date].empty:focus, input[type=month].empty:focus,  input[type=password].empty:focus, input[type=number].empty:focus, input[type=url].empty:focus, textarea.empty:focus {
         outline : none;
         box-shadow: none;
         border: 2px solid red;

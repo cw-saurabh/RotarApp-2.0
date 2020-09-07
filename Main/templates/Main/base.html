@@ -65,11 +65,11 @@
     
   </head>
   
-  <body onresize="resize()">
+  <body>
      
     {% include "Main/navbar.html" %}
     
-    <div class="container" id="mainWrapperContainer">
+    <div class="container" id="mainWrapperContainer" style="min-height:auto">
       {% block content %}{% endblock %}
     </div>  
     <br class="mobile">

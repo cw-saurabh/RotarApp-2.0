@@ -6,9 +6,6 @@
     <div id="generalBodyMeetings">
 
     </div>
-    <button type="button" class="addRow" onclick="appendGeneralBodyMeeting()">Add Row</button>
-    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
-     
 </div>
 <br>
 <div class="heading">
@@ -19,8 +16,6 @@
     <div id="boardOfDirectorsMeetings">
         
     </div>
-    <button type="button" class="addRow" onclick="appendBODMeeting()">Add Row</button>
-    <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
 </div>
 <br>
 <div class="heading">
@@ -59,12 +54,12 @@
           </div>
           <div class="col-lg-6">
           <p class="label">Dues paid upto the last month <br>@ INR 300
-            Per member (P)<b style="color:red"></b>
+            Per member (P)
             </p><br>
           <input tab="Admin" type="text" id="paidAlready" readonly>
           </div>
           <div class="col-lg-6">
-            <p class="label" id="duesLabel03">District dues paid in this month<b style="color:red"> *</b><br>(p)</p><br>
+            <p class="label" id="duesLabel03">District dues paid in this month<br>(p)</p><br>
             <input tab="Admin" type="number" min=0 step=1 oninput="validity.valid||(value='');updateList(this.id,null,null);updatePending(this.value);" name="duesPaidInThisMonth" id="duesPaidInThisMonth">
           </div>
           <div class="col-lg-6">
