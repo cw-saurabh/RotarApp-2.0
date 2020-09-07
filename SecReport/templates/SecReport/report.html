@@ -34,6 +34,7 @@
         console.log("Saving initialised !");
         console.log(data);
         console.log(deletedData);
+        data['reportId']="{{Report.ReportId}}";
         $('#errorMessages').html('');
         $("#loader").show();
         $.post( "{% url 'saveReport' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data),'deletedData':JSON.stringify(deletedData)}, function(response, status){
@@ -115,7 +116,7 @@
             $("textarea").attr("disabled", true);
             $("button").not("#reportButton00,#reportButton02,#reportButton10,#reportButton12,#reportButton20,#reportButton22").attr("disabled", true).hide();
             $(".addRow").hide();
-            $("#submitButton").html(`<button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'submitReport' %}'" style="float:right;width:100%">Submit</button>`);
+            $("#submitButton").html(`<button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'submitReport' reportId=Report.ReportId %}'" style="float:right;width:100%">Submit</button>`);
             $(".instructions").hide();
         {% endif %}
 
@@ -163,7 +164,7 @@
         }
         if(flag)
         {
-        location.href = "{% url 'finishReport' %}";
+        location.href = `{% url 'finishReport' reportId=Report.ReportId %}`;
         }
     }
     </script>

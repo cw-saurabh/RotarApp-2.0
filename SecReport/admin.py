@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DuesPaid, Report, Meeting, Event, Bulletin, MemberMatrix, MemberMatrixAttribute, FeedbackQuestion, Feedback, ReportBulletinMapping, ReportEventMapping, ReportMeetingMapping, MeetingJointClubMapping, BulletinJointClubMapping, EventJointClubMapping
+from .models import DuesPaid, ReportViewPermission, Report, Meeting, Event, Bulletin, MemberMatrix, MemberMatrixAttribute, FeedbackQuestion, Feedback, ReportBulletinMapping, ReportEventMapping, ReportMeetingMapping, MeetingJointClubMapping, BulletinJointClubMapping, EventJointClubMapping
 
 # Register your models here.
 
@@ -12,6 +12,7 @@ admin.site.register(MemberMatrixAttribute)
 admin.site.register(FeedbackQuestion)
 admin.site.register(Feedback)
 admin.site.register(DuesPaid)
+admin.site.register(ReportViewPermission)
 
 admin.site.register(ReportMeetingMapping)
 admin.site.register(ReportEventMapping)

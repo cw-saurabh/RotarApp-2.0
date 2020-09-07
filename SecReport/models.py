@@ -191,3 +191,6 @@ class BulletinJointClubMapping(models.Model):
     bulletin = models.ForeignKey(Bulletin, on_delete=models.CASCADE)
     jointClub = models.ForeignKey(Club, on_delete=models.CASCADE)
 
+class ReportViewPermission(models.Model) :
+    club = models.ForeignKey(Club, on_delete = models.CASCADE, null = True, blank = True)
+    hasPermission = models.BooleanField(default = False, verbose_name="Has permission?")

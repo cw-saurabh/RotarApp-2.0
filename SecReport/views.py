@@ -14,19 +14,21 @@ from django.conf import settings
 from io import BytesIO
 from django.core.mail import EmailMessage
 from .decorators import is_Club, has_Access
+import string
+import random
 
 def migrate_data(request):
 
-    p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
-    p.save()
-    p = FAQ(question='Where should we add other avenue events ?',answer='Rotaract Events fall under 4 Categories : PD, ISD, CMD & CSD. If your event is under more than 2 avenues then add a new row and then add the same event again by just changing the avenue.')
-    p.save()
-    p = FAQ(question='What if we don\'t have an Instagram link or a drive link of a particular event/bulletin ?',answer='Just add a hyphen ( - )')
-    p.save()
-    p = FAQ(question='Which browsers are supported for Reporting ?',answer='You can use Chrome or Firefox Browser on mobile or desktop. Do not use Safari Browser.')
-    p.save()
-    p = FAQ(question='How can I save the data that I have filled ?',answer='Click on "Save" Button and your data will be saved.')
-    p.save()
+    # p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
+    # p.save()
+    # p = FAQ(question='Where should we add other avenue events ?',answer='Rotaract Events fall under 4 Categories : PD, ISD, CMD & CSD. If your event is under more than 2 avenues then add a new row and then add the same event again by just changing the avenue.')
+    # p.save()
+    # p = FAQ(question='What if we don\'t have an Instagram link or a drive link of a particular event/bulletin ?',answer='Just add a hyphen ( - )')
+    # p.save()
+    # p = FAQ(question='Which browsers are supported for Reporting ?',answer='You can use Chrome or Firefox Browser on mobile or desktop. Do not use Safari Browser.')
+    # p.save()
+    # p = FAQ(question='How can I save the data that I have filled ?',answer='Click on "Save" Button and your data will be saved.')
+    # p.save()
 
     # p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
     # p.save()
@@ -53,6 +55,7 @@ def migrate_data(request):
 reportingMonth = str((datetime.now().month)-1) if ((datetime.now().month)-1)>9 else "0"+str((datetime.now().month)-1)
 year = datetime.now().year
 
+@login_required
 @has_Access
 def get_report(request,reportId,club):
 
@@ -60,6 +63,8 @@ def get_report(request,reportId,club):
     report = Report.objects.filter(reportId=reportId).first()
 
     data = model_to_dict(report)
+
+    data['ReportId'] = reportId
     data['ReportingMonth'] = report.reportingMonth
     data['DuesPaid'] = report.duesPaidAlready
 
@@ -109,26 +114,38 @@ def get_report(request,reportId,club):
 @login_required
 @is_Club
 def present_report(request):
+
     if (True) : #Has permission
-        club = Club.objects.filter(login=request.user).first()
-        reportId = str(club.rotaryId)+"-"+str(reportingMonth)+"-"+str(year)
-        report = Report.objects.filter(reportId=reportId)
+        _club = Club.objects.filter(login=request.user).first()
+        _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
+        print(_reportId)
+        report = Report.objects.filter(reportId=_reportId)
         FAQs = FAQ.objects.all()
-
+        print("12")
         if report.exists() :
-            data = get_report(request,reportId,club)
+            print("1")
+            data = get_report(request,_reportId,_club)
+            print(_reportId)
+            print(_club)
             if report.first().status == '1' :
-                return render(request, 'SecReport/reportFoundResponse.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs})
+                print("13")
+                return render(request, 'SecReport/reportFoundResponse.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':_club,'FAQs':FAQs})
             else :
+                print("14")
                 print(FAQs)
-                return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
+                return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':_club,'FAQs':FAQs,'Edit':True})
         else :
+            print("5")
             try :
+                print("6")
                 with transaction.atomic() :
-                    newReport = Report(reportId=reportId, reportingMonth=reportingMonth, reportingClub=club, status = 0)
+                    newReport = Report(reportId=_reportId, reportingMonth=reportingMonth, reportingClub=_club, status = 0)
                     newReport.save()
-
-                    newBulletin = Bulletin(bulletinId=reportId+'-B',hostClub = club)
+                    
+                    salt = ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k = 4))
+                    bulletinId = "B-"+reportingMonth+"-"+salt 
+                    newBulletin = Bulletin(bulletinId=bulletinId,hostClub = _club)
                     newBulletin.save()
                     newBulletinMap = ReportBulletinMapping(report=newReport,bulletin=newBulletin)
                     newBulletinMap.save()
@@ -142,26 +159,27 @@ def present_report(request):
                     for question in questions :
                         newFeedback = Feedback(reportId = newReport, feedbackQuestion=question)
                         newFeedback.save()
-
-                    duesPaid = DuesPaid.objects.get(club=club)
+                    print("7")
+                    duesPaid = DuesPaid.objects.get(club=_club)
                     duesPaidAlreadyVar = duesPaid.dues
-                    Report.objects.filter(reportId=reportId).update(duesPaidAlready=duesPaidAlreadyVar)
+                    Report.objects.filter(reportId=_reportId).update(duesPaidAlready=duesPaidAlreadyVar)
+                    print("8")
+            except Exception as e :
+                print("9")
+                print(e)
+                return redirect('presentReport') #Change
 
-
-
-            except :
-                return redirect('presentReport')
-
-            data = get_report(request,reportId,club)
+            data = get_report(request,_reportId,_club)
             return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
     else :
         return render(request, 'SecReport/deadlineMissed.html',{'Title':'Reporting','Tab':'Reporting'})
 
-def upload_report(request, data, deletedData, status) :
+@login_required
+@has_Access
+def upload_report(request, reportId, data, deletedData, status) :
 
     #Essentials
     club = Club.objects.filter(login=request.user).first()
-    reportId = str(club.rotaryId)+"-"+str(reportingMonth)+"-"+str(year)
 
     #Populate Dictionaries
     reportData = dict()
@@ -327,16 +345,19 @@ def upload_report(request, data, deletedData, status) :
     else :
         raise Exception("Report Object Not Found")
 
+@login_required
 def save_report(request) :
 
     data = json.loads(request.POST.get('data'))
     deletedData = json.loads(request.POST.get('deletedData'))
+    reportId = data['reportId']
 
     try :
-        upload_report(request, data, deletedData, 0)
+        upload_report(request, reportId, data, deletedData, 0)
         data = {
             'success': True
         }
+    
     except Exception as Error :
         print(Error)
         data = {
@@ -346,10 +367,11 @@ def save_report(request) :
 
     return JsonResponse(data)
 
-def finish_report(request):
+@login_required
+@has_Access
+def finish_report(request,reportId):
     print("kya tapleek")
     club = Club.objects.filter(login=request.user).first()
-    reportId = str(club.rotaryId)+"-"+str(reportingMonth)+"-"+str(year)
     report = Report.objects.filter(reportId=reportId)
     FAQs = FAQ.objects.all()
     print("yaha")
@@ -365,18 +387,22 @@ def finish_report(request):
         print("idhar")
         return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','ClubProfile':club,'FAQs':FAQs,'Edit':False,'Error':'Report object not found'})
 
-def submit_report(request) :
+@login_required
+@has_Access
+def submit_report(request, reportId) :
     print("idhar 1")
     club = Club.objects.filter(login=request.user).first()
-    reportId = str(club.rotaryId)+"-"+str(reportingMonth)+"-"+str(year)
     try :
         with transaction.atomic() :
             print("kidhar 1")
             report = Report.objects.filter(reportId=reportId)
             report.update(status="1")
+            print("kidhar 1")
             totalDues = DuesPaid.objects.get(club=club).dues
             duesPaidInThisMonth = report.first().duesPaidInThisMonth
-            totalDues = int(totalDues) + int(duesPaidInThisMonth)
+            duesPaidAlready = report.first().duesPaidAlready
+            print("kidhar 1")
+            totalDues = (0 if duesPaidAlready=='' else int(duesPaidAlready)) + (0 if duesPaidInThisMonth=='' else int(duesPaidInThisMonth))
             DuesPaid.objects.filter(club=club).update(dues=totalDues)
             print("vaha 1")
         return redirect('presentReport')
@@ -387,6 +413,7 @@ def submit_report(request) :
         FAQs = FAQ.objects.all()
         return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':False,'Error':'Submit failed, Contact website coordinators','Exception':e})
 
+@login_required
 @has_Access
 def email_report(request,reportId):
 
@@ -547,6 +574,7 @@ def email_report(request,reportId):
     message.send()
     return redirect('main-home')
 
+@login_required
 @has_Access
 def export_report(request,reportId):
     response = HttpResponse(content_type='application/ms-excel')

@@ -68,7 +68,7 @@ class Club(models.Model):
     clubLogo = models.ImageField(verbose_name="Club Logo", upload_to="clubLogos")
     charterDate  = models.DateTimeField(verbose_name = "Charter Date", null=True, blank=True, default=None)
     meetingPlace = models.CharField(max_length=100,verbose_name = "Meeting Place", null=True, blank=True, default=None)
-    rotaryId = models.CharField(max_length=7,verbose_name = "Rotary Id",null=True,blank=True, default="23")
+    rotaryId = models.CharField(max_length=7, verbose_name = "Rotary Id", null=True, blank=True, default="")
 
     def __str__(self):
         return f'{self.clubName}'
