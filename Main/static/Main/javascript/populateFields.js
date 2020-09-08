@@ -11,7 +11,10 @@ let paidAlready = 0;
 let paid=0;
 let owedMoney=0;
 let pending=0;
+let monthNo = "00";
 
+var today = new Date();
+var year = today.getFullYear();
 
 
 let rowCount = 1;
@@ -68,6 +71,12 @@ function appendGeneralBodyMeeting(meetingId=null,meetingNo=null, meetingDate=nul
   </div>
 
   `);
+
+  day1 = year+'-'+monthNo+'-01';
+  daylast = year+'-'+monthNo+'-31';
+  $("#gbm"+gbmsIndex+"-date").attr("min", day1);
+  $("#gbm"+gbmsIndex+"-date").attr("max", daylast);
+
 
   if(meetingNo!=null) $("#"+"gbm"+gbmsIndex+"-no").val(meetingNo); 
   $("#"+"gbm"+gbmsIndex+"-date").val(meetingDate);
@@ -131,6 +140,11 @@ function appendBODMeeting(meetingId=null,meetingNo=null, meetingDate=null,meetin
 
   `);
 
+  day1 = year+'-'+monthNo+'-01';
+  daylast = year+'-'+monthNo+'-31';
+  $("#bod"+bodsIndex+"-date").attr("min", day1);
+  $("#bod"+bodsIndex+"-date").attr("max", daylast);
+
   if(meetingNo!=null) $("#"+"bod"+bodsIndex+"-no").val(meetingNo); 
   $("#"+"bod"+bodsIndex+"-date").val(meetingDate);
   if(meetingAgenda!=null) $("#"+"bod"+bodsIndex+"-agenda").val(meetingAgenda); 
@@ -139,6 +153,8 @@ function appendBODMeeting(meetingId=null,meetingNo=null, meetingDate=null,meetin
   if(meetingAttendance!=null) $("#"+"bod"+bodsIndex+"-attendance").val(meetingAttendance); 
 
   updateProgress();
+
+  
 }
 
 function appendFEvent(eventId=null, eventName=null, eventStartDate=null, eventEndDate=null, eventAvenue=null, eventDescription=null) {
@@ -154,11 +170,11 @@ function appendFEvent(eventId=null, eventName=null, eventStartDate=null, eventEn
     </div>
     <div class="col-lg-3">
       <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Start Date</p><br>
-      <input tab="Others" oninput="updateList(this.id,'fevent','`+eventId+`')" type="date" id="fevent`+feventsIndex+`-startDate" name="eventStartDate">
+      <input tab="Others" oninput="$('#fevent`+feventsIndex+`-endDate').attr('min', this.value);updateList(this.id,'fevent','`+eventId+`')" type="date" id="fevent`+feventsIndex+`-startDate" name="eventStartDate">
     </div>
     <div class="col-lg-3">
       <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;End Date</p><br>
-      <input tab="Others" oninput="updateList(this.id,'fevent','`+eventId+`')" type="date" id="fevent`+feventsIndex+`-endDate" name="eventEndDate">
+      <input tab="Others" oninput="$('#fevent`+feventsIndex+`-startDate').attr('max', this.value);updateList(this.id,'fevent','`+eventId+`')" type="date" id="fevent`+feventsIndex+`-endDate" name="eventEndDate">
     </div>
     <div class="col-lg-3">
       <p class="label"><i class="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;Avenue</p><br>
@@ -185,6 +201,13 @@ function appendFEvent(eventId=null, eventName=null, eventStartDate=null, eventEn
 
   `);
 
+  console.log(today.getUTCMonth());
+  day1 = year+'-'+((today.getMonth()<10)?("0"+today.getMonth()):today.getMonth())+'-01';
+  console.log(day1);
+  $("#fevent"+feventsIndex+"-startDate").attr("min", day1);
+  $("#fevent"+feventsIndex+"-endDate").attr("min", day1);
+
+
   if(eventName!=null) $("#"+"fevent"+feventsIndex+"-name").val(eventName);
   if(eventStartDate!=null) $("#"+"fevent"+feventsIndex+"-startDate").val(eventStartDate);
   if(eventEndDate!=null) $("#"+"fevent"+feventsIndex+"-endDate").val(eventEndDate);
@@ -207,7 +230,7 @@ function appendEvent(eventId=null, eventName=null, eventStartDate=null, eventEnd
     </div>
     <div class="col-lg-3">
       <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;Start Date</p><br>
-      <input tab="Avenue" oninput="updateList(this.id,'event','`+eventId+`')" type="date" id="event`+eventsIndex+`-startDate" name="eventStartDate">
+      <input tab="Avenue" oninput="$('#event`+eventsIndex+`-endDate').attr('min', this.value);updateList(this.id,'event','`+eventId+`')" type="date" id="event`+eventsIndex+`-startDate" name="eventStartDate">
     </div>
     <div class="col-lg-3">
       <p class="label"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;End Date</p><br>
@@ -254,6 +277,13 @@ function appendEvent(eventId=null, eventName=null, eventStartDate=null, eventEnd
 
   `);
 
+  day1 = year+'-'+monthNo+'-01';
+  daylast = year+'-'+monthNo+'-31';
+  $("#event"+eventsIndex+"-startDate").attr("min", day1);
+  $("#event"+eventsIndex+"-startDate").attr("max", daylast);
+  $("#event"+eventsIndex+"-endDate").attr("min", day1);
+  
+
   if(eventName!=null) $("#"+"event"+eventsIndex+"-name").val(eventName);
   if(eventStartDate!=null) $("#"+"event"+eventsIndex+"-startDate").val(eventStartDate);
   if(eventEndDate!=null) $("#"+"event"+eventsIndex+"-endDate").val(eventEndDate);
@@ -293,7 +323,7 @@ function appendBulletin(bulletinId=null,bulletinName=null,bulletinType=null,bull
     </div>
     <div class="col-lg-4">
       <p class="label">Issued on</p><br>
-      <input tab="Others" oninput="updateList(this.id,'bulletin','`+bulletinId+`')" type="date" name="bulletinIssuedOn" id="bulletin`+bulletinsIndex+`-issuedOn">
+      <input tab="Others" oninput="$('#bulletin`+bulletinsIndex+`-lastIssued').attr('max', this.value);updateList(this.id,'bulletin','`+bulletinId+`')" type="date" name="bulletinIssuedOn" id="bulletin`+bulletinsIndex+`-issuedOn">
     </div>
     <div class="col-lg-4">
       <p class="label">Last Issued on</p><br>
@@ -305,6 +335,14 @@ function appendBulletin(bulletinId=null,bulletinName=null,bulletinType=null,bull
     </div>
   `);
   
+
+  
+  day1 = year+'-'+monthNo+'-01';
+  daylast = year+'-'+monthNo+'-31';
+  $("#bulletin"+bulletinsIndex+"-issuedOn").attr("min", day1);
+  $("#bulletin"+bulletinsIndex+"-issuedOn").attr("max", daylast);
+  $("#bulletin"+bulletinsIndex+"-lastIssued").attr("max", daylast);
+
   if(bulletinName!=null) $("#"+"bulletin"+bulletinsIndex+"-name").val(bulletinName);
   if(bulletinType!=null) $("#"+"bulletin"+bulletinsIndex+"-type").val(bulletinType);
   if(bulletinLink!=null) $("#"+"bulletin"+bulletinsIndex+"-link").val(bulletinLink);
@@ -428,7 +466,7 @@ function validateUrl(id) {
 function updateMonth(reportingMonth=null) {
 
   let now=new Date();
-  let monthNo=reportingMonth.toString();
+  monthNo=reportingMonth.toString();
   
   if(monthNo == "01")
   month="January";
