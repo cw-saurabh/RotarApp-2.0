@@ -1,3 +1,4 @@
+let active = 'Admin';
 function openSection(sectionName) {
     active=sectionName;
     var i, tabcontent, tablinks;
@@ -17,5 +18,23 @@ function openSection(sectionName) {
     document.getElementById(sectionName).style.display = "block";
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+function openPrevSection() {
+    if (active == 'Admin')
+    openSection('Others');
+    else if (active == 'Avenue')
+    openSection('Admin');
+    else if (active == 'Others')
+    openSection('Avenue');
+}
+
+function openNextSection() {
+    if (active == 'Admin')
+    openSection('Avenue');
+    else if (active == 'Avenue')
+    openSection('Others');
+    else if (active == 'Others')
+    openSection('Admin');
 }
 

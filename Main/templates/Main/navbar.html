@@ -18,7 +18,7 @@
 
     <a href="{% url 'main-home' %}" id="desktop-home">Home</a>
     {% if user.is_authenticated %}
-    <a href="{% url 'updateClubProfile' %}" id="desktop-clubProfile">My Club</a>
+    <!--<a href="{% url 'updateClubProfile' %}" id="desktop-clubProfile">My Club</a>-->
     {% if user.loginType == '0' %}
     <a href="{% url 'updateUserProfile' %}" id="desktop-userProfile">My Profile</a>
     {% elif user.loginType == '1' %}
@@ -35,7 +35,7 @@
       <a href="{% url 'main-home' %}" id="mobile-home">Home</a>
 
       {% if user.is_authenticated %}
-      <a href="{% url 'updateClubProfile' %}" id="mobile-clubProfile">My Club</a>
+      <!--<a href="{% url 'updateClubProfile' %}" id="mobile-clubProfile">My Club</a>-->
       {% if user.loginType == '0' %}
       <a href="{% url 'updateUserProfile' %}" id="mobile-userProfile">My Profile</a>
       {% elif user.loginType == '1' %}

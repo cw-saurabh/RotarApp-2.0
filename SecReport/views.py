@@ -19,36 +19,36 @@ import random
 
 def migrate_data(request):
 
-    # p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
-    # p.save()
-    # p = FAQ(question='Where should we add other avenue events ?',answer='Rotaract Events fall under 4 Categories : PD, ISD, CMD & CSD. If your event is under more than 2 avenues then add a new row and then add the same event again by just changing the avenue.')
-    # p.save()
-    # p = FAQ(question='What if we don\'t have an Instagram link or a drive link of a particular event/bulletin ?',answer='Just add a hyphen ( - )')
-    # p.save()
-    # p = FAQ(question='Which browsers are supported for Reporting ?',answer='You can use Chrome or Firefox Browser on mobile or desktop. Do not use Safari Browser.')
-    # p.save()
-    # p = FAQ(question='How can I save the data that I have filled ?',answer='Click on "Save" Button and your data will be saved.')
-    # p.save()
+    p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
+    p.save()
+    p = FAQ(question='Where should we add other avenue events ?',answer='Rotaract Events fall under 4 Categories : PD, ISD, CMD & CSD. If your event is under more than 2 avenues then add a new row and then add the same event again by just changing the avenue.')
+    p.save()
+    p = FAQ(question='What if we don\'t have an Instagram link or a drive link of a particular event/bulletin ?',answer='Just add a hyphen ( - )')
+    p.save()
+    p = FAQ(question='Which browsers are supported for Reporting ?',answer='You can use Chrome or Firefox Browser on mobile or desktop. Do not use Safari Browser.')
+    p.save()
+    p = FAQ(question='How can I save the data that I have filled ?',answer='Click on "Save" Button and your data will be saved.')
+    p.save()
 
-    # p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Members added")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Members left")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Prospective")
-    # p.save()
-    # p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
-    # p.save()
+    p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Members added")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Members left")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Prospective")
+    p.save()
+    p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
+    p.save()
 
-    # p = FeedbackQuestion(questionText="Whether you have received acknowledgement from the District Reporting Secretary ?")
-    # p.save()
-    # p = FeedbackQuestion(questionText="Do you get a prompt response from the DZR / AZR ?")
-    # p.save()
-    # p = FeedbackQuestion(questionText="Whether you have received receipt for payment of Dues ?")
-    # p.save()
-    # p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
-    # p.save()
+    p = FeedbackQuestion(questionText="Whether you have received acknowledgement from the District Reporting Secretary ?")
+    p.save()
+    p = FeedbackQuestion(questionText="Do you get a prompt response from the DZR / AZR ?")
+    p.save()
+    p = FeedbackQuestion(questionText="Whether you have received receipt for payment of Dues ?")
+    p.save()
+    p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
+    p.save()
 
     return redirect('login')
 
@@ -120,29 +120,34 @@ def present_report(request):
     report = Report.objects.filter(reportId=_reportId)
 
     if (True) : #Has permission
-        
+        print("1")
         FAQs = FAQ.objects.all()
-
+        print("2")
         if report.exists() :
+            print("3")
             data = get_report(request,_reportId,_club)
             if report.first().status == '1' :
+                print("4")
                 return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
             else :
+                print("5")
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':_club,'FAQs':FAQs,'Edit':True})
         else :
+            print("6")
             try :
                 with transaction.atomic() :
+                    print("7")
                     newReport = Report(reportId=_reportId, reportingMonth=reportingMonth, reportingClub=_club, status = 0)
                     newReport.save()
-                    
+                    print("8")
                     salt = ''.join(random.choices(string.ascii_uppercase +
                              string.digits, k = 4))
-                    bulletinId = "B-"+reportingMonth+"-"+salt 
+                    bulletinId = "B-"+reportingMonth+"-"+salt
                     newBulletin = Bulletin(bulletinId=bulletinId,hostClub = _club)
                     newBulletin.save()
                     newBulletinMap = ReportBulletinMapping(report=newReport,bulletin=newBulletin)
                     newBulletinMap.save()
-
+                    print("9")
                     attributes = MemberMatrixAttribute.objects.all()
                     for attribute in attributes :
                         newMatrixRow = MemberMatrix(reportId = newReport, attribute=attribute)
@@ -156,15 +161,17 @@ def present_report(request):
                     duesPaid = DuesPaid.objects.get(club=_club)
                     duesPaidAlreadyVar = duesPaid.dues
                     Report.objects.filter(reportId=_reportId).update(duesPaidAlready=duesPaidAlreadyVar)
-                
+                    print("10")
                 data = get_report(request,_reportId,_club)
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
 
             except Exception as e :
+                print("11")
                 print(e)
-                return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'An error has occurred. Log in again and contact the website coordinators if the error retains.' }}})
-              
+                return redirect('presentReport')
+
     else :
+        print("12")
         if report.exists() and report.first().status == '1' :
             return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
         else :
@@ -353,7 +360,7 @@ def save_report(request) :
         data = {
             'success': True
         }
-    
+
     except Exception as Error :
         print(Error)
         data = {
@@ -385,7 +392,7 @@ def finish_report(request,reportId):
     club = Club.objects.filter(login=request.user).first()
     report = Report.objects.filter(reportId=reportId)
     FAQs = FAQ.objects.all()
-    
+
     if report.exists() :
         data = get_report(request, reportId,club)
         if report.first().status == '1' :
