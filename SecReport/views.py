@@ -415,17 +415,24 @@ def submit_report(request, reportId) :
             duesPaidAlready = report.first().duesPaidAlready
             totalDues = (0 if duesPaidAlready=='' else int(duesPaidAlready)) + (0 if duesPaidInThisMonth=='' else int(duesPaidInThisMonth))
             DuesPaid.objects.filter(club=club).update(dues=totalDues)
-        return redirect('presentReport')
+        
     except Exception as e:
         print(e)
         data = get_report(request, reportId,club)
         FAQs = FAQ.objects.all()
         return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':False,'Error':'Submit failed, Contact website coordinators','Exception':e})
+    try :
+        email_report(request, reportId)
+    except Exception as e:
+        print(e)
+    return redirect('presentReport')
 
 @login_required
 @has_Access
 def email_report(request,reportId):
 
+    emailId = request.user.email
+    print(emailId)
     Report1 = Report.objects.filter(reportId=reportId).all().first()
     Club = Report1.reportingClub.clubName
     Month = Report1.reportingMonth
@@ -568,9 +575,10 @@ def email_report(request,reportId):
     f = BytesIO() # create a file-like object
     wb.save(f)
     subject = 'Secretarial Report Received'
-    message = 'We have received your report for the previous month. Attaching it herewith.<br><br>For any queries, Contact - <br><br>Rtr. Prasad Seth (District Secretary - Reporting)<br>Call : +91 - 9623134392<br>Whatsapp : +91 - 9623134392<br>Mail Id: rtrprasadseth@gmail.com'
+    message = 'We have received your report for the previous month. Find a copy of your report that has been attached herewith.<br><br>For any queries, Contact - <br><br>Rtr. Prasad Seth (District Secretary - Reporting)<br>Call : +91 - 9623134392<br>Whatsapp : +91 - 9623134392<br>Mail Id: rtrprasadseth@gmail.com'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = ['rtrprasadseth@gmail.com']
+    recipient_list.append(emailId)
     # send_mail( subject, message, email_from, recipient_list )
 
 
