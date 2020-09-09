@@ -1,9 +1,9 @@
 {% extends "Main/base.html" %}
-    
+
 {% load static %}
 
 {% block javascript %}
-    
+
     <script src="{% static 'Main/javascript/memberMatrix.js' %}"></script>
     <script src="{% static 'Main/javascript/populateFields.js' %}"></script>
     <script src="{% static 'Main/javascript/updateProgress.js' %}"></script>
@@ -22,14 +22,14 @@
         content.style.maxHeight = null;
         } else {
         content.style.maxHeight = content.scrollHeight + "px";
-        } 
+        }
     });
     }
 
     </script>
 
     <script>
-    
+
     function save() {
         console.log("Saving initialised !");
         console.log(data);
@@ -57,7 +57,7 @@
             }
         });
     }
-    
+
     $(document).ready(function(){
         updateProgress();
         updateMonth("{{Report.ReportingMonth}}");
@@ -72,14 +72,14 @@
         {% if not Report.GBMData %}
             appendGeneralBodyMeeting();
         {% endif %}
-        
+
         {% for key, value in Report.BODData.items %}
             appendBODMeeting("{{value.meetingId}}","{{value.meetingNo}}","{{value.meetingDate|date:"Y-m-d"}}","{{value.meetingAgenda}}","{{value.bylawsBoolean}}","{{value.budgetBoolean}}","{{value.meetingAttendance}}");
         {% endfor %}
         {% if not Report.BODData %}
             appendBODMeeting();
         {% endif %}
-        
+
         {% for key, value in Report.EventData.items %}
             appendEvent("{{value.eventId}}","{{value.eventName}}","{{value.eventStartDate|date:"Y-m-d"}}","{{value.eventEndDate|date:"Y-m-d"}}","{{value.eventAvenue}}","{{value.eventAttendance}}","{{value.eventHours}}","{{value.eventFundRaised}}","{{value.eventDescription}}","{{value.eventLink}}");
         {% endfor %}
@@ -107,8 +107,8 @@
         {% for MemberMatrixRow in Report.MemberMatrix %}
             appendMemberMatrixRow("{{MemberMatrixRow.attribute__id}}","{{MemberMatrixRow.attribute__attribute}}","{{MemberMatrixRow.attribute__operation}}","{{MemberMatrixRow.maleCount}}","{{MemberMatrixRow.femaleCount}}","{{MemberMatrixRow.othersCount}}");
             updateMatrix();
-        {% endfor %}     
-        
+        {% endfor %}
+
         {% if not Edit %}
             $("input").attr("disabled", true);
             $("select").attr("disabled", true);
@@ -127,15 +127,15 @@
         updatePending();
 
 
-        
+
     });
-    
+
     </script>
     <script>
     function customSubmit() {
         var flag = true;
         var empty = [];
-        
+
         $("input").not("input[name=bulletinIssuedOn],input[name=lastBulletinIssuedOn]").each(function() {
         var element = $(this);
         element.removeClass("empty");
@@ -188,6 +188,12 @@
 
 <div id="reportHeadingSection" class="text-center">
     <h4 id="reportHeading1" onclick="AutoFill()"><b>Secretarial Reporting</b></h4>
+    <!--<img id="reportImage1" src="{{STATIC_URL}}{{ ClubProfile.clubLogo.url }}" alt="Rotaract">-->
+    {% if profile.zone %}
+    <h4 id="reportHeading2"><b>{{ ClubProfile.clubName }}<br><h4>Zone {{ ClubProfile.zone }} - {{ ClubProfile.rotaryId }}</h4></b></h4>
+    {% else %}
+    <h4 id="reportHeading2"><b>{{ ClubProfile.clubName }}<br><h4>{{ ClubProfile.rotaryId }}</h4></b></h4>
+    {% endif %}
 </div>
 
 <div class="container" id="tabs">
@@ -212,7 +218,7 @@
         <h6><small style="color:red"><b>*&nbsp;&nbsp;:&nbsp;&nbsp;Numeric Fields,&nbsp;&nbsp;All fields are compulsory.</b></small></h6>
     </div>
     <div id="errorMessages" style="padding:0;margin:0">
-        
+
     </div>
     <div id="successMessages" style="padding-left:2%;margin:0;color:green;display:none">
         <b>Saved changes !</b>
@@ -225,7 +231,7 @@
 {% csrf_token %}
 
 <div id="Admin" class="tabcontent active" style="padding-bottom:0">
-    
+
 <div class="row" style="margin:0">
     <div class="col-lg-3">
         <p class="label" id = "">Reporting for the month of :</p>
@@ -258,8 +264,22 @@
     {% for FAQ in FAQs %}
     <p class="label" style="color:#D41367;white-space:normal;padding:0;margin:0">{{FAQ.question|linebreaksbr}}</p><br>
     <p class="label" style="color:#337ab7;white-space:normal;padding:0;margin:0;text-align:justify">{{FAQ.answer|linebreaksbr}}</p><br><br>
-    {% endfor %}    
+    {% endfor %}
     <br>
+    <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%"><br>
+    <p class="label" style="color:#D41367;white-space:normal;padding:0;margin:0">Disclaimer</p><br>
+    <p class="label" style="color:#337ab7;white-space:normal;padding:0;margin:0;text-align:justify">Do not add emojis in the text fields. Technical issues won't be entertained on the last day of reporting.</p><br><br>
+    <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%"><br>
+    <p class="label" style="color:#337ab7;white-space:normal;padding:0;margin:0;text-align:justify">
+    For any queries, Contact -<br><br>
+    Rtr. Prasad Seth<br class="mobile">
+    (District Secretary - Reporting)<br><br>
+
+    <i class="fa fa-mobile" aria-hidden="true"></i>&nbsp;&nbsp;Call : <a href="tel:+919623134392">+91 - 9623134392</a><br>
+    <i class="fa fa-whatsapp" aria-hidden="true"></i>&nbsp;&nbsp;Whatsapp : <a href="https://api.whatsapp.com/send?phone=919623134392#">+91 - 9623134392</a><br>
+    <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Mail : <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=rtrprasadseth@gmail.com" target="_blank">rtrprasadseth@gmail.com</a>
+    </p>
+    <br><br>
 </div>
 
 
