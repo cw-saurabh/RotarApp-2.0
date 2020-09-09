@@ -463,7 +463,7 @@ def email_report(request,reportId):
         row_num += 1
         rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
         for row in rows :
-            for col_num in range(5):
+            for col_num in range(6):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
 
     #BOD
@@ -480,7 +480,7 @@ def email_report(request,reportId):
         row_num += 1
         rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
         for row in rows :
-            for col_num in range(5):
+            for col_num in range(6):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
 
     #Events
@@ -627,7 +627,7 @@ def export_report(request,reportId):
         row_num += 1
         rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
         for row in rows :
-            for col_num in range(5):
+            for col_num in range(6):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
 
     #BOD
@@ -644,7 +644,7 @@ def export_report(request,reportId):
         row_num += 1
         rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
         for row in rows :
-            for col_num in range(5):
+            for col_num in range(6):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
 
     #Events

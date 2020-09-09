@@ -3,8 +3,8 @@ from django.db import models
 import uuid
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
-from django.db import models  
-from datetime import datetime, timedelta 
+from django.db import models
+from datetime import datetime, timedelta
 
 loginTypes = (
     ("0", "Rotaractor"),
@@ -15,11 +15,11 @@ class Account(AbstractUser):
     loginId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = None
     last_name = None
-    loginType = models.CharField( 
-        max_length = 2, 
-        choices = loginTypes, 
+    loginType = models.CharField(
+        max_length = 2,
+        choices = loginTypes,
         default = '0'
-        ) 
+        )
     email = models.EmailField(blank=False)
     REQUIRED_FIELDS = ['loginType','email']
 
@@ -40,7 +40,7 @@ class District(models.Model):
 
     class Meta:
         verbose_name = 'District'
-        verbose_name_plural = 'Districts' 
+        verbose_name_plural = 'Districts'
 
     def save(self, *args, **kwargs):
 
@@ -56,7 +56,7 @@ class District(models.Model):
                 height = int((float(img.size[1])*float(wpercent)))
                 img = img.resize((width,height), Image.ANTIALIAS)
                 img.save(self.distLogo.path)
-        except Exception as e: 
+        except Exception as e:
             print(e)
 
 class Club(models.Model):
@@ -64,7 +64,6 @@ class Club(models.Model):
     login = models.OneToOneField(Account, on_delete=models.CASCADE)
     clubName = models.CharField(max_length=50,verbose_name = "Name", default="",blank=True)
     zone = models.CharField(verbose_name = "Zone", max_length = 2, blank=True, null=True)
-    distId = models.ForeignKey(District, on_delete = models.CASCADE, null=True)
     clubLogo = models.ImageField(verbose_name="Club Logo", upload_to="clubLogos")
     charterDate  = models.DateTimeField(verbose_name = "Charter Date", null=True, blank=True, default=None)
     meetingPlace = models.CharField(max_length=100,verbose_name = "Meeting Place", null=True, blank=True, default=None)
@@ -76,13 +75,13 @@ class Club(models.Model):
     class Meta:
         verbose_name = 'Club'
         verbose_name_plural = 'Clubs'
-        
+
     def save(self, *args, **kwargs):
         try:
             this = Club.objects.get(clubId=self.clubId)
             if this.clubLogo.path != self.clubLogo.path :
                 this.clubLogo.delete()
-        except Exception as e: 
+        except Exception as e:
             print(e)
 
         super().save(*args, **kwargs)
@@ -97,21 +96,21 @@ class Club(models.Model):
                 height = int((float(img.size[1])*float(wpercent)))
                 img = img.resize((width,height), Image.ANTIALIAS)
                 img.save(self.clubLogo.path)
-        except Exception as e: 
+        except Exception as e:
             print(e)
 
 class Member(models.Model):
     memberId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     login = models.OneToOneField(Account, on_delete=models.CASCADE)
-    firstName = models.CharField(max_length=15,verbose_name = "First Name", default="",blank=True) 
-    lastName = models.CharField(max_length=15,verbose_name = "Last Name", default="",blank=True, null=True) 
-    gender = models.CharField( 
-        max_length = 1, 
-        choices = (("M","Male"),("F","Female"),("O","Others")), 
+    firstName = models.CharField(max_length=15,verbose_name = "First Name", default="",blank=True)
+    lastName = models.CharField(max_length=15,verbose_name = "Last Name", default="",blank=True, null=True)
+    gender = models.CharField(
+        max_length = 1,
+        choices = (("M","Male"),("F","Female"),("O","Others")),
         default = None,
         blank = True,
         null = True
-        ) 
+        )
     rotaryId = models.IntegerField(verbose_name = "Rotary Id",null=True,blank=True)
     contact = models.CharField(max_length=10,verbose_name = "Contact Number", default="",blank=True, null=True)
     birthDate = models.DateTimeField(verbose_name = "Birth Date", null=True, blank=True, default=None)
@@ -125,13 +124,13 @@ class Member(models.Model):
     class Meta:
         verbose_name = 'Rotaractor'
         verbose_name_plural = 'Rotaractors'
-        
+
     def save(self, *args, **kwargs):
         try:
             this = Member.objects.get(memberId=self.memberId)
             if this.photo.path != self.photo.path :
                 this.photo.delete()
-        except Exception as e: 
+        except Exception as e:
             print(e)
 
         super().save(*args, **kwargs)
@@ -146,12 +145,12 @@ class Member(models.Model):
                 height = int((float(img.size[1])*float(wpercent)))
                 img = img.resize((width,height), Image.ANTIALIAS)
                 img.save(self.photo.path)
-        except Exception as e: 
+        except Exception as e:
             print(e)
 
 class ClubRole(models.Model):
     clubRoleId = models.AutoField(primary_key=True)
-    clubRoleName = models.CharField(max_length=15,verbose_name = "Club Role Name") 
+    clubRoleName = models.CharField(max_length=15,verbose_name = "Club Role Name")
 
     def __str__(self):
         return f'{self.clubRoleName}'
@@ -162,7 +161,7 @@ class ClubRole(models.Model):
 
 class DistrictRole(models.Model):
     distRoleId = models.AutoField(primary_key=True)
-    distRoleName = models.CharField(max_length=15,verbose_name = "District Role Name") 
+    distRoleName = models.CharField(max_length=15,verbose_name = "District Role Name")
 
     def __str__(self):
         return f'{self.distRoleName}'
@@ -191,7 +190,7 @@ class DistrictCouncil(models.Model):
             startDate = self.tenureStarts
             endDate = startDate + timedelta(days=365)
             self.tenureEnds = endDate
-        except Exception as e: 
+        except Exception as e:
             print(e)
 
         super().save(*args, **kwargs)
@@ -216,7 +215,7 @@ class ClubCouncil(models.Model):
             startDate = self.tenureStarts
             endDate = startDate + timedelta(days=365)
             self.tenureEnds = endDate
-        except Exception as e: 
+        except Exception as e:
             print(e)
 
         super().save(*args, **kwargs)
