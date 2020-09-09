@@ -16,39 +16,74 @@ from django.core.mail import EmailMessage
 from .decorators import is_Club, has_Access
 import string
 import random
+import logging
+
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
+            'format': '%(asctime)s:%(funcName)s:%(levelname)s:%(message)s'
+        },
+        'file': {
+            'format': '%(asctime)s:%(funcName)s:%(levelname)s:%(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'file',
+            'filename': 'debug.log'
+        }
+    },
+    'loggers': {
+        '': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'file']
+        }
+    }
+})
+
+# This retrieves a Python logging instance (or creates it)
+logger = logging.getLogger(__name__)
 
 def migrate_data(request):
 
-    p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
-    p.save()
-    p = FAQ(question='Where should we add other avenue events ?',answer='Rotaract Events fall under 4 Categories : PD, ISD, CMD & CSD. If your event is under more than 2 avenues then add a new row and then add the same event again by just changing the avenue.')
-    p.save()
-    p = FAQ(question='What if we don\'t have an Instagram link or a drive link of a particular event/bulletin ?',answer='Just add a hyphen ( - )')
-    p.save()
-    p = FAQ(question='Which browsers are supported for Reporting ?',answer='You can use Chrome or Firefox Browser on mobile or desktop. Do not use Safari Browser.')
-    p.save()
-    p = FAQ(question='How can I save the data that I have filled ?',answer='Click on "Save" Button and your data will be saved.')
-    p.save()
+    # p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
+    # p.save()
+    # p = FAQ(question='Where should we add other avenue events ?',answer='Rotaract Events fall under 4 Categories : PD, ISD, CMD & CSD. If your event is under more than 2 avenues then add a new row and then add the same event again by just changing the avenue.')
+    # p.save()
+    # p = FAQ(question='What if we don\'t have an Instagram link or a drive link of a particular event/bulletin ?',answer='Just add a hyphen ( - )')
+    # p.save()
+    # p = FAQ(question='Which browsers are supported for Reporting ?',answer='You can use Chrome or Firefox Browser on mobile or desktop. Do not use Safari Browser.')
+    # p.save()
+    # p = FAQ(question='How can I save the data that I have filled ?',answer='Click on "Save" Button and your data will be saved.')
+    # p.save()
 
-    p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
-    p.save()
-    p = MemberMatrixAttribute(attribute="Members added")
-    p.save()
-    p = MemberMatrixAttribute(attribute="Members left")
-    p.save()
-    p = MemberMatrixAttribute(attribute="Prospective")
-    p.save()
-    p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
-    p.save()
+    # p = MemberMatrixAttribute(attribute="Members at the beginning of this month")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Members added")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Members left")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Prospective")
+    # p.save()
+    # p = MemberMatrixAttribute(attribute="Guests (RYE /NGSE /Family)")
+    # p.save()
 
-    p = FeedbackQuestion(questionText="Whether you have received acknowledgement from the District Reporting Secretary ?")
-    p.save()
-    p = FeedbackQuestion(questionText="Do you get a prompt response from the DZR / AZR ?")
-    p.save()
-    p = FeedbackQuestion(questionText="Whether you have received receipt for payment of Dues ?")
-    p.save()
-    p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
-    p.save()
+    # p = FeedbackQuestion(questionText="Whether you have received acknowledgement from the District Reporting Secretary ?")
+    # p.save()
+    # p = FeedbackQuestion(questionText="Do you get a prompt response from the DZR / AZR ?")
+    # p.save()
+    # p = FeedbackQuestion(questionText="Whether you have received receipt for payment of Dues ?")
+    # p.save()
+    # p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
+    # p.save()
 
     return redirect('login')
 
@@ -120,26 +155,26 @@ def present_report(request):
     report = Report.objects.filter(reportId=_reportId)
 
     if (True) : #Has permission
-        print("1")
         FAQs = FAQ.objects.all()
-        print("2")
+
         if report.exists() :
-            print("3")
+            logger.debug(request.user.username + ": Report Exists")
             data = get_report(request,_reportId,_club)
             if report.first().status == '1' :
-                print("4")
+                logger.debug(request.user.username + ": Report is locked")
                 return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
             else :
-                print("5")
+                logger.debug(request.user.username + ": Report is open")
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':_club,'FAQs':FAQs,'Edit':True})
+        
         else :
-            print("6")
             try :
                 with transaction.atomic() :
-                    print("7")
+                    logger.debug(request.user.username + ": Report doesn't exist")
+                    
                     newReport = Report(reportId=_reportId, reportingMonth=reportingMonth, reportingClub=_club, status = 0)
                     newReport.save()
-                    print("8")
+              
                     salt = ''.join(random.choices(string.ascii_uppercase +
                              string.digits, k = 4))
                     bulletinId = "B-"+reportingMonth+"-"+salt
@@ -147,7 +182,7 @@ def present_report(request):
                     newBulletin.save()
                     newBulletinMap = ReportBulletinMapping(report=newReport,bulletin=newBulletin)
                     newBulletinMap.save()
-                    print("9")
+              
                     attributes = MemberMatrixAttribute.objects.all()
                     for attribute in attributes :
                         newMatrixRow = MemberMatrix(reportId = newReport, attribute=attribute)
@@ -161,17 +196,18 @@ def present_report(request):
                     duesPaid = DuesPaid.objects.get(club=_club)
                     duesPaidAlreadyVar = duesPaid.dues
                     Report.objects.filter(reportId=_reportId).update(duesPaidAlready=duesPaidAlreadyVar)
-                    print("10")
+
+                    logger.info(request.user.username + ": Report Created")
+              
                 data = get_report(request,_reportId,_club)
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
 
             except Exception as e :
-                print("11")
-                print(e)
+                logger.error(request.user.username + ": Report initialisation failed. Exception :" + str(e))
                 return redirect('presentReport')
 
     else :
-        print("12")
+
         if report.exists() and report.first().status == '1' :
             return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
         else :
@@ -350,7 +386,8 @@ def upload_report(request, reportId, data, deletedData, status) :
 
 @login_required
 def save_report(request) :
-
+    
+    logger.info(request.user.username + ": The Report is staged for saving")
     data = json.loads(request.POST.get('data'))
     deletedData = json.loads(request.POST.get('deletedData'))
     reportId = data['reportId']
@@ -360,19 +397,21 @@ def save_report(request) :
         data = {
             'success': True
         }
+        logger.info(request.user.username + ": The Report has been saved successfully")
 
     except Exception as Error :
-        print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
+        logger.error(request.user.username + ": Saving failed, Caught an exception, " + str(Error))
 
     return JsonResponse(data)
 
 @login_required
 @has_Access
 def view_report(request,reportId) :
+    logger.info(request.user.username + ": Presenting the view")
     _club = Club.objects.filter(login=request.user).first()
     report = Report.objects.filter(reportId=reportId)
 
@@ -383,12 +422,14 @@ def view_report(request,reportId) :
         else :
             return redirect('presentReport')
     else :
+        logger.error(request.user.username + ": report-view unsuccessful, report not found")
         return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
 
 
 @login_required
 @has_Access
 def finish_report(request,reportId):
+    logger.info(request.user.username + ": The Report has been staged for 'Finish'")
     club = Club.objects.filter(login=request.user).first()
     report = Report.objects.filter(reportId=reportId)
     FAQs = FAQ.objects.all()
@@ -400,12 +441,14 @@ def finish_report(request,reportId):
         else :
             return render(request, 'SecReport/reportView.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'Edit':True})
     else :
+        logger.error(request.user.username + ": Finish unsuccessful, report not found")
         return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
 
 @login_required
 @has_Access
 def submit_report(request, reportId) :
     club = Club.objects.filter(login=request.user).first()
+    logger.info(request.user.username + ": The Report is staged for the final submit")
     try :
         with transaction.atomic() :
             report = Report.objects.filter(reportId=reportId)
@@ -415,16 +458,18 @@ def submit_report(request, reportId) :
             duesPaidAlready = report.first().duesPaidAlready
             totalDues = (0 if duesPaidAlready=='' else int(duesPaidAlready)) + (0 if duesPaidInThisMonth=='' else int(duesPaidInThisMonth))
             DuesPaid.objects.filter(club=club).update(dues=totalDues)
+            logger.info(request.user.username + ": The Report has been submitted successfully !")
         
     except Exception as e:
-        print(e)
+        logger.error(request.user.username + ": Submit failed, Caught an exception, " + str(e))
         data = get_report(request, reportId,club)
         FAQs = FAQ.objects.all()
         return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':False,'Error':'Submit failed, Contact website coordinators','Exception':e})
     try :
         email_report(request, reportId)
+        logger.info(request.user.username + ": Automatic response successful !")
     except Exception as e:
-        print(e)
+        logger.error(request.user.username + ": Auto-response failed, Caught an exception, " + str(e))
     return redirect('presentReport')
 
 @login_required
@@ -594,148 +639,156 @@ def email_report(request,reportId):
 @login_required
 @has_Access
 def export_report(request,reportId):
-    response = HttpResponse(content_type='application/ms-excel')
-    Report1 = Report.objects.filter(reportId=reportId).all().first()
-    Club = Report1.reportingClub.clubName
-    Month = Report1.reportingMonth
-    response['Content-Disposition'] = 'attachment; filename="'+str(Club)+"-"+str(Month)+'.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    colwidth = int(13*260)
+    try :
+        logger.info(request.user.username + ": Export initialised !")
+        response = HttpResponse(content_type='application/ms-excel')
+        Report1 = Report.objects.filter(reportId=reportId).all().first()
+        Club = Report1.reportingClub.clubName
+        Month = Report1.reportingMonth
+        response['Content-Disposition'] = 'attachment; filename="'+str(Club)+"-"+str(Month)+'.xls"'
+        wb = xlwt.Workbook(encoding='utf-8')
+        colwidth = int(13*260)
 
-    #Reports
-    ws = wb.add_sheet('Reports')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    font_style.alignment.wrap = 1
-    columns = ['Month','Date','Dues paid already','Dues paid in this month','Suggestions']
-    for i in range(len(columns)):
-        ws.col(i).width = colwidth
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    font_style.alignment.wrap = 1
-    rows = Report.objects.filter(reportId=reportId).all().values_list('reportingMonth','reportingDate','duesPaidAlready','duesPaidInThisMonth','suggestions')
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, str(row[col_num]), font_style)
-
-    #GBM
-    ws = wb.add_sheet('GBMs')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Meeting No.','Date','Agenda','Bylaws passed?','Budget passed?','Attendance']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    maps = ReportMeetingMapping.objects.filter(report=reportId,meeting__meetingType="2").all()
-    for map in maps :
-        row_num += 1
-        rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
-        for row in rows :
-            for col_num in range(6):
+        #Reports
+        ws = wb.add_sheet('Reports')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        font_style.alignment.wrap = 1
+        columns = ['Month','Date','Dues paid already','Dues paid in this month','Suggestions']
+        for i in range(len(columns)):
+            ws.col(i).width = colwidth
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        font_style.alignment.wrap = 1
+        rows = Report.objects.filter(reportId=reportId).all().values_list('reportingMonth','reportingDate','duesPaidAlready','duesPaidInThisMonth','suggestions')
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
 
-    #BOD
-    ws = wb.add_sheet('BODs')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Meeting No.','Date','Agenda','Bylaws passed?','Budget passed?','Attendance']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    maps = ReportMeetingMapping.objects.filter(report=reportId,meeting__meetingType="1").all()
-    for map in maps :
-        row_num += 1
-        rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
+        #GBM
+        ws = wb.add_sheet('GBMs')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['Meeting No.','Date','Agenda','Bylaws passed?','Budget passed?','Attendance']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        maps = ReportMeetingMapping.objects.filter(report=reportId,meeting__meetingType="2").all()
+        for map in maps :
+            row_num += 1
+            rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
+            for row in rows :
+                for col_num in range(6):
+                    ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+        #BOD
+        ws = wb.add_sheet('BODs')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['Meeting No.','Date','Agenda','Bylaws passed?','Budget passed?','Attendance']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        maps = ReportMeetingMapping.objects.filter(report=reportId,meeting__meetingType="1").all()
+        for map in maps :
+            row_num += 1
+            rows = Meeting.objects.filter(meetingId=map.meeting.meetingId).all().values_list('meetingNo','meetingDate','meetingAgenda','bylawsBoolean','budgetBoolean','meetingAttendance')
+            for row in rows :
+                for col_num in range(6):
+                    ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+        #Events
+        ws = wb.add_sheet('Events')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['Event Name','Start Date','End Date','Avenue','Attendance','Voluntary Hours','Funds raised','Description','Link']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        maps = ReportEventMapping.objects.filter(report=reportId,event__eventType="1").all()
+        for map in maps :
+            row_num += 1
+            rows = Event.objects.filter(eventId=map.event.eventId).all().values_list('eventName','eventStartDate','eventEndDate','eventAvenue','eventAttendance','eventHours','eventFundRaised','eventDescription','eventLink')
+            for row in rows :
+                for col_num in range(9):
+                    ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+        #Future Events
+        ws = wb.add_sheet('Future Events')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['Event Name','Start Date','End Date','Avenue','Description']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        maps = ReportEventMapping.objects.filter(report=reportId,event__eventType="2").all()
+        for map in maps :
+            row_num += 1
+            rows = Event.objects.filter(eventId=map.event.eventId).all().values_list('eventName','eventStartDate','eventEndDate','eventAvenue','eventDescription')
+            for row in rows :
+                for col_num in range(5):
+                    ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+        #Feedback
+        ws = wb.add_sheet('Feedback')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['Question','Response']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = Feedback.objects.filter(reportId=reportId).all().values_list('feedbackQuestion__questionText','booleanResponse')
         for row in rows :
-            for col_num in range(6):
+            row_num += 1
+            for col_num in range(2):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
 
-    #Events
-    ws = wb.add_sheet('Events')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Event Name','Start Date','End Date','Avenue','Attendance','Voluntary Hours','Funds raised','Description','Link']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    maps = ReportEventMapping.objects.filter(report=reportId,event__eventType="1").all()
-    for map in maps :
-        row_num += 1
-        rows = Event.objects.filter(eventId=map.event.eventId).all().values_list('eventName','eventStartDate','eventEndDate','eventAvenue','eventAttendance','eventHours','eventFundRaised','eventDescription','eventLink')
+        #Member Matrix
+        ws = wb.add_sheet('Member Matrix')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['Attribute', 'Male Count', 'Female Count', 'Others Count']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = MemberMatrix.objects.filter(reportId=reportId).all().values_list('attribute__attribute','maleCount','femaleCount','othersCount')
         for row in rows :
-            for col_num in range(9):
+            row_num += 1
+            for col_num in range(4):
                 ws.write(row_num, col_num, str(row[col_num]), font_style)
 
-    #Future Events
-    ws = wb.add_sheet('Future Events')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Event Name','Start Date','End Date','Avenue','Description']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    maps = ReportEventMapping.objects.filter(report=reportId,event__eventType="2").all()
-    for map in maps :
-        row_num += 1
-        rows = Event.objects.filter(eventId=map.event.eventId).all().values_list('eventName','eventStartDate','eventEndDate','eventAvenue','eventDescription')
-        for row in rows :
-            for col_num in range(5):
-                ws.write(row_num, col_num, str(row[col_num]), font_style)
-
-    #Feedback
-    ws = wb.add_sheet('Feedback')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Question','Response']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    rows = Feedback.objects.filter(reportId=reportId).all().values_list('feedbackQuestion__questionText','booleanResponse')
-    for row in rows :
-        row_num += 1
-        for col_num in range(2):
-            ws.write(row_num, col_num, str(row[col_num]), font_style)
-
-    #Member Matrix
-    ws = wb.add_sheet('Member Matrix')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Attribute', 'Male Count', 'Female Count', 'Others Count']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    rows = MemberMatrix.objects.filter(reportId=reportId).all().values_list('attribute__attribute','maleCount','femaleCount','othersCount')
-    for row in rows :
-        row_num += 1
-        for col_num in range(4):
-            ws.write(row_num, col_num, str(row[col_num]), font_style)
-
-    #Bulletin
-    ws = wb.add_sheet('Bulletin')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['Bulletin Name','Bulletin Type','Bulletin Link','Issued on','Last bulletin Issued on','Frequency']
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-    font_style = xlwt.XFStyle()
-    maps = ReportBulletinMapping.objects.filter(report=reportId).all()
-    for map in maps :
-        row_num += 1
-        rows = Bulletin.objects.filter(bulletinId=map.bulletin.bulletinId).all().values_list('bulletinName','bulletinType','bulletinLink','bulletinIssuedOn','lastBulletinIssuedOn','bulletinFrequency')
-        for row in rows :
-            for col_num in range(6):
-                ws.write(row_num, col_num, str(row[col_num]), font_style)
+        #Bulletin
+        ws = wb.add_sheet('Bulletin')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['Bulletin Name','Bulletin Type','Bulletin Link','Issued on','Last bulletin Issued on','Frequency']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        maps = ReportBulletinMapping.objects.filter(report=reportId).all()
+        for map in maps :
+            row_num += 1
+            rows = Bulletin.objects.filter(bulletinId=map.bulletin.bulletinId).all().values_list('bulletinName','bulletinType','bulletinLink','bulletinIssuedOn','lastBulletinIssuedOn','bulletinFrequency')
+            for row in rows :
+                for col_num in range(6):
+                    ws.write(row_num, col_num, str(row[col_num]), font_style)
 
 
-    wb.save(response)
-    return response
+        wb.save(response)
+        logger.info(request.user.username + ": Export successful !")
+        return response
+
+    except Exception as e :
+        response = None
+        logger.error(request.user.username + ": Export failed, Caught an exception, " + str(e))
+        return response
