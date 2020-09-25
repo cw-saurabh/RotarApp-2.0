@@ -29,7 +29,7 @@
     </script>
 
     <script>
-
+    {% autoescape off %}
     function save() {
         console.log("Saving initialised !");
         console.log(data);
@@ -60,52 +60,52 @@
 
     $(document).ready(function(){
         updateProgress();
-        updateMonth("{{Report.ReportingMonth}}");
+        updateMonth(`{{Report.ReportingMonth}}`);
         {% if Error %}
             $('#errorMessages').html("<p>{{Error}}</p>");
         {% endif %}
-        $("#suggestion00").val('{{Report.suggestions}}');
+        $("#suggestion00").val(`{{Report.suggestions}}`);
 
         {% for key, value in Report.GBMData.items %}
-            appendGeneralBodyMeeting("{{value.meetingId}}","{{value.meetingNo}}","{{value.meetingDate|date:"Y-m-d"}}","{{value.meetingAgenda}}","{{value.bylawsBoolean}}","{{value.budgetBoolean}}","{{value.meetingAttendance}}");
+            appendGeneralBodyMeeting(`{{value.meetingId}}`,`{{value.meetingNo}}`,`{{value.meetingDate|date:"Y-m-d"}}`,`{{value.meetingAgenda}}`,`{{value.bylawsBoolean}}`,`{{value.budgetBoolean}}`,`{{value.meetingAttendance}}`);
         {% endfor %}
         {% if not Report.GBMData %}
             appendGeneralBodyMeeting();
         {% endif %}
 
         {% for key, value in Report.BODData.items %}
-            appendBODMeeting("{{value.meetingId}}","{{value.meetingNo}}","{{value.meetingDate|date:"Y-m-d"}}","{{value.meetingAgenda}}","{{value.bylawsBoolean}}","{{value.budgetBoolean}}","{{value.meetingAttendance}}");
+            appendBODMeeting(`{{value.meetingId}}`,`{{value.meetingNo}}`,`{{value.meetingDate|date:"Y-m-d"}}`,`{{value.meetingAgenda}}`,`{{value.bylawsBoolean}}`,`{{value.budgetBoolean}}`,`{{value.meetingAttendance}}`);
         {% endfor %}
         {% if not Report.BODData %}
             appendBODMeeting();
         {% endif %}
 
         {% for key, value in Report.EventData.items %}
-            appendEvent("{{value.eventId}}","{{value.eventName}}","{{value.eventStartDate|date:"Y-m-d"}}","{{value.eventEndDate|date:"Y-m-d"}}","{{value.eventAvenue}}","{{value.eventAttendance}}","{{value.eventHours}}","{{value.eventFundRaised}}","{{value.eventDescription}}","{{value.eventLink}}");
+            appendEvent(`{{value.eventId}}`,`{{value.eventName}}`,`{{value.eventStartDate|date:"Y-m-d"}}`,`{{value.eventEndDate|date:"Y-m-d"}}`,`{{value.eventAvenue}}`,`{{value.eventAttendance}}`,`{{value.eventHours}}`,`{{value.eventFundRaised}}`,`{{value.eventDescription}}`,`{{value.eventLink}}`);
         {% endfor %}
         {% if not Report.EventData %}
             appendEvent();
         {% endif %}
 
         {% for key, value in Report.FEventData.items %}
-            appendFEvent("{{value.eventId}}","{{value.eventName}}","{{value.eventStartDate|date:"Y-m-d"}}","{{value.eventEndDate|date:"Y-m-d"}}","{{value.eventAvenue}}","{{value.eventDescription}}");
+            appendFEvent(`{{value.eventId}}`,`{{value.eventName}}`,`{{value.eventStartDate|date:"Y-m-d"}}`,`{{value.eventEndDate|date:"Y-m-d"}}`,`{{value.eventAvenue}}`,`{{value.eventDescription}}`);
         {% endfor %}
         {% if not Report.FEventData %}
             appendFEvent();
         {% endif %}
 
         {% for Question in Report.Questions %}
-            appendFeedback("{{Question.feedbackQuestion__questionText}}","{{Question.feedbackQuestion__id}}","{{Question.booleanResponse}}");
+            appendFeedback(`{{Question.feedbackQuestion__questionText}}`,`{{Question.feedbackQuestion__id}}`,`{{Question.booleanResponse}}`);
         {% endfor %}
 
         {% if Report.Bulletin %}
-            appendBulletin("{{Report.Bulletin.bulletinId}}","{{Report.Bulletin.bulletinName}}","{{Report.Bulletin.bulletinType}}","{{Report.Bulletin.bulletinLink}}","{{Report.Bulletin.bulletinIssuedOn|date:"Y-m-d"}}","{{Report.Bulletin.lastBulletinIssuedOn|date:"Y-m-d"}}","{{Report.Bulletin.bulletinFrequency}}");
+            appendBulletin(`{{Report.Bulletin.bulletinId}}`,`{{Report.Bulletin.bulletinName}}`,`{{Report.Bulletin.bulletinType}}`,`{{Report.Bulletin.bulletinLink}}`,`{{Report.Bulletin.bulletinIssuedOn|date:"Y-m-d"}}`,`{{Report.Bulletin.lastBulletinIssuedOn|date:"Y-m-d"}}`,`{{Report.Bulletin.bulletinFrequency}}`);
         {% else %}
             appendBulletin();
         {% endif %}
 
         {% for MemberMatrixRow in Report.MemberMatrix %}
-            appendMemberMatrixRow("{{MemberMatrixRow.attribute__id}}","{{MemberMatrixRow.attribute__attribute}}","{{MemberMatrixRow.attribute__operation}}","{{MemberMatrixRow.maleCount}}","{{MemberMatrixRow.femaleCount}}","{{MemberMatrixRow.othersCount}}");
+            appendMemberMatrixRow(`{{MemberMatrixRow.attribute__id}}`,`{{MemberMatrixRow.attribute__attribute}}`,`{{MemberMatrixRow.attribute__operation}}`,`{{MemberMatrixRow.maleCount}}`,`{{MemberMatrixRow.femaleCount}}`,`{{MemberMatrixRow.othersCount}}`);
             updateMatrix();
         {% endfor %}
 
@@ -121,18 +121,19 @@
 
         updateTotalNumberOfMembers();
         updateTotalNumberOfInductedMembers();
-        updateDuesAlreadyPaid("{{Report.DuesPaid}}");
-        updatePaid("{{Report.duesPaidInThisMonth|default:0}}");
+        updateDuesAlreadyPaid(`{{Report.DuesPaid}}`);
+        updatePaid(`{{Report.duesPaidInThisMonth|default:0}}`);
         updateOwedMoney();
         updatePending();
 
 
 
     });
-
+    {% endautoescape%}
     </script>
     <script>
     function customSubmit() {
+        save();
         var flag = true;
         var empty = [];
 

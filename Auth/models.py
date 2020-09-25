@@ -15,6 +15,7 @@ class Account(AbstractUser):
     loginId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = None
     last_name = None
+    date_joined = None
     loginType = models.CharField(
         max_length = 2,
         choices = loginTypes,
