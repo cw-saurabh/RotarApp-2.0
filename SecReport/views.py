@@ -16,42 +16,6 @@ from django.core.mail import EmailMessage
 from .decorators import is_Club, has_Access
 import string
 import random
-import logging
-
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'console': {
-            'format': '%(asctime)s:%(funcName)s:%(levelname)s:%(message)s'
-        },
-        'file': {
-            'format': '%(asctime)s:%(funcName)s:%(levelname)s:%(message)s'
-        }
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'console'
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'file',
-            'filename': 'debug.log'
-        }
-    },
-    'loggers': {
-        '': {
-            'level': 'DEBUG',
-            'handlers': ['console', 'file']
-        }
-    }
-})
-
-# This retrieves a Python logging instance (or creates it)
-logger = logging.getLogger(__name__)
-
 def migrate_data(request):
 
     # p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
@@ -154,27 +118,23 @@ def present_report(request):
     _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
     report = Report.objects.filter(reportId=_reportId)
 
-    if (True) : #Has permission
+    if (False) : #Has permission
         FAQs = FAQ.objects.all()
 
         if report.exists() :
-            logger.debug(request.user.username + ": Report Exists")
             data = get_report(request,_reportId,_club)
             if report.first().status == '1' :
-                logger.debug(request.user.username + ": Report is locked")
                 return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
             else :
-                logger.debug(request.user.username + ": Report is open")
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':_club,'FAQs':FAQs,'Edit':True})
-        
+
         else :
             try :
                 with transaction.atomic() :
-                    logger.debug(request.user.username + ": Report doesn't exist")
-                    
+
                     newReport = Report(reportId=_reportId, reportingMonth=reportingMonth, reportingClub=_club, status = 0)
                     newReport.save()
-              
+
                     salt = ''.join(random.choices(string.ascii_uppercase +
                              string.digits, k = 4))
                     bulletinId = "B-"+reportingMonth+"-"+salt
@@ -182,7 +142,7 @@ def present_report(request):
                     newBulletin.save()
                     newBulletinMap = ReportBulletinMapping(report=newReport,bulletin=newBulletin)
                     newBulletinMap.save()
-              
+
                     attributes = MemberMatrixAttribute.objects.all()
                     for attribute in attributes :
                         newMatrixRow = MemberMatrix(reportId = newReport, attribute=attribute)
@@ -197,14 +157,11 @@ def present_report(request):
                     duesPaidAlreadyVar = duesPaid.dues
                     Report.objects.filter(reportId=_reportId).update(duesPaidAlready=duesPaidAlreadyVar)
 
-                    logger.info(request.user.username + ": Report Created")
-              
                 data = get_report(request,_reportId,_club)
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
 
             except Exception as e :
-                logger.error(request.user.username + ": Report initialisation failed. Exception :" + str(e))
-                return redirect('secReport_presentReport')
+                return redirect('presentReport')
 
     else :
 
@@ -386,8 +343,7 @@ def upload_report(request, reportId, data, deletedData, status) :
 
 @login_required
 def save_report(request) :
-    
-    logger.info(request.user.username + ": The Report is staged for saving")
+
     data = json.loads(request.POST.get('data'))
     deletedData = json.loads(request.POST.get('deletedData'))
     reportId = data['reportId']
@@ -397,21 +353,19 @@ def save_report(request) :
         data = {
             'success': True
         }
-        logger.info(request.user.username + ": The Report has been saved successfully")
 
     except Exception as Error :
+        print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
-        logger.error(request.user.username + ": Saving failed, Caught an exception, " + str(Error))
 
     return JsonResponse(data)
 
 @login_required
 @has_Access
 def view_report(request,reportId) :
-    logger.info(request.user.username + ": Presenting the view")
     _club = Club.objects.filter(login=request.user).first()
     report = Report.objects.filter(reportId=reportId)
 
@@ -422,14 +376,12 @@ def view_report(request,reportId) :
         else :
             return redirect('secReport_presentReport')
     else :
-        logger.error(request.user.username + ": report-view unsuccessful, report not found")
         return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
 
 
 @login_required
 @has_Access
 def finish_report(request,reportId):
-    logger.info(request.user.username + ": The Report has been staged for 'Finish'")
     club = Club.objects.filter(login=request.user).first()
     report = Report.objects.filter(reportId=reportId)
     FAQs = FAQ.objects.all()
@@ -437,18 +389,16 @@ def finish_report(request,reportId):
     if report.exists() :
         data = get_report(request, reportId,club)
         if report.first().status == '1' :
-            return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':_reportId})
+            return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'info':{'Message':'We have received your report for the previous month.'}},'ReportId':reportId})
         else :
             return render(request, 'SecReport/reportView.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'Edit':True})
     else :
-        logger.error(request.user.username + ": Finish unsuccessful, report not found")
         return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
 
 @login_required
 @has_Access
 def submit_report(request, reportId) :
     club = Club.objects.filter(login=request.user).first()
-    logger.info(request.user.username + ": The Report is staged for the final submit")
     try :
         with transaction.atomic() :
             report = Report.objects.filter(reportId=reportId)
@@ -458,19 +408,17 @@ def submit_report(request, reportId) :
             duesPaidAlready = report.first().duesPaidAlready
             totalDues = (0 if duesPaidAlready=='' else int(duesPaidAlready)) + (0 if duesPaidInThisMonth=='' else int(duesPaidInThisMonth))
             DuesPaid.objects.filter(club=club).update(dues=totalDues)
-            logger.info(request.user.username + ": The Report has been submitted successfully !")
-        
+
     except Exception as e:
-        logger.error(request.user.username + ": Submit failed, Caught an exception, " + str(e))
+        print(e)
         data = get_report(request, reportId,club)
         FAQs = FAQ.objects.all()
         return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':False,'Error':'Submit failed, Contact website coordinators','Exception':e})
     try :
         email_report(request, reportId)
-        logger.info(request.user.username + ": Automatic response successful !")
     except Exception as e:
-        logger.error(request.user.username + ": Auto-response failed, Caught an exception, " + str(e))
-    return redirect('secReport_presentReport')
+        print(e)
+    return redirect('presentReport')
 
 @login_required
 @has_Access
@@ -640,7 +588,6 @@ def email_report(request,reportId):
 @has_Access
 def export_report(request,reportId):
     try :
-        logger.info(request.user.username + ": Export initialised !")
         response = HttpResponse(content_type='application/ms-excel')
         Report1 = Report.objects.filter(reportId=reportId).all().first()
         Club = Report1.reportingClub.clubName
@@ -785,10 +732,8 @@ def export_report(request,reportId):
 
 
         wb.save(response)
-        logger.info(request.user.username + ": Export successful !")
         return response
 
     except Exception as e :
         response = None
-        logger.error(request.user.username + ": Export failed, Caught an exception, " + str(e))
         return response

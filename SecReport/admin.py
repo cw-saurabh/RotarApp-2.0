@@ -3,7 +3,12 @@ from .models import DuesPaid, ReportViewPermission, Report, Meeting, Event, Bull
 
 # Register your models here.
 
-admin.site.register(Report)
+class ReportAdmin(admin.ModelAdmin):
+    verbose_name_plural = "Reports"
+    list_display = ['reportingClub','reportingMonth','status','suggestions' ]
+
+
+admin.site.register(Report, ReportAdmin)
 admin.site.register(Meeting)
 admin.site.register(Event)
 admin.site.register(Bulletin)

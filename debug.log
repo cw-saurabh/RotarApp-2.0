@@ -3306,3 +3306,4 @@ AttributeError: 'DistrictRole' object has no attribute 'districtRole'
 2020-09-25 20:00:44,125:trigger_reload:INFO:S:\Projects 2.0\RotarApp 2.0\RotarApp-2.0\DistReport\views.py changed, reloading.
 2020-09-25 20:01:11,749:trigger_reload:INFO:S:\Projects 2.0\RotarApp 2.0\RotarApp-2.0\DistReport\views.py changed, reloading.
 2020-09-25 20:01:16,400:trigger_reload:INFO:S:\Projects 2.0\RotarApp 2.0\RotarApp-2.0\DistReport\views.py changed, reloading.
+2020-09-25 20:29:23,024:trigger_reload:INFO:S:\Projects 2.0\RotarApp 2.0\RotarApp-2.0\SecReport\views.py changed, reloading.
