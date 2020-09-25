@@ -1,0 +1,344 @@
+{% extends "Main/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags }
+{% block content %}
+<div class="tasks">
+    <div id="monthSelect">
+
+    </div>
+    <div class="card">        
+            <h3 class="header text-center" id="header"><b>Council Reporting</b></h3>
+            <h6 class="subheader text-center">{{DistRole}}</h6>
+            <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;width:100%">
+            <div class="alert-danger alert" id="cantEdit" style="display:none">
+                You can not update your report for this month. Contact District Administration Secretary.
+            </div>
+            <div id="taskContainer" class="">
+                <!-- <span id="addLoader" style="color:white;font-size:40px"><i class="fa fa-circle-o-notch fa-spin"></i></span> -->
+            </div>
+            <br>
+            <br>
+            <div id="addButton">
+                
+            </div>
+        </div>
+    
+    </div>
+</div>
+    
+</div>
+{% endblock content%}
+{% block javascript %}
+<script>
+
+    let monthNames = {
+            "01" : "January",
+            "02" : "February",
+            "03" : "March",
+            "04" : "April",
+            "05" : "May",
+            "06" : "June",
+            "07" : "July",
+            "08" : "August",
+            "09" : "September",
+            "10" : "October",
+            "11" : "November",
+            "12" : "December",
+    };       
+    
+    function getAllottedBy(allottedBy=null) {
+        if (allottedBy=='0')
+        return 'District Secretary - Administration';
+        else if (allottedBy=='1')
+        return 'Self';
+        else
+        return '';
+
+    }
+
+    function getStatus(status = null) {
+        if (status=='0')
+        return 'Incomplete';
+        else if (status=='1')
+        return 'Partially Complete';
+        else if (status=='2')
+        return 'Complete';
+        else
+        return '';
+    }
+
+    function prevMonth(month = null) {
+        if(month!=null)
+        {
+            if(isNaN(month))
+            {
+                console.log("Error:month=NaN");
+            }
+            else {
+                if(month!="01")
+                {
+                    let prevMonth = parseInt(month)-1;
+                    updateMonth((prevMonth<10)?("0"+prevMonth.toString()):(prevMonth.toString()));
+                }
+                else
+                {
+                    updateMonth("12");
+                }
+            }
+        }
+        else 
+        {
+            console.log("Error:month=null");
+        }
+    }
+
+    function nextMonth(month = null) {
+        if(month!=null)
+        {
+            if(isNaN(month))
+            {
+                console.log("Error:month=NaN");
+            }
+            else {
+                if(month!="12")
+                {
+                    let prevMonth = parseInt(month)+1;
+                    updateMonth((prevMonth<10)?("0"+prevMonth.toString()):(prevMonth.toString()));
+                }
+                else
+                {
+                    updateMonth("01");
+                }
+            }
+        }
+        else 
+        {
+            console.log("Error:month=null");
+        }
+    }
+    
+    function updateMonth(month = null) {
+        $('#cantEdit').hide();
+        $("#taskContainer").html('');
+
+        let now = new Date();
+        let thisMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+        let year = now.getFullYear();
+
+        if(month==null)
+        month = thisMonth; 
+        
+        $('#header').html('<b>Council Reporting : '+monthNames[month]+' '+year+'</b>')
+
+        $("#monthSelect").html(`
+        <div class = "row text-center heading">
+            <div class="col-lg-1 col-xs-2" id="prev" onclick="prevMonth(`+month+`)">
+                <span class="navIcons"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            </div>
+            <div class = "col-lg-10 col-xs-8 text-center">
+                <p id="monthName">`+monthNames[month]+`</p>
+            </div>
+            <div class="col-lg-1 col-xs-2" id="next" onclick="nextMonth(`+month+`)">
+                <span class="navIcons"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+            </div>
+        </div>
+        <br><br class="mobile">
+        <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+        `);
+        
+        $("#addButton").html(`
+        
+        <form action="" method="POST" id="theForm">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-11">
+                        <input type="text" name="newTask" placeholder="Add a self allocated task">
+                    </div>
+        </form>
+                    <div class="col-lg-1 text-center">
+                        <button type="button" class="downloadButton" id="addTaskFor`+month+`" onclick="addNewTask('`+month+`')" style="background-color:#D41367;border-radius:10px"><i class="fa fa-plus" aria-hidden="true"></i><span id="addLoader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
+                    </div>
+                </div>
+                <div class="errorBox" id="addError`+month+`">
+                </div>
+                <div id="addSuccess">
+                </div>
+        
+        `);
+
+        let len = Object.keys(tasks[month]).length;
+        if(len==0) {
+            $('#taskContainer').html('<div class="text-center"><h3 style="color:white"><b>No task found</b></h3></div>');    
+        }
+        else {
+            let counter = 0;
+            for(var key in tasks[month]) {
+                counter+=1;
+                let dict = tasks[month][key];
+                renderForm(dict['task__taskId'],dict['responseId'],dict['task__taskText'],(dict['completionStatus']),dict['response'],dict['driveLink'],getAllottedBy(dict['allottedBy']),dict['modifiedOn'],month);   
+            }
+        }
+
+        if(month != thisMonth)
+        $('input,textarea,select').attr('disabled',true); 
+        if(parseInt(month-'0') < parseInt(thisMonth-'0'))
+        $('#cantEdit').show();
+        
+    }
+
+    function saveTask(responseId=null, month = null) {
+        
+        if(responseId!=null) {
+            $('#saveError'+responseId).html('').show();
+            data = {
+                'responseId': responseId,
+                'data' : {            
+                    'response':$('#response'+responseId).val(),
+                    'completionStatus':$('#status'+responseId).val(),
+                    'driveLink':$('#link'+responseId).val()
+                }
+            };
+
+            if(data['data']['response']=='' || data['data']['driveLink']=='' || data['data']['completionStatus']=='')
+            $("#saveError"+responseId).html('Check if all of the three fields are filled !').delay(3000).fadeOut(); 
+            else {
+                $.post( "{% url 'distReport_c_savetask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                    if(response['success']) {
+                        tasks = response['tasks'];
+                        updateMonth(month); 
+                    }
+                    else {
+                        $("#saveError"+responseId).html('Save failed !<br>'+response['error']).delay(5000).fadeOut(); 
+                    }
+            });
+            }
+        }
+    }
+
+    function addNewTask(month) {
+
+        if($("input[name=newTask]").val()=='')
+        {
+            $('#addError'+month).html('Task addition failed : Empty string').delay(5000).fadeOut();
+        }
+        else
+        {
+            data = {};
+            data["taskText"]=$("input[name=newTask]").val();
+            data['month']= month;
+            $.post( "{% url 'distReport_c_addtask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                if(response['success'])
+                {
+                    console.log(tasks);
+                    tasks = response['tasks'];
+                    updateMonth(month); 
+                }
+                else {
+                    
+                }
+            });
+        }
+
+    }
+
+    function renderForm(taskId = null, responseId = null, taskText = null, status = null, response = null, link = null, allottedBy = null, modifiedOn = null, month = null ) {
+
+        if (responseId==null) responseId = '0';
+
+        if (!(responseId==''||responseId==null||taskId==''||taskId==null||allottedBy==null||allottedBy==''||taskText==''||taskText==null))
+        {
+            $('#taskContainer').append(`
+                <div class="taskRow">
+                    <h4><p style="color:#D41367" id = 'taskText`+responseId+`'><b></b></p></h4>
+                    <p class="label" style="color:#337ab7">Allocated by, `+allottedBy+`</p>
+                    <br>
+                    <hr style="border-width: 2px;border-color:#337ab7;border-radius : 4px;">
+                    <form>
+                    <p class="label" style="color:#337ab7">Task Execution</p>
+                    <br><br>
+                    <textarea id = 'response`+responseId+`' style="text-align:justify">
+
+                    </textarea>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <p class="label" style="color:#337ab7">Status</p>
+                            <br><br>
+                            <select id='status`+responseId+`'>
+                                <option disabled selected value>Select :</option>
+                                <option value="0">Incomplete</option>
+                                <option value="1">Partially Complete</option>
+                                <option value="2">Complete</option>
+                            </select>
+                            <br class="mobile"><br class="mobile">
+                        </div>
+                        
+                        <div class="col-lg-8">
+                            <p class="label" style="color:#337ab7">Drive Link</p>
+                            <br><br>
+                            <input type="text" id = 'link`+responseId+`'>
+                        </div>
+                        <div class="col-lg-1">
+                            <br><br>
+                            <div class="mobile text-center">
+                            <button class="downloadButton" type="button" onclick="saveTask('`+responseId+`','`+month+`')" style="background-color:#4caf50;border-radius:10px;vertical-align: baseline;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 errorBox" id="saveError`+responseId+`">
+                        </div>
+
+                    </div>
+                    <br><hr>
+                    <small class="desktop" style="float:right">Last Modified at : <span id='timestamp`+responseId+`'>NA</span></small>
+                    <small class="mobile">Last Modified at : <span id='timestamp`+responseId+`'>NA</span></small>
+                    <br class="mobile"><br class="mobile">
+                    </form>                    
+                </div>
+                <br>
+        `);
+        }
+
+        if (taskText!=null || taskText!='') $('#taskText'+responseId).html(taskText);
+        if (response!=null) $('#response'+responseId).val(response);
+        if (link!=null) $('#link'+responseId).val(link);
+        if (status!=null) $('#status'+responseId).val(status);
+        let date = new Date(modifiedOn);
+        if (modifiedOn!=null) $('#timestamp'+responseId ).html(date.toDateString()+', '+date.toLocaleTimeString());
+    }
+
+    $(document).ready(function(){
+
+        tasks = {
+            '01' : {},
+            '02' : {},
+            '03' : {},
+            '04' : {},
+            '05' : {},
+            '06' : {},
+            '07' : {},
+            '08' : {},
+            '09' : {},
+            '10' : {},
+            '11' : {},
+            '12' : {},
+        };
+        
+        updateMonth();
+
+        $.post("{% url 'distReport_c_gettasks' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
+                if(response['success'])
+                {
+                    tasks = response['tasks'];
+                    updateMonth(); 
+                }
+                else {
+                    
+                }
+        });
+
+        
+    });
+
+</script>   
+{% endblock javascript %}

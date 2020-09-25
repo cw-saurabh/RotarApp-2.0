@@ -19,7 +19,7 @@
     <hr class="mobile" style="margin:0;border-width: medium;border-color: #D41367;width:100%;margin-top:1vw">
     <br>
 </div>
-<form method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
+<form method="post" action="{% url 'auth_profile' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ eform|crispy }}
     {{ pform|crispy }}
@@ -28,7 +28,7 @@
         <input type="submit" id="member" style="width:100%" value="Update"></input>    
       </div>
       <div class="col-lg-6">
-        <button class="text-center" type="button" onclick="window.location.href = `{% url 'passwordChange' %}`;" style="color:white;width:100%"  id="member1">Change Password</button> 
+        <button class="text-center" type="button" onclick="window.location.href = `{% url 'auth_passwordChange' %}`;" style="color:white;width:100%"  id="member1">Change Password</button> 
       </div>
     </div>
 </form>

@@ -129,7 +129,7 @@
   <span class="homeText2" style="color:#D41367"><small><b>Update your profile</b></small>
 </div>
 <br><br>
-<form method="post" action="{% url 'updateUserProfile' %}" enctype="multipart/form-data">
+<form method="post" action="{% url 'auth_updateUserProfile' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ pform|crispy }}
     <br>
@@ -138,7 +138,7 @@
         <input type="submit" id="member" style="width:100%;" value="Update"></input>    
       </div>
       <div class="col-lg-6">
-        <button class="text-center" type="button" onclick="window.location.href = `{% url 'passwordChange' %}`;" style="color:white;width:100%;margin:0"  id="member1">Change Password</button> 
+        <button class="text-center" type="button" onclick="window.location.href = `{% url 'auth_passwordChange' %}`;" style="color:white;width:100%;margin:0"  id="member1">Change Password</button> 
       </div>
     </div>
 </form>

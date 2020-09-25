@@ -14,7 +14,7 @@
       <hr class="mobile" style="margin:0;border-width: medium;border-color: #D41367;width:100%;margin-top:1vw">
     </div>
   
-    <form method="post" action="{% url 'signup' %}">
+    <form method="post" action="{% url 'auth_signup' %}">
         {% csrf_token %}
         {% for field in form %}
         {% if form.errors %}

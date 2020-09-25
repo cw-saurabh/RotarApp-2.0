@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('Main.urls')),
     path('', include('SecReport.urls')),
     path('', include('Auth.urls')),
+    path('', include('DistReport.urls')),
 ]
 
 

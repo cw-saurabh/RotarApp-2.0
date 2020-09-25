@@ -1,0 +1,310 @@
+{% extends "Main/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags }
+{% block content %}
+<div class="card">
+    <div class="tasks" id="tiles">
+        <h3 class="header text-center" id="header"><b>Council Reporting</b></h3>
+        <h6 class="subheader text-center">District Secretary - Reporting</h6>
+        <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;">
+        <br>
+        <div id="taskContainer" style="">
+            <div id="taskList">
+            
+            </div>
+        </div>
+        <br>
+        <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;">
+        <br>
+        <form action="" method="POST" id="theForm">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-lg-11">
+                    <input type="text" name="newTask">
+                </div>
+            </form>
+                <div class="col-lg-1 text-center">
+                    <button type="button" class="downloadButton" id="addTask" onclick="addNewTask()" style="background-color:#D41367;border-radius:10px"><i class="fa fa-plus" aria-hidden="true"></i><span id="addLoader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
+                </div>
+            </div>
+            <div class="errorBox" id="addError">
+            </div>
+            <div id="addSuccess">
+            </div>
+        
+        <br>
+    </div>
+    </div>
+    
+</div>
+{% endblock content%}
+{% block javascript %}
+<script>
+    function updateTaskList(responseId=null,taskId=null,taskText=null,driveLink=null,status=null,response=null, modifiedOn = null, allottedBy = null) {
+        
+        let date = new Date(modifiedOn);
+        console.log(modifiedOn);
+        if(responseId==''||responseId==null||taskId==''||taskId==null||driveLink==''||driveLink==null||status==''||status==null||response==''||response==null||allottedBy==null||allottedBy==''||modifiedOn==''||modifiedOn==null)
+        {
+            $('#taskList').append(`
+            <div class="taskRow" style="border-radius:10px">
+                <h3><p style="color:#D41367"><b>`+taskText+`</b></p></h3>
+                <br>
+                <div class="row">
+                    <div class="col-lg-12">
+                        No response yet
+                    </div>
+                </div>
+                <br>
+                
+                <hr style="border-width: 2px;border-color:#337ab7;border-radius : 4px;">
+                                    
+                <div class="row" style="">
+                        <div class="col-lg-9">
+                            <input type="text" id="editInput`+taskId+`" style="display:none">
+                            <div class="errorBox" id="editError`+taskId+`"></div>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" id="editDone`+taskId+`" onclick="changeTask('`+taskId+`')" style="background-color:#4caf50;display:none;border-radius:10px;vertical-align: baseline;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" onclick="$('#editDone`+taskId+`,#editInput`+taskId+`').show();$('#editInput`+taskId+`').val('`+taskText+`');" style="border-radius:10px;vertical-align: baseline;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" onclick="deleteTask('`+responseId+`')" style="background-color:#D41367;border-radius:10px"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            <div class="errorBox" id="deleteError`+responseId+`"></div>
+                        </div>
+                </div>
+
+            </div>
+            <br>
+            `);
+        }
+        else {
+            $('#taskList').append(`
+                <div class="taskRow" style="border-radius:10px">
+                    <h3><p style="color:#D41367"><b>`+taskText+`</b></p></h3>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <p class="label" style="color:#337ab7"><b>Status</b></p>
+                        </div>
+                        <div class="col-lg-10" style="white-space: nowrap;">
+                            `+status+`
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <p class="label" style="color:#337ab7"><b>Drive Link</b></p>
+                        </div>
+                        <div class="col-lg-10" style="white-space: nowrap;">
+                            <a href="`+driveLink+`">`+driveLink+`</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <p class="label" style="color:#337ab7"><b>Allotted By</b></p>
+                        </div>
+                        <div class="col-lg-10" style="white-space: nowrap;">
+                            <p>`+allottedBy+`</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <p class="label" style="color:#337ab7"><b>Modified on</b></p>
+                        </div>
+                        <div class="col-lg-10" style="white-space: nowrap;">
+                            `+date.toDateString()+`, <br class="mobile">`+date.toLocaleTimeString()+`
+                        </div>
+                    </div>
+                    <br>
+                    
+                    <p class="label" style="color:#337ab7;margin-bottom:20em;"><b>Response</b></p>
+                    <br><br>
+                    <p style="text-align:justify">`+response+`</p>
+                    
+                    <hr style="border-width: 2px;border-color:#337ab7;border-radius : 4px;">
+                                    
+                    <div class="row" style="">
+                        <div class="col-lg-9 text-center">
+                            <input type="text" id="editInput`+taskId+`" style="display:none">
+                            <div class="errorBox" id="editError`+taskId+`"></div>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" id="editDone`+taskId+`" onclick="changeTask('`+taskId+`')" style="background-color:#4caf50;display:none;border-radius:10px;vertical-align: baseline;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" onclick="$('#editDone`+taskId+`,#editInput`+taskId+`').show();$('#editInput`+responseId+`').val('`+taskText+`');" style="border-radius:10px;vertical-align: baseline;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" onclick="deleteTask('`+responseId+`')" style="background-color:#D41367;border-radius:10px"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            <div class="errorBox" id="deleteError`+responseId+`"></div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+                <br>
+            `);
+        }
+        
+    }
+
+    function getAllottedBy(allottedBy=null) {
+        if (allottedBy=='0')
+        return 'District Secretary - Administration';
+        else if (allottedBy=='1')
+        return 'Self';
+        else
+        return '';
+
+    }
+
+    function getStatus(status = null) {
+        if (status=='0')
+        return 'Incomplete';
+        else if (status=='1')
+        return 'Partially Complete';
+        else if (status=='2')
+        return 'Complete';
+        else
+        return '';
+    }
+
+    function getMonth(month=null) {
+        if (month=='01')
+        return 'January';
+        else if (month=='02')
+        return 'February';
+        else if (month=='03')
+        return 'March';
+        else if (month=='04')
+        return 'April';
+        else if (month=='05')
+        return 'May';
+        else if (month=='06')
+        return 'June';
+        else if (month=='07')
+        return 'July';
+        else if (month=='08')
+        return 'August';
+        else if (month=='09')
+        return 'September';
+        else if (month=='10')
+        return 'October';
+        else if (month=='11')
+        return 'November';
+        else if (month=='12')
+        return 'December';
+        else
+        return '';
+    }
+</script>
+<script>
+    $(document).ready(function(){
+        $('#header').html('<h3 class="header text-center" id="header"><b>Council Reporting : '+getMonth(`{{Month}}`)+` {{Year}}`+'</b></h3>');
+        {% for value in Response %}
+            updateTaskList(`{{value.0}}`,`{{value.1}}`,`{{value.2}}`,`{{value.3}}`,getStatus(`{{value.4}}`),`{{value.5}}`,`{{value.6|date:"c"}}`,getAllottedBy(`{{value.7}}`));
+        {% endfor %}
+    });
+</script>
+
+<script>
+    data = {
+        'ReportId':'{{ReportId}}',
+        'DistrictRole':'{{DistrictRole}}',
+        'Month':'{{Month}}'
+    };
+    function addNewTask() {
+        
+        if($("input[name=newTask]").val()=='')
+        {
+            $('#addError').html('Task addition failed : Empty string').delay(5000).fadeOut();
+        }
+        else
+        {
+            $('#addLoader').show();
+            data["taskText"]=$("input[name=newTask]").val();
+
+            $.post( "{% url 'distReport_a_addtask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                if(response['success'])
+                {
+                    $('#addSuccess').html('Task added successfully !').delay(5000).fadeOut();
+                    $('#taskList').html('');
+                    $('input[name=newTask]').val('');
+                    for(var key in response['tasks']) {
+                        let dict = response['tasks'][key];
+                        updateTaskList(dict['responseId'],dict['task__taskId'],dict['task__taskText'],dict['driveLink'],getStatus(dict['completionStatus']),dict['response'],dict['modifiedOn'],getAllottedBy(dict['allottedBy']));
+                    }
+                    $('#addLoader').hide();
+                }
+                else {
+                    $('#addError').html(response['error']).delay(5000).fadeOut();
+                    $('#addLoader').hide();
+                }
+            });
+        }
+
+    }
+    function deleteTask(ResponseId=null) {
+
+        if(ResponseId!=null)
+        
+        {
+            $('#deleteError'+ResponseId).html('').show();
+            console.log("Trying to delete");
+            data["ResponseId"]=ResponseId;
+
+            $.post( "{% url 'distReport_a_deletetask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                if(response['success'])
+                {
+                    $('#taskList').html('');
+                    for(var key in response['tasks']) {
+                        let dict = response['tasks'][key];
+                        updateTaskList(dict['responseId'],dict['task__taskId'],dict['task__taskText'],dict['driveLink'],getStatus(dict['completionStatus']),dict['response'],dict['modifiedOn'],getAllottedBy(dict['allottedBy']));
+                    }
+                }
+                else {
+                    console.log("Error");
+                    $('#deleteError'+ResponseId).html('Failed').delay(5000).fadeOut();
+
+                }
+            });
+        }
+        else {
+            $('#deleteError'+ResponseId).html('Failed').delay(5000).fadeOut();
+        }
+    }
+    function changeTask(taskId=null) {
+        if(taskId!=null) {
+            data['taskId']=taskId;
+            data['taskText']=$('#editInput'+taskId).val();
+
+
+            $.post( "{% url 'distReport_a_edittask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                    if(response['success'])
+                    {
+                        $('#taskList').html('');
+                        for(var key in response['tasks']) {
+                            let dict = response['tasks'][key];
+                            updateTaskList(dict['responseId'],dict['task__taskId'],dict['task__taskText'],dict['driveLink'],getStatus(dict['completionStatus']),dict['response'],dict['modifiedOn'],getAllottedBy(dict['allottedBy']));
+                        }
+                    }
+                    else {
+                        $('#editError'+taskId).html('Failed').delay(5000).fadeOut();
+                    }
+                });
+        }
+        else {
+            $('#editError'+taskId).html('Failed').delay(5000).fadeOut();
+        }
+    }
+        
+    </script>
+
+{% endblock javascript %}

@@ -1,0 +1,162 @@
+@import 'Main/scss/globals';
+
+body {
+    zoom : 100%;
+}
+.tasks {
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        cursor: pointer;
+        zoom : 100%;
+    }
+    
+    .card:hover {
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.4);
+        border-radius: 5px;
+    }
+    
+    .label {
+        color : $pinkcolor;
+        font-size: $d-extraSmall;
+        font-weight: bold;
+        padding:0;
+    }
+    
+    img {
+        border-radius: 5px 5px 0 0;
+    }
+
+    .zero-margin {
+        margin :0;
+    }
+
+    .zero-padding {
+        padding :0;
+    }
+
+    .heading {
+        outline: none;
+        width: 100%;
+        background-color: $textcolor1;
+        border-radius: 4px;
+        height: 3.5vw;
+        border: solid $textcolor1;
+        border: 2px solid $textcolor1;
+        box-shadow: 3px 3px 2px #555;
+        padding-left: 1vw;
+        font-size:$d-medium;
+        font-weight: bold;
+        color: white;
+        margin:0;
+    }
+
+    .downloadButton, .uploadButton {
+        outline:none;
+        background-color: DodgerBlue;
+        border: none;
+        color: white;
+        padding: 5px auto;
+        cursor: pointer;
+        font-size: 15px;
+        height : 2.5vw;
+        width:90%;
+    }
+    
+    .downloadButton:hover, .uploadButton:hover {
+        outline:none;
+        background-color: RoyalBlue;
+    }
+
+    .uploadButton {
+        background-color: $pinkcolor;
+    }
+
+    .uploadButton:hover {
+        background-color: darken($pinkcolor, 5%);;
+    }
+
+    i {
+        // margin-right:0.5em;
+    }
+
+    #prev, #next {
+        cursor: pointer;
+    }
+
+    .header {
+        color: $pinkcolor;
+        font-size: $d-extraMedium;
+    }
+    
+    .subheader {
+        color: $textcolor1;
+        font-size: $d-medium;
+    }
+    
+    .taskRow {
+        background-color: #ffffff;
+        
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        // box-shadow: 2px 2px 2px #555;    
+        padding:2em;
+        min-height:50px;
+    }
+
+    .editStrip {
+        background-color:#dddddd;
+        min-height:4em;
+    }
+
+    input[type=text], textarea, select {
+        outline: none;
+        width : 100%;
+        margin:0 !important;
+        height : 2.5vw;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        color: $textcolor1;
+        background-color: $bgcolor;
+        padding-left:1vw;
+        padding-right:1vw;
+        box-shadow: 2px 2px 2px #555;
+    }
+
+    input[type=text]:hover, select:hover, textarea:hover {
+        border: 2px solid $textcolor1;
+        border-radius: 4px;
+        outline: none;
+        color: $textcolor1;
+        background-color: $bgcolor;
+        padding-left:1vw;
+        padding-right:1vw;
+        box-shadow: none;
+        font-weight: bold;
+    }
+
+    textarea {
+        height: 8vw;
+        width: 100%;
+        padding:1vw;
+    }
+
+    .errorBox {
+        margin-top: 1em;
+        font-weight: bold;
+        color : red;
+    }
+
+    .col-lg-* {
+        padding:0;
+    }
+
+    .col-lg-1 {
+        padding:0;
+    }
+
+    #taskContainer {
+        background-color: #337ab7;padding:2em;border-radius: 10px;
+    }
+
+}

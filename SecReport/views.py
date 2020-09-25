@@ -85,7 +85,7 @@ def migrate_data(request):
     # p = FeedbackQuestion(questionText="Do you get a timely response from the District ?")
     # p.save()
 
-    return redirect('login')
+    return redirect('auth_login')
 
 reportingMonth = str((datetime.now().month)-1) if ((datetime.now().month)-1)>9 else "0"+str((datetime.now().month)-1)
 year = datetime.now().year
@@ -204,7 +204,7 @@ def present_report(request):
 
             except Exception as e :
                 logger.error(request.user.username + ": Report initialisation failed. Exception :" + str(e))
-                return redirect('presentReport')
+                return redirect('secReport_presentReport')
 
     else :
 
@@ -420,7 +420,7 @@ def view_report(request,reportId) :
         if report.first().status == '1' :
             return render(request, 'SecReport/reportView.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'Edit':False})
         else :
-            return redirect('presentReport')
+            return redirect('secReport_presentReport')
     else :
         logger.error(request.user.username + ": report-view unsuccessful, report not found")
         return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
@@ -470,7 +470,7 @@ def submit_report(request, reportId) :
         logger.info(request.user.username + ": Automatic response successful !")
     except Exception as e:
         logger.error(request.user.username + ": Auto-response failed, Caught an exception, " + str(e))
-    return redirect('presentReport')
+    return redirect('secReport_presentReport')
 
 @login_required
 @has_Access
@@ -622,7 +622,7 @@ def email_report(request,reportId):
     subject = 'Secretarial Report Received'
     message = 'We have received your report for the previous month. Find a copy of your report that has been attached herewith.<br><br>For any queries, Contact - <br><br>Rtr. Prasad Seth (District Secretary - Reporting)<br>Call : +91 - 9623134392<br>Whatsapp : +91 - 9623134392<br>Mail Id: rtrprasadseth@gmail.com'
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['rtrprasadseth@gmail.com']
+    recipient_list = ['saurabh.s1999@gmail.com']
     recipient_list.append(emailId)
     # send_mail( subject, message, email_from, recipient_list )
 
@@ -634,7 +634,7 @@ def email_report(request,reportId):
     filename=str(Club)+"-"+str(Month)+".xls"
     message.attach(filename, f.getvalue(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") #get the stream and set the correct mimetype
     message.send()
-    return redirect('main-home')
+    return redirect('main_home')
 
 @login_required
 @has_Access

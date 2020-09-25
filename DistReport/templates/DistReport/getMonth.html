@@ -1,0 +1,157 @@
+{% extends "Main/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags }
+{% block content %}
+<div class="tasks" id="tiles">
+    
+</div>
+{% endblock content%}
+{% block javascript %}
+<script>
+
+    let monthNames = {
+            "01" : "January",
+            "02" : "February",
+            "03" : "March",
+            "04" : "April",
+            "05" : "May",
+            "06" : "June",
+            "07" : "July",
+            "08" : "August",
+            "09" : "September",
+            "10" : "October",
+            "11" : "November",
+            "12" : "December",
+    };       
+        
+    function prevMonth(month = null) {
+        if(month!=null)
+        {
+            if(isNaN(month))
+            {
+                console.log("Error:month=NaN");
+            }
+            else {
+                if(month!="01")
+                {
+                    let prevMonth = parseInt(month)-1;
+                    populateTiles((prevMonth<10)?("0"+prevMonth.toString()):(prevMonth.toString()));
+                }
+                else
+                {
+                    populateTiles("12");
+                }
+            }
+        }
+        else 
+        {
+            console.log("Error:month=null");
+        }
+    }
+
+    function nextMonth(month = null) {
+        if(month!=null)
+        {
+            if(isNaN(month))
+            {
+                console.log("Error:month=NaN");
+            }
+            else {
+                if(month!="12")
+                {
+                    let prevMonth = parseInt(month)+1;
+                    populateTiles((prevMonth<10)?("0"+prevMonth.toString()):(prevMonth.toString()));
+                }
+                else
+                {
+                    populateTiles("01");
+                }
+            }
+        }
+        else 
+        {
+            console.log("Error:month=null");
+        }
+    }
+    
+    function populateTiles(month = null) {
+        let now = new Date();
+        let thisMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+        
+        if(month==null)
+        month = thisMonth;
+        
+
+        $("#tiles").html(`
+        <div class = "row text-center heading">
+            <div class="col-lg-1 col-xs-2" id="prev" onclick="prevMonth(`+month+`)">
+                <span class="navIcons"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            </div>
+            <div class = "col-lg-10 col-xs-8 text-center">
+                <p id="monthName">`+monthNames[month]+`</p>
+            </div>
+            <div class="col-lg-1 col-xs-2" id="next" onclick="nextMonth(`+month+`)">
+                <span class="navIcons"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+            </div>
+        </div>
+        <br>
+        <br>
+        <form>
+            <div class="row">
+                <div class="col-lg-3  text-center">
+                    <p class="label desktop" style="float:left">Upload tasks :</p>
+                    <p class="label mobile" style="">Upload tasks :</p><br class="desktop"><br class="desktop">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label" for="customFile">Upload CSV File</label>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-center">
+                    <br class="desktop"><br class="desktop">
+                    <button class="uploadButton" style="width:100%;"><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;&nbsp;Upload</button>
+                </div>
+                <div class="col-lg-3 text-center">
+                    <br class="desktop"><br class="desktop">
+                    <button class="downloadButton" style="width:100%;"><i class="fa fa-download"></i>&nbsp;&nbsp;Format File</button>
+                </div>
+                <div class="col-lg-3 text-center">
+                    <br class="mobile"><br class="mobile">
+                    <p class="label desktop" style="float:left">Download reports :</p>
+                    <p class="label mobile">Download reports :</p><br class="desktop"><br class="desktop">
+                    <button class="downloadButton" style="width:100%;"><i class="fa fa-download"></i>&nbsp;&nbsp;Reports</button>
+                </div>
+            </div>
+        </form>
+        <br><br class="mobile">
+        <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+        <div class = "row">
+            {% for key, value in Council.items %}
+            
+            <div class="col-lg-3">
+                <div class="card text-center" onclick="location.href = '/tasks/`+month+`/{{key.distRoleId}}'" style="height:90%">
+                    {% ifequal value.gender "M" %}
+                    <img src="{% static 'Main/images/img_avatar.png' %}" alt="Avatar" style="width:100%">
+                    {% else %}
+                    <img src="{% static 'Main/images/img_avatar2.png' %}" alt="Avatar" style="width:100%">
+                    {% endifequal %}
+                    <div class="zero-padding zero-margin">
+                        <h4><b>Rtr. {{value.firstName}} {{value.lastName|make_list|first}}</b></h4>
+                        <h6><p>{{key.distRoleName}}</p></h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        `);
+    
+
+    }
+</script>
+
+<script>
+    $(document).ready(function(){
+        populateTiles();
+    });
+</script>
+{% endblock javascript %}

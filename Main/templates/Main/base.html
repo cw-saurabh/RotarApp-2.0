@@ -4,7 +4,7 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;' name='viewport' />
     <meta name="theme-color" content="#D41367"/>
     <link rel="icon" href="{% static 'Main/images/district_logo.png' %}" type="image/icon type">
     <!-- Bootstrap CSS -->
@@ -53,6 +53,9 @@
     <link rel="stylesheet" href="{% static 'Main/css/report-2-d.css' %}">
     <link rel="stylesheet" href="{% static 'Main/css/report-2-m.css' %}">
 
+    <link rel="stylesheet" href="{% static 'Main/css/tasks-d.css' %}">
+    <link rel="stylesheet" href="{% static 'Main/css/tasks-m.css' %}">
+
     <link rel="stylesheet" href="{% static 'Auth/css/login-d.css' %}">
     <link rel="stylesheet" href="{% static 'Auth/css/login-m.css' %}">
 
@@ -69,7 +72,7 @@
      
     {% include "Main/navbar.html" %}
     
-    <div class="container" id="mainWrapperContainer" style="min-height:auto">
+    <div class="container" id="mainWrapperContainer" style="">
       {% block content %}{% endblock %}
     </div>  
     <br class="mobile">

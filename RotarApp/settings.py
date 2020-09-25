@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'h5l%fev*eb22%3!2wf0e^&57-c^ke5c__5ea8kj-phdabqs)4p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','ss0506.pythonanywhere.com','www.rotaractdistrict3131.org']
 
@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1','ss0506.pythonanywhere.com','www.rotar
 INSTALLED_APPS = [
     'Auth.apps.AuthConfig',
     'SecReport.apps.SecreportConfig',
+    'DistReport.apps.DistreportConfig',
     'Main.apps.MainConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -169,9 +170,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
-LOGIN_REDIRECT_URL = 'main-home'
-LOGOUT_REDIRECT_URL = 'main-home'
-SIGNUP_REDIRECT_URL = 'main-home'
+LOGIN_REDIRECT_URL = 'main_home'
+LOGOUT_REDIRECT_URL = 'auth_login'
+SIGNUP_REDIRECT_URL = 'main_home'
 LOGIN_URL = '/login'
 
 # Production Checklist

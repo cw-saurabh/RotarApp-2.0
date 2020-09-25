@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+    <div class="card" style="margin : 2em 1em">
         {% for key, value in Messages.items %}
         <div class="container" id="tabs" style="padding:0;margin:0">
             <div class="alert alert-{{key}}">
@@ -12,9 +13,9 @@
         {% endfor %}
         {% if ReportId %}
         <hr>
-        <a href="{% url 'viewReport' reportId=ReportId %}">Click here</a> to view your report.
+        <a href="{% url 'secReport_viewReport' reportId=ReportId %}">Click here</a> to view your report.
         <br>
-        <a href="{% url 'exportReport' reportId=ReportId %}">Click here</a> to export your report into an Excel Sheet.
+        <a href="{% url 'secReport_exportReport' reportId=ReportId %}">Click here</a> to export your report into an Excel Sheet.
         <hr>
         {% endif %}
         
@@ -22,9 +23,9 @@
         Rtr. Prasad Seth<br class="mobile">
         (District Secretary - Reporting)<br><br>
 
-        <i class="fa fa-mobile" aria-hidden="true"></i>&nbsp;&nbsp;Call : <a href="tel:+919623134392">+91 - 9623134392</a><br>
+        <span><i class="fa fa-mobile" aria-hidden="true"></i><span>&nbsp;&nbsp;Call : <a href="tel:+919623134392">+91 - 9623134392</a></span><br>
         <i class="fa fa-whatsapp" aria-hidden="true"></i>&nbsp;&nbsp;Whatsapp : <a href="https://api.whatsapp.com/send?phone=919623134392#">+91 - 9623134392</a><br>
         <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Mail : <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=rtrprasadseth@gmail.com" target="_blank">rtrprasadseth@gmail.com</a>
-    
+    </div>
 {% endblock content%}
 

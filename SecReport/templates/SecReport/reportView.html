@@ -66,7 +66,7 @@
 
 
 {% block content %}
-
+<div class="card">
 <div id="reportForm">
 
 <div id="reportHeadingSection" class="text-center">
@@ -127,7 +127,7 @@
         </div>
         <div class="col-4">
             {% if Edit %}
-            <button type="button" id="reportButton01" onclick="location.href = '{% url 'presentReport' %}'">Edit</button>
+            <button type="button" id="reportButton01" onclick="location.href = '{% url 'secReport_presentReport' %}'">Edit</button>
             {% endif %}
         </div>
         <div class="col-4">
@@ -142,7 +142,7 @@
         
         <div class="col-lg-4 col-xs-12" id="submitButton">
             {% if Edit %}
-            <button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'submitReport' reportId=Report.ReportId %}'" style="float:right;width:100%">Submit</button>
+            <button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'secReport_submitReport' reportId=Report.ReportId %}'" style="float:right;width:100%">Submit</button>
             {% endif %}
         </div>
         <div class="col-4">
@@ -153,5 +153,6 @@
 
 </div>
 </form>
+</div>
 
 {% endblock content%}

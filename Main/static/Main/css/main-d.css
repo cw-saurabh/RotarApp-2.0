@@ -4,8 +4,8 @@
 
 /* Sass Testing */
 body, html {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vw;
   background: #F8F9FA;
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
   padding-bottom: 0;
@@ -32,17 +32,24 @@ p, div, h1, h2, h3, h4, h5, h6, a, span {
     display: none;
   }
   .container {
-    width: 90vw;
+    width: 20vw;
     margin: 0 auto;
+    padding: 3em 2em;
+    width: 90%;
+    min-width: 90%;
+  }
+  #mainWrapperContainer {
+    min-height: 39vw;
+    width: 90%;
+    min-width: 90%;
+  }
+  .card {
     margin-top: 2em;
     margin-bottom: 2em;
     padding: 2em;
     border-radius: 4px;
-  }
-  #mainWrapperContainer {
-    min-height: 39vw;
-    background: white;
-    box-shadow: -3px -3px 10px grey;
+    background-color: white;
+    box-shadow: 3px 3px 10px grey;
   }
   #homeSection1 {
     margin: 0;

@@ -1,0 +1,86 @@
+@import 'Main/scss/globals';
+
+@media screen and (max-width: 1000px) {
+
+    .tasks {
+        width:90%;
+        margin:0 auto;
+            
+        .card {
+            padding :1em;
+        }
+
+        .heading {
+            width: 100% !important ;
+            background-color: $textcolor1;
+            border-radius: 4px;
+            height: 9vw;
+            line-height: 9vw;
+            border:solid black;
+            border: 2px solid $textcolor1;
+            box-shadow: 3px 3px 2px #555;
+            padding-left: 1vw;
+            font-size:$m-medium;
+            font-weight: bold;
+            color: white;
+            margin:0;
+            margin-top:2.5em;
+        }
+    
+        .label {
+            color : $pinkcolor;
+            font-size: $m-small;
+            font-weight: bold;
+        }
+        
+        .downloadButton, .uploadButton, .custom-file {
+            margin-top:1em;
+            border-radius : 4px;
+            min-height:2em;
+            width:90%;
+            margin-left:auto;
+            margin-right:auto;
+        }
+
+        .row {
+            height:90%;
+        }
+
+        .header {
+            color: $pinkcolor;
+            font-size: $m-extraMedium;
+        }
+
+        .subheader {
+            color: $textcolor1;
+            font-size: $m-medium;
+        }
+
+        h3 {
+            font-size: $m-medium;
+            text-align: justify;
+            
+        }
+
+        .taskRow {
+            margin:0;
+            padding:1.5em;
+        }
+
+        #taskContainer {
+            padding:0.8em;
+            background-color: #337ab7;
+        }
+
+        p, a, div {
+            
+            word-break: normal;white-space:normal;
+        }
+
+        input, select {
+            min-height:2em;
+            width:100%;
+        }
+    }
+
+}

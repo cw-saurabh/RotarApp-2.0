@@ -37,7 +37,7 @@
         data['reportId']="{{Report.ReportId}}";
         $('#errorMessages').html('');
         $("#loader").show();
-        $.post( "{% url 'saveReport' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data),'deletedData':JSON.stringify(deletedData)}, function(response, status){
+        $.post( "{% url 'secReport_saveReport' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data),'deletedData':JSON.stringify(deletedData)}, function(response, status){
             $("#loader").hide();
             if(response['error'])
             {
@@ -115,7 +115,7 @@
             $("textarea").attr("disabled", true);
             $("button").not("#reportButton00,#reportButton02,#reportButton10,#reportButton12,#reportButton20,#reportButton22").attr("disabled", true).hide();
             $(".addRow").hide();
-            $("#submitButton").html(`<button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'submitReport' reportId=Report.ReportId %}'" style="float:right;width:100%">Submit</button>`);
+            $("#submitButton").html(`<button class="addRow" id="submit3" type="button" onclick="location.href = '{% url 'secReport_submitReport' reportId=Report.ReportId %}'" style="float:right;width:100%">Submit</button>`);
             $(".instructions").hide();
         {% endif %}
 
@@ -174,7 +174,7 @@
         }
         if(flag)
         {
-        location.href = `{% url 'finishReport' reportId=Report.ReportId %}`;
+        location.href = `{% url 'secReport_finishReport' reportId=Report.ReportId %}`;
         }
     }
     </script>
@@ -183,7 +183,7 @@
 
 
 {% block content %}
-
+<div class="card">
 <div id="reportForm">
 
 <div id="reportHeadingSection" class="text-center">
@@ -280,6 +280,6 @@
     </p>
     <br><br>
 </div>
-
+</div>
 
 {% endblock content%}

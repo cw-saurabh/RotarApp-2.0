@@ -16,35 +16,43 @@
   <img id="logo" src="{% static 'Main/images/Rotaract Logo-min.png' %}" alt="Rotaract">
   <div class="desktop">
 
-    <a href="{% url 'main-home' %}" id="desktop-home">Home</a>
+    <a href="{% url 'main_home' %}" id="desktop-home">Home</a>
     {% if user.is_authenticated %}
-    <!--<a href="{% url 'updateClubProfile' %}" id="desktop-clubProfile">My Club</a>-->
-    {% if user.loginType == '0' %}
-    <a href="{% url 'updateUserProfile' %}" id="desktop-userProfile">My Profile</a>
-    {% elif user.loginType == '1' %}
-    <a href="{% url 'presentReport' %}" id="desktop-Reporting">Reporting</a>
-    {% endif %}
-    <a href="{% url 'logout' %}" id="desktop-logout">Logout</a>
+        {% if user.loginType == '0' %}
+            {% if DRole == '0' %}
+                <a href="{% url 'distReport_a_getMonth' %}" id="desktop-Tasks">Tasks - Admin</a>
+            {% elif DRole != None %}
+                <a href="{% url 'distReport_c_index' %}" id="desktop-Tasks">Tasks</a>
+            {% endif %}
+            <!-- <a href="{% url 'auth_updateUserProfile' %}" id="desktop-userProfile">My Profile</a> -->
+        {% elif user.loginType == '1' %}
+        <a href="{% url 'secReport_presentReport' %}" id="desktop-Reporting">Reporting</a>
+        {% endif %}
+        <a href="{% url 'auth_logout' %}" id="desktop-logout">Logout</a>
     {% else %}
-    <!--<a href="{% url 'login' %}" id="desktop-login">Login</a>-->
-    <!--<a href="{% url 'signup' %}" id="desktop-signup">Sign up</a>-->
+        <a href="{% url 'auth_login' %}" id="desktop-login">Login</a>
+        <!--<a href="{% url 'auth_signup' %}" id="desktop-signup">Sign up</a>-->
     {% endif %}
 
   </div>
   <div class="mobile">
-      <a href="{% url 'main-home' %}" id="mobile-home">Home</a>
+      <a href="{% url 'main_home' %}" id="mobile-home">Home</a>
 
       {% if user.is_authenticated %}
-      <!--<a href="{% url 'updateClubProfile' %}" id="mobile-clubProfile">My Club</a>-->
-      {% if user.loginType == '0' %}
-      <a href="{% url 'updateUserProfile' %}" id="mobile-userProfile">My Profile</a>
-      {% elif user.loginType == '1' %}
-      <a href="{% url 'presentReport' %}" id="mobile-Reporting">Reporting</a>
-      {% endif %}
-      <a href="{% url 'logout' %}" id="mobile-logout">Logout</a>
+          {% if user.loginType == '0' %}
+          {% if DRole == '0' %}
+                <a href="{% url 'distReport_a_getMonth' %}" id="mobile-Tasks">Tasks - Admin</a>
+            {% elif DRole != None %}
+                <a href="{% url 'distReport_c_index' %}" id="mobile-Tasks">Tasks</a>
+            {% endif %}
+          <!-- <a href="{% url 'auth_updateUserProfile' %}" id="mobile-userProfile">My Profile</a> -->
+          {% elif user.loginType == '1' %}
+          <a href="{% url 'secReport_presentReport' %}" id="mobile-Reporting">Reporting</a>
+          {% endif %}
+          <a href="{% url 'auth_logout' %}" id="mobile-logout">Logout</a>
       {% else %}
-      <!--<a href="{% url 'login' %}" id="mobile-login">Login</a>-->
-      <!--<a href="{% url 'signup' %}" id="mobile-signup">Sign up</a>-->
+          <a href="{% url 'auth_login' %}" id="mobile-login">Login</a>
+          <!--<a href="{% url 'auth_signup' %}" id="mobile-signup">Sign up</a>-->
       {% endif %}
       <a href="javascript:void(0);" class="icon" onclick="openNav()">
         <i class="fa fa-bars"></i>

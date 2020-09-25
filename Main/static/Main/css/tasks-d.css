@@ -1,0 +1,154 @@
+body {
+  zoom: 100%;
+}
+
+.tasks .card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  cursor: pointer;
+  zoom: 100%;
+}
+
+.tasks .card:hover {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+}
+
+.tasks .label {
+  color: #D41367;
+  font-size: 1vw;
+  font-weight: bold;
+  padding: 0;
+}
+
+.tasks img {
+  border-radius: 5px 5px 0 0;
+}
+
+.tasks .zero-margin {
+  margin: 0;
+}
+
+.tasks .zero-padding {
+  padding: 0;
+}
+
+.tasks .heading {
+  outline: none;
+  width: 100%;
+  background-color: #337ab7;
+  border-radius: 4px;
+  height: 3.5vw;
+  border: solid #337ab7;
+  border: 2px solid #337ab7;
+  box-shadow: 3px 3px 2px #555;
+  padding-left: 1vw;
+  font-size: 2vw;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+.tasks .downloadButton, .tasks .uploadButton {
+  outline: none;
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 5px auto;
+  cursor: pointer;
+  font-size: 15px;
+  height: 2.5vw;
+  width: 90%;
+}
+
+.tasks .downloadButton:hover, .tasks .uploadButton:hover {
+  outline: none;
+  background-color: RoyalBlue;
+}
+
+.tasks .uploadButton {
+  background-color: #D41367;
+}
+
+.tasks .uploadButton:hover {
+  background-color: #bd115c;
+}
+
+.tasks #prev, .tasks #next {
+  cursor: pointer;
+}
+
+.tasks .header {
+  color: #D41367;
+  font-size: 2.5vw;
+}
+
+.tasks .subheader {
+  color: #337ab7;
+  font-size: 2vw;
+}
+
+.tasks .taskRow {
+  background-color: #ffffff;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  padding: 2em;
+  min-height: 50px;
+}
+
+.tasks .editStrip {
+  background-color: #dddddd;
+  min-height: 4em;
+}
+
+.tasks input[type=text], .tasks textarea, .tasks select {
+  outline: none;
+  width: 100%;
+  margin: 0 !important;
+  height: 2.5vw;
+  border: 1px solid lightgrey;
+  border-radius: 4px;
+  color: #337ab7;
+  background-color: #FFFFFF;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  box-shadow: 2px 2px 2px #555;
+}
+
+.tasks input[type=text]:hover, .tasks select:hover, .tasks textarea:hover {
+  border: 2px solid #337ab7;
+  border-radius: 4px;
+  outline: none;
+  color: #337ab7;
+  background-color: #FFFFFF;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  box-shadow: none;
+  font-weight: bold;
+}
+
+.tasks textarea {
+  height: 8vw;
+  width: 100%;
+  padding: 1vw;
+}
+
+.tasks .errorBox {
+  margin-top: 1em;
+  font-weight: bold;
+  color: red;
+}
+
+.tasks *.col-lg- {
+  padding: 0;
+}
+
+.tasks .col-lg-1 {
+  padding: 0;
+}
+
+.tasks #taskContainer {
+  background-color: #337ab7;
+  padding: 2em;
+  border-radius: 10px;
+}

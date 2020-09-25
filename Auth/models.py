@@ -33,7 +33,7 @@ class Account(AbstractUser):
 class District(models.Model):
     distId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     distName = models.CharField(verbose_name = "District Id", max_length = 5, blank=True, null=True)
-    distLogo = models.ImageField(verbose_name="District Logo", upload_to="distLogos")
+    distLogo = models.ImageField(verbose_name = "District Logo", upload_to="distLogos")
 
     def __str__(self):
         return f'{self.distName}'
@@ -115,7 +115,7 @@ class Member(models.Model):
     contact = models.CharField(max_length=10,verbose_name = "Contact Number", default="",blank=True, null=True)
     birthDate = models.DateTimeField(verbose_name = "Birth Date", null=True, blank=True, default=None)
     bloodGroup = models.CharField(max_length=3,verbose_name = "Blood Group", default=None,blank=True, null=True)
-    photo = models.ImageField(verbose_name="Photo", upload_to="profilePics", null=True)
+    photo = models.ImageField(blank=True, verbose_name="Photo", upload_to="profilePics", null=True)
     joiningDate = models.DateTimeField(verbose_name = "Joining Date", null=True, blank=True, default=None)
 
     def __str__(self):
@@ -160,11 +160,11 @@ class ClubRole(models.Model):
         verbose_name_plural = 'Club Roles'
 
 class DistrictRole(models.Model):
-    distRoleId = models.AutoField(primary_key=True)
-    distRoleName = models.CharField(max_length=15,verbose_name = "District Role Name")
+    distRoleId = models.CharField(max_length=2,primary_key=True)
+    distRoleName = models.CharField(max_length=60,verbose_name = "District Role Name")
 
     def __str__(self):
-        return f'{self.distRoleName}'
+        return f'{self.distRoleId}-{self.distRoleName}'
 
     class Meta:
         verbose_name = 'District Role'
@@ -179,7 +179,7 @@ class DistrictCouncil(models.Model):
     status = models.BooleanField('District Council Status', default=True)
 
     def __str__(self):
-        return f'{self.tenureStarts+"-"+self.districtRole.distRoleName}'
+        return f'{self.districtRole.distRoleName} : {self.accountId.username}'
 
     class Meta:
         verbose_name = 'District Council Member'

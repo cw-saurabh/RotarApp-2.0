@@ -143,12 +143,12 @@
     margin-bottom: 1vw;
     height: 2.5vw;
     width: 100%;
-    border: 1px solid lightgrey;
-    border-radius: 4px;
     color: #337ab7;
     background-color: #FFFFFF;
     padding-left: 1vw;
     padding-right: 1vw;
+    border: 1px solid lightgrey;
+    border-radius: 4px;
     box-shadow: 2px 2px 2px #555;
   }
   #reportForm .col-lg-3 select:focus, #reportForm .col-lg-3 select:after, #reportForm .col-lg-3 select:hover, #reportForm .col-lg-6 select:focus, #reportForm .col-lg-6 select:after, #reportForm .col-lg-6 select:hover, #reportForm .col-lg-2 select:focus, #reportForm .col-lg-2 select:after, #reportForm .col-lg-2 select:hover, #reportForm .col-lg-8 select:focus, #reportForm .col-lg-8 select:after, #reportForm .col-lg-8 select:hover, #reportForm .col-lg-4 select:focus, #reportForm .col-lg-4 select:after, #reportForm .col-lg-4 select:hover, #reportForm .col-lg-5 select:focus, #reportForm .col-lg-5 select:after, #reportForm .col-lg-5 select:hover, #reportForm .col-lg-9 select:focus, #reportForm .col-lg-9 select:after, #reportForm .col-lg-9 select:hover, #reportForm .col-lg-12 select:focus, #reportForm .col-lg-12 select:after, #reportForm .col-lg-12 select:hover {

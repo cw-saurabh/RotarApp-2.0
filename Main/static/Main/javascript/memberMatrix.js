@@ -31,8 +31,8 @@ function updateMatrix(attributeId = null, column = null, subjectId = null ) {
         }
     }
     appendMemberMatrixTotalRow(matrix['Total']['Male'],matrix['Total']['Female'],matrix['Total']['Others'],matrix['Total']['Total']);
-    countN = (1 in matrix) ? matrix[1]['Total'] : null ;
-    countn = (2 in matrix) ? matrix[2]['Total'] : null ;
+    countN = (6 in matrix) ? matrix[6]['Total'] : null ;
+    countn = (7 in matrix) ? matrix[7]['Total'] : null ;
 
     updateTotalNumberOfMembers();
     updateTotalNumberOfInductedMembers();
