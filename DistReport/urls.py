@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path('tasks/', views.admin_getMonth, name = 'distReport_a_getMonth'),
-    url(r'^tasks/(?P<month>[0-9]+)/(?P<distRoleId>[0-9]+)/$', views.admin_getTasks, name='distReport_a_getTasks'),
+    url(r'^tasks/(?P<monthId>[0-9]+)/(?P<distRoleId>[0-9]+)/$', views.admin_getTasks, name='distReport_a_getTasks'),
     path('addTask/', views.admin_addTask, name = 'distReport_a_addtask'),
     path('deleteTask/', views.admin_deleteTask, name = 'distReport_a_deletetask'),
     path('editTask/', views.admin_editTask, name = 'distReport_a_edittask'),

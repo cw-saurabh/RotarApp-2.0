@@ -6,7 +6,7 @@
 <div class="card">
     <div class="tasks" id="tiles">
         <h3 class="header text-center" id="header"><b>Council Reporting</b></h3>
-        <h6 class="subheader text-center">District Secretary - Reporting</h6>
+        <h6 class="subheader text-center">{{DistrictRole.distRoleName}}</h6>
         <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;">
         <br>
         <div id="taskContainer" style="">
@@ -204,22 +204,30 @@
         else
         return '';
     }
+
 </script>
+
 <script>
     $(document).ready(function(){
-        $('#header').html('<h3 class="header text-center" id="header"><b>Council Reporting : '+getMonth(`{{Month}}`)+` {{Year}}`+'</b></h3>');
+        $('#header').html('<h3 class="header text-center" id="header"><b>Council Reporting : '+getMonth(`{{Month.month}}`)+` {{Month.year}}`+'</b></h3>');
+        let counter = 0;
         {% for value in Response %}
+            counter+=1;
             updateTaskList(`{{value.0}}`,`{{value.1}}`,`{{value.2}}`,`{{value.3}}`,getStatus(`{{value.4}}`),`{{value.5}}`,`{{value.6|date:"c"}}`,getAllottedBy(`{{value.7}}`));
         {% endfor %}
+        if(counter==0) {
+            $('#taskList').html(`<div class="text-center"><h3 style="color:white;margin:0"><b>No task found</b></h3></div>`);
+        }
     });
 </script>
 
 <script>
     data = {
         'ReportId':'{{ReportId}}',
-        'DistrictRole':'{{DistrictRole}}',
-        'Month':'{{Month}}'
+        'DistrictRoleId':'{{DistrictRole.distRoleId}}',
+        'Month':'{{Month.month}}'
     };
+    
     function addNewTask() {
         
         if($("input[name=newTask]").val()=='')
@@ -237,9 +245,14 @@
                     $('#addSuccess').html('Task added successfully !').delay(5000).fadeOut();
                     $('#taskList').html('');
                     $('input[name=newTask]').val('');
+                    let counter=0;
                     for(var key in response['tasks']) {
+                        counter+=1;
                         let dict = response['tasks'][key];
                         updateTaskList(dict['responseId'],dict['task__taskId'],dict['task__taskText'],dict['driveLink'],getStatus(dict['completionStatus']),dict['response'],dict['modifiedOn'],getAllottedBy(dict['allottedBy']));
+                    }
+                    if(counter==0) {
+                    $('#taskList').html(`<div class="text-center"><h3 style="color:white;margin:0"><b>No task found</b></h3></div>`);
                     }
                     $('#addLoader').hide();
                 }
@@ -264,9 +277,14 @@
                 if(response['success'])
                 {
                     $('#taskList').html('');
+                    let counter = 0;
                     for(var key in response['tasks']) {
+                        counter+=1;
                         let dict = response['tasks'][key];
                         updateTaskList(dict['responseId'],dict['task__taskId'],dict['task__taskText'],dict['driveLink'],getStatus(dict['completionStatus']),dict['response'],dict['modifiedOn'],getAllottedBy(dict['allottedBy']));
+                    }
+                    if(counter==0) {
+                    $('#taskList').html(`<div class="text-center"><h3 style="color:white;margin:0"><b>No task found</b></h3></div>`);
                     }
                 }
                 else {
@@ -305,6 +323,6 @@
         }
     }
         
-    </script>
+</script>
 
 {% endblock javascript %}

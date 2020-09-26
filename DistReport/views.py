@@ -10,21 +10,38 @@ year = datetime.datetime.now().year
 reportingMonth = '09'
 
 def admin_getMonth(request):
+    months = Month.objects.filter(view=True).order_by('year','month').all()
     council = dict()
-    councilList = DistrictCouncil.objects.all()
-    for councilMember in councilList :
-        memberProfile = Member.objects.filter(login=councilMember.accountId).first()
-        council[councilMember.districtRole] = memberProfile
-    return render(request, 'DistReport/getMonth.html',{'title':'Tasks','Tab':'Tasks','DRole':'0','Council':council})
+    roleList = DistrictRole.objects.all()
+    for role in roleList :
+        count = DistrictCouncil.objects.filter(districtRole=role).count()
+        if count==1:
+            person = DistrictCouncil.objects.filter(districtRole=role).first()
+            memberProfiles = Member.objects.filter(login=person.accountId).first()
+        else :
+            people = DistrictCouncil.objects.filter(districtRole=role).all()
+            memberProfiles = []
+            for person in people :
+                memberProfile = Member.objects.filter(login=person.accountId).first()
+                memberProfiles.append(memberProfile)
+        
+        council1 = {}
+        council1['count'] = count
+        council1['data'] = memberProfiles
+        council[role] = council1
 
-def admin_getTasks(request, month, distRoleId):
+    return render(request, 'DistReport/getMonth.html',{'title':'Tasks','Tab':'Tasks','DRole':'0','Council':council,'Months':months})
+
+def admin_getTasks(request, monthId, distRoleId):
     districtRole = DistrictRole.objects.filter(distRoleId=distRoleId).first()
-    report = DistReport.objects.filter(reportingMonth=month).filter(districtRole=districtRole).first()
+    month = Month.objects.filter(id=monthId).first()
+    reportId = month.month+"-"+month.year+"-"+str(districtRole.distRoleId)
+    report, created = DistReport.objects.get_or_create(dReportId=reportId, month=month, districtRole=districtRole)
     response = Response.objects.filter(dReport=report).all().values_list('responseId','task__taskId','task__taskText','driveLink','completionStatus','response','modifiedOn','allottedBy')
-    return render(request, 'DistReport/getTasks.html',{'title':'Tasks','Tab':'Tasks','DRole':'0','Response':response,'DistrictRole':distRoleId,'ReportId':report.dReportId,'Month':month,'Year':report.reportingYear})
+    return render(request, 'DistReport/getTasks.html',{'title':'Tasks','Tab':'Tasks','DRole':'0','Response':response,'DistrictRole':districtRole,'ReportId':report.dReportId,'Month':month})
 
 def admin_addTask(request):
-    print("Adding")
+    
     try :
         data = json.loads(request.POST.get('data'))
         
@@ -32,7 +49,7 @@ def admin_addTask(request):
             newTask = Task(taskText=data['taskText'])
             newTask.save()
         
-            districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRole']).first()
+            # districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRoleId']).first()
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
         
             newResponse = Response(dReport = report, task = newTask)
@@ -62,7 +79,7 @@ def admin_deleteTask(request):
         data = json.loads(request.POST.get('data'))
         
         with transaction.atomic() :
-            districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRole']).first()
+            # districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRole']).first()
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
             Response.objects.filter(responseId=data['ResponseId']).delete()
 
@@ -90,7 +107,7 @@ def admin_editTask(request):
         data = json.loads(request.POST.get('data'))
         
         with transaction.atomic() :
-            districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRole']).first()
+            # districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRole']).first()
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
             Task.objects.filter(taskId=data['taskId']).update(taskText=data['taskText'])
 
@@ -112,8 +129,6 @@ def admin_editTask(request):
         
     return JsonResponse(data)
 
-
-
 def council_index(request):
     months = Month.objects.filter(view=True).order_by('year','month').all()
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
@@ -127,7 +142,6 @@ def council_getTasks(request):
     
     report = DistReport.objects.filter(districtRole = Council.districtRole)
     
-    # months = ['01','02','03','04','05','06','07','08','09','10','11','12']
     try :
         jsonResponse = {}
         
