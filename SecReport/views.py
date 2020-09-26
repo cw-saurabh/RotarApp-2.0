@@ -118,7 +118,7 @@ def present_report(request):
     _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
     report = Report.objects.filter(reportId=_reportId)
 
-    if (False) : #Has permission
+    if (True) : #Has permission
         FAQs = FAQ.objects.all()
 
         if report.exists() :
