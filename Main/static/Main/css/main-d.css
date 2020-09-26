@@ -27,6 +27,10 @@ p, div, h1, h2, h3, h4, h5, h6, a, span {
   z-index: 0;
 }
 
+.card {
+    border:none !important;
+}
+
 @media screen and (min-width: 1000px) {
   .mobile {
     display: none;
@@ -50,6 +54,7 @@ p, div, h1, h2, h3, h4, h5, h6, a, span {
     border-radius: 4px;
     background-color: white;
     box-shadow: 3px 3px 10px grey;
+    border : none !important;
   }
   #homeSection1 {
     margin: 0;

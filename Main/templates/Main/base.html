@@ -11,30 +11,30 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <script>
-          
+
     function openNav() {
         let x = document.getElementById("mynavigation");
-        if (x.className === "navigation sticky") 
+        if (x.className === "navigation sticky")
         {
             x.className += " responsive";
-        } 
-        else 
+        }
+        else
         {
             x.className = "navigation sticky";
         }
         x = document.getElementById("mainWrapperContainer");
-        if (x.className === "container") 
+        if (x.className === "container")
         {
             x.className += " blur";
-        } 
-        else 
+        }
+        else
         {
             x.className = "container";
         }
@@ -49,7 +49,7 @@
     <link rel="stylesheet" href="{% static 'Main/css/main-m.css' %}">
     <link rel="stylesheet" href="{% static 'Main/css/navigation-d.css' %}">
     <link rel="stylesheet" href="{% static 'Main/css/navigation-m.css' %}">
-    
+
     <link rel="stylesheet" href="{% static 'Main/css/report-2-d.css' %}">
     <link rel="stylesheet" href="{% static 'Main/css/report-2-m.css' %}">
 
@@ -65,16 +65,16 @@
     {% else %}
         <title>Rotaract District 3131</title>
     {% endif %}
-    
+
   </head>
-  
+
   <body>
-     
+
     {% include "Main/navbar.html" %}
-    
-    <div class="container" id="mainWrapperContainer" style="">
+
+    <div class="container" id="mainWrapperContainer" style="border:none">
       {% block content %}{% endblock %}
-    </div>  
+    </div>
     <br class="mobile">
     <br class="mobile">
 
