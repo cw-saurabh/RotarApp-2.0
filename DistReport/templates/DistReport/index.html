@@ -12,18 +12,18 @@
             <h6 class="subheader text-center">{{DistRole}}</h6>
             <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;width:100%">
             <div class="alert-danger alert" id="cantEdit" style="display:none">
-                You can not update your report for this month. Contact District Administration Secretary.
+                You can not update this report. Contact District Administration Secretary for any queries.
             </div>
             <div id="taskContainer" class="">
-                <!-- <span id="addLoader" style="color:white;font-size:40px"><i class="fa fa-circle-o-notch fa-spin"></i></span> -->
-            </div>
-            <br>
-            <br>
-            <div id="addButton">
                 
             </div>
+            <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;width:100%">
+            <div style="float:left;padding:0.2em">
+                <div id="addButton">
+                    
+                </div>
+            </div>
         </div>
-    
     </div>
 </div>
     
@@ -32,6 +32,9 @@
 {% block javascript %}
 <script>
 
+    let months = [];
+    let tasks = {};
+    
     let monthNames = {
             "01" : "January",
             "02" : "February",
@@ -68,126 +71,114 @@
         return '';
     }
 
-    function prevMonth(month = null) {
-        if(month!=null)
+    function prevMonth(index) {
+        if(index!=null)
         {
-            if(isNaN(month))
-            {
-                console.log("Error:month=NaN");
+            if(index==0) {
+                console.log("Info:Month Index = 0");
             }
-            else {
-                if(month!="01")
-                {
-                    let prevMonth = parseInt(month)-1;
-                    updateMonth((prevMonth<10)?("0"+prevMonth.toString()):(prevMonth.toString()));
-                }
-                else
-                {
-                    updateMonth("12");
-                }
-            }
+            else 
+            updateMonth((index-1));
         }
         else 
         {
-            console.log("Error:month=null");
+            console.log("Error:Month Index = null");
         }
     }
 
-    function nextMonth(month = null) {
-        if(month!=null)
+    function nextMonth(index) {
+        if(index!=null)
         {
-            if(isNaN(month))
-            {
-                console.log("Error:month=NaN");
+            if(index==months.length-1) {
+                console.log("Info:Month Index = Max");
             }
-            else {
-                if(month!="12")
-                {
-                    let prevMonth = parseInt(month)+1;
-                    updateMonth((prevMonth<10)?("0"+prevMonth.toString()):(prevMonth.toString()));
-                }
-                else
-                {
-                    updateMonth("01");
-                }
-            }
+            else 
+            updateMonth((index+1));
         }
         else 
         {
-            console.log("Error:month=null");
+            console.log("Error:Month Index = null");
         }
     }
     
-    function updateMonth(month = null) {
+    function updateMonth(index) {
+
         $('#cantEdit').hide();
+        
         $("#taskContainer").html('');
 
-        let now = new Date();
-        let thisMonth = ("0" + (now.getMonth() + 1)).slice(-2);
-        let year = now.getFullYear();
-
-        if(month==null)
-        month = thisMonth; 
-        
-        $('#header').html('<b>Council Reporting : '+monthNames[month]+' '+year+'</b>')
+        // console.log("Index"+index);
+        // console.log("Months[index]"+months[index]);
+        $('#header').html('<b>Council Reporting : '+monthNames[months[index][1]]+' '+months[index][2]+'</b>');
 
         $("#monthSelect").html(`
         <div class = "row text-center heading">
-            <div class="col-lg-1 col-xs-2" id="prev" onclick="prevMonth(`+month+`)">
-                <span class="navIcons"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            <div class="col-lg-1 col-xs-2" onclick="prevMonth(`+index+`)">
+                <span class="navIcons" id="prev`+index+`"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
             </div>
             <div class = "col-lg-10 col-xs-8 text-center">
-                <p id="monthName">`+monthNames[month]+`</p>
+                <p id="monthName">`+monthNames[months[index][1]]+`</p>
             </div>
-            <div class="col-lg-1 col-xs-2" id="next" onclick="nextMonth(`+month+`)">
-                <span class="navIcons"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+            <div class="col-lg-1 col-xs-2" onclick="nextMonth(`+index+`)">
+                <span class="navIcons" id="next`+index+`"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
             </div>
         </div>
-        <br><br class="mobile">
-        <hr style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+        <br class="desktop">
+        <hr class="desktop" style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
         `);
         
+        if(index==0) {
+            $('#prev'+index).hide();
+        }
+        else if(index==months.length-1) {
+            $('#next'+index).hide();
+        }
+
         $("#addButton").html(`
         
         <form action="" method="POST" id="theForm">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-11">
-                        <input type="text" name="newTask" placeholder="Add a self allocated task">
+                        <input type="text" id="newtask`+index+`"  name="newTask" placeholder="Add a self allocated task">
                     </div>
         </form>
                     <div class="col-lg-1 text-center">
-                        <button type="button" class="downloadButton" id="addTaskFor`+month+`" onclick="addNewTask('`+month+`')" style="background-color:#D41367;border-radius:10px"><i class="fa fa-plus" aria-hidden="true"></i><span id="addLoader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
+                        <button type="button" class="downloadButton" id="addTaskFor`+index+`" onclick="addNewTask('`+index+`')" style="background-color:#D41367;border-radius:10px"><i class="fa fa-plus" aria-hidden="true"></i><span id="addLoader" style="display:none">&nbsp;&nbsp;<i class="fa fa-circle-o-notch fa-spin"></i></span></button>
                     </div>
                 </div>
-                <div class="errorBox" id="addError`+month+`">
+                <div class="errorBox" id="addError`+index+`">
                 </div>
                 <div id="addSuccess">
                 </div>
         
         `);
-
-        let len = Object.keys(tasks[month]).length;
+        
+        let len = Object.keys(tasks[months[index][0]]).length;
         if(len==0) {
-            $('#taskContainer').html('<div class="text-center"><h3 style="color:white"><b>No task found</b></h3></div>');    
+            $('#taskContainer').html('<div class="text-center"><h3 style="color:white;margin:0"><b>No task found</b></h3></div>');    
         }
         else {
             let counter = 0;
-            for(var key in tasks[month]) {
+            for(var key in tasks[months[index][0]]) {
                 counter+=1;
-                let dict = tasks[month][key];
-                renderForm(dict['task__taskId'],dict['responseId'],dict['task__taskText'],(dict['completionStatus']),dict['response'],dict['driveLink'],getAllottedBy(dict['allottedBy']),dict['modifiedOn'],month);   
+                let dict = tasks[months[index][0]][key];
+                renderForm(dict['task__taskId'],dict['responseId'],dict['task__taskText'],(dict['completionStatus']),dict['response'],dict['driveLink'],getAllottedBy(dict['allottedBy']),dict['modifiedOn'],index);   
             }
         }
-
-        if(month != thisMonth)
-        $('input,textarea,select').attr('disabled',true); 
-        if(parseInt(month-'0') < parseInt(thisMonth-'0'))
-        $('#cantEdit').show();
+        if(months[index][3]=='False') 
+        {
         
+            $('input,textarea,select').attr('disabled',true); 
+
+            $('#cantEdit').show();
+            // alert('disable');
+            
+        }
+
     }
 
-    function saveTask(responseId=null, month = null) {
+    function saveTask(responseId=null, index) {
         
         if(responseId!=null) {
             $('#saveError'+responseId).html('').show();
@@ -206,9 +197,10 @@
                 $.post( "{% url 'distReport_c_savetask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
                     if(response['success']) {
                         tasks = response['tasks'];
-                        updateMonth(month); 
+                        updateMonth(index);
                     }
                     else {
+                        updateMonth(index);
                         $("#saveError"+responseId).html('Save failed !<br>'+response['error']).delay(5000).fadeOut(); 
                     }
             });
@@ -216,33 +208,33 @@
         }
     }
 
-    function addNewTask(month) {
-
+    function addNewTask(index) {
+        $('#addError'+index).html('').show();
         if($("input[name=newTask]").val()=='')
         {
-            $('#addError'+month).html('Task addition failed : Empty string').delay(5000).fadeOut();
+            $('#addError'+index).html('Task addition failed : Empty string').delay(5000).fadeOut();
         }
         else
         {
             data = {};
             data["taskText"]=$("input[name=newTask]").val();
-            data['month']= month;
+            data['monthId']= months[index][0];
             $.post( "{% url 'distReport_c_addtask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
                 if(response['success'])
                 {
-                    console.log(tasks);
                     tasks = response['tasks'];
-                    updateMonth(month); 
+                    updateMonth(index); 
                 }
                 else {
-                    
+                    updateMonth(index);
+                    $('#addError'+index).html('Task addition failed : Unknown error. Contact website coordinators').delay(5000).fadeOut();
                 }
             });
         }
 
     }
 
-    function renderForm(taskId = null, responseId = null, taskText = null, status = null, response = null, link = null, allottedBy = null, modifiedOn = null, month = null ) {
+    function renderForm(taskId = null, responseId = null, taskText = null, status = null, response = null, link = null, allottedBy = null, modifiedOn = null, index ) {
 
         if (responseId==null) responseId = '0';
 
@@ -281,8 +273,8 @@
                         </div>
                         <div class="col-lg-1">
                             <br><br>
-                            <div class="mobile text-center">
-                            <button class="downloadButton" type="button" onclick="saveTask('`+responseId+`','`+month+`')" style="background-color:#4caf50;border-radius:10px;vertical-align: baseline;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            <div class="text-center">
+                            <button class="downloadButton" type="button" onclick="saveTask('`+responseId+`','`+index+`')" style="background-color:#4caf50;border-radius:10px;vertical-align: baseline;"><i class="fa fa-check" aria-hidden="true"></i></button>
                             </div>
                         </div>
                         <div class="col-lg-12 errorBox" id="saveError`+responseId+`">
@@ -290,8 +282,8 @@
 
                     </div>
                     <br><hr>
-                    <small class="desktop" style="float:right">Last Modified at : <span id='timestamp`+responseId+`'>NA</span></small>
-                    <small class="mobile">Last Modified at : <span id='timestamp`+responseId+`'>NA</span></small>
+                    <small class="desktop" style="float:right">Last Modified at : <span id='timestamp1`+responseId+`'>NA</span></small>
+                    <small class="mobile">Last Modified at : <span id='timestamp2`+responseId+`'>NA</span></small>
                     <br class="mobile"><br class="mobile">
                     </form>                    
                 </div>
@@ -304,39 +296,70 @@
         if (link!=null) $('#link'+responseId).val(link);
         if (status!=null) $('#status'+responseId).val(status);
         let date = new Date(modifiedOn);
-        if (modifiedOn!=null) $('#timestamp'+responseId ).html(date.toDateString()+', '+date.toLocaleTimeString());
+        if (modifiedOn!=null) $('#timestamp1'+responseId ).html(date.toDateString()+', '+date.toLocaleTimeString());
+        if (modifiedOn!=null) $('#timestamp2'+responseId ).html(date.toDateString()+', <br>'+date.toLocaleTimeString());
     }
 
     $(document).ready(function(){
 
-        tasks = {
-            '01' : {},
-            '02' : {},
-            '03' : {},
-            '04' : {},
-            '05' : {},
-            '06' : {},
-            '07' : {},
-            '08' : {},
-            '09' : {},
-            '10' : {},
-            '11' : {},
-            '12' : {},
-        };
+        let active = null;
+        let thisMonth = null;
+        let counter = 0;
+        months = [];
+        tasks = {};
+
+        let now = new Date();
+        let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
         
-        updateMonth();
+        
+        {% for value in Months %}
+            months.push(['{{value.id}}','{{value.month}}','{{value.year}}','{{value.edit}}']);
+            if('{{value.edit}}'=='True') {
+                if(active==null)
+                active = counter;
+            }
+            if(nowMonth=='{{value.month}}') {
+                thisMonth = counter;
+            }
+            counter += 1;
+            tasks['{{value.id}}']={};
+        {% endfor %}
+        // alert(months);
+        // alert(thisMonthObject);
+        // alert(months[thisMonthObject]);
+        
+        if(active!=null) {
+            updateMonth(active);
+        }
+        else if(thisMonth!=null) {
+            
+            updateMonth(thisMonth);
+        }
 
         $.post("{% url 'distReport_c_gettasks' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
                 if(response['success'])
                 {
-                    tasks = response['tasks'];
-                    updateMonth(); 
+                    tasks = response['tasks'];                    
+                    if(active!=null) {
+                        updateMonth(active);
+                    }
+                    else if(thisMonth!=null) {
+                        updateMonth(thisMonth);
+                    }
+
                 }
                 else {
                     
+                    if(active!=null) {
+                        updateMonth(active);
+                    }
+                    else if(thisMonth!=null) {
+                        
+                        updateMonth(thisMonth);
+                    }
+
                 }
         });
-
         
     });
 

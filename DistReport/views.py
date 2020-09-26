@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from Auth.models import DistrictCouncil, Member, DistrictRole
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
-from .models import DistReport, Task, Response
+from .models import DistReport, Task, Response, Month
 import json
 from django.db import transaction
 import datetime
 
 year = datetime.datetime.now().year
+reportingMonth = '09'
 
 def admin_getMonth(request):
     council = dict()
@@ -111,28 +112,35 @@ def admin_editTask(request):
         
     return JsonResponse(data)
 
+
+
 def council_index(request):
+    months = Month.objects.filter(view=True).order_by('year','month').all()
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
-    return render(request, 'DistReport/index.html',{'title':'Tasks','Tab':'Tasks','DRole':'1','DistRole':Council.districtRole.distRoleName})
+    return render(request, 'DistReport/index.html',{'title':'Tasks','Tab':'Tasks','DRole':'1','DistRole':Council.districtRole.distRoleName,'Months':months})
 
 def council_getTasks(request):
-    
+    months = Month.objects.filter(view=True).order_by('year','month').all()
+    print("hii")
+    print(months)    
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
     
     report = DistReport.objects.filter(districtRole = Council.districtRole)
     
-    months = ['01','02','03','04','05','06','07','08','09','10','11','12']
+    # months = ['01','02','03','04','05','06','07','08','09','10','11','12']
     try :
         jsonResponse = {}
         
         for month in months :
-            jsonResponse[month] = {}
-            report1 = report.filter(reportingMonth=month).first()
+            
+            jsonResponse[month.id] = {}
+
+            report1 = report.filter(month=month).first()
             
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
             
             for item in response1 :
-                jsonResponse[month][item['responseId']] = item
+                jsonResponse[month.id][item['responseId']] = item
 
         data = {
             'success': True,
@@ -174,25 +182,24 @@ def council_saveTask(request):
 
     report = DistReport.objects.filter(districtRole = Council.districtRole)
     
-    months = ['01','02','03','04','05','06','07','08','09','10','11','12']
     try :
         jsonResponse = {}
-        
+        months = Month.objects.filter(view=True).order_by('year','month').all()
         for month in months :
-            jsonResponse[month] = {}
-            report1 = report.filter(reportingMonth=month).first()
+            
+            jsonResponse[month.id] = {}
+
+            report1 = report.filter(month=month).first()
             
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
             
             for item in response1 :
-                jsonResponse[month][item['responseId']] = item
+                jsonResponse[month.id][item['responseId']] = item
 
         data = {
             'success': True,
             'tasks':jsonResponse
         }
-
-        print(jsonResponse)
 
     except Exception as Error :
         print(Error)
@@ -206,46 +213,52 @@ def council_saveTask(request):
 def council_addTask(request):
 
     try :
-    
+        
         data = json.loads(request.POST.get('data'))
+        
         Council = DistrictCouncil.objects.filter(accountId = request.user).first()
-        reportId = str(data['month'])+"-"+str(year)+"-"+str(Council.districtRole.distRoleId)
+        print(data['monthId'])
+
+        month = Month.objects.filter(id=data['monthId']).first()
+        reportId = month.month+"-"+month.year+"-"+str(Council.districtRole.distRoleId)
         print(reportId)
+
         with transaction.atomic() :
             
             newTask = Task(taskText=data['taskText'])
             newTask.save()
 
             Council = DistrictCouncil.objects.filter(accountId = request.user).first()
-            report = DistReport.objects.filter(districtRole = Council.districtRole).filter(reportingMonth=data['month'])
+            report = DistReport.objects.filter(dReportId = reportId)
             
             if report.exists() :
                 newResponse = Response(dReport = report.first(), task = newTask, allottedBy = '1')
                 newResponse.save()
 
             else :
-                report = DistReport(districtRole=Council.districtRole, reportingMonth=data['month'], reportingYear = year, dReportId=reportId) 
+                report = DistReport(districtRole=Council.districtRole, month=month, dReportId=reportId) 
                 report.save()
                 newResponse = Response(dReport = report, task = newTask, allottedBy = '1')
                 newResponse.save()
 
         jsonResponse = {}
-        
-        months = ['01','02','03','04','05','06','07','08','09','10','11','12']
-    
+        months = Month.objects.filter(view=True).order_by('year','month').all()
         for month in months :
-            jsonResponse[month] = {}
-            report1 = DistReport.objects.filter(districtRole = Council.districtRole).filter(reportingMonth=month).first()
-            print(report1)
+            
+            jsonResponse[month.id] = {}
+
+            report1 = report.filter(month=month).first()
+            
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
-            print(response1)
+            
             for item in response1 :
-                jsonResponse[month][item['responseId']] = item
-        print(jsonResponse)
+                jsonResponse[month.id][item['responseId']] = item
+
         data = {
             'success': True,
             'tasks':jsonResponse
         }
+
 
     except Exception as Error :
     

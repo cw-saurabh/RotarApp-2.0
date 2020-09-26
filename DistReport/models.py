@@ -17,18 +17,28 @@ months = (
     ("12","December")
 )
 
+class Month(models.Model) :
+    month = models.CharField(blank = True, max_length=2, choices = months, verbose_name = "Month")
+    year = models.CharField(blank = True, max_length=4, verbose_name = "Year")
+    edit = models.BooleanField(verbose_name = "Edit permission", default = False, null = True, blank = True)
+    view = models.BooleanField(verbose_name = "View permission", default = True, null = True, blank = True)
+
+    class Meta:
+        verbose_name = 'Month'
+        verbose_name_plural = 'Months'
+
+    def __str__(self):
+        return f'{self.month}-{self.year}'
+
 class DistReport(models.Model):
     dReportId = models.CharField(blank = True, max_length=32, verbose_name = "Report Id", primary_key = True)
-    reportingMonth = models.CharField(blank = True, max_length=2, choices = months, verbose_name = "Month")
-    reportingYear = models.CharField(blank = True, max_length=4, verbose_name = "Year")
+    month = models.ForeignKey(Month, on_delete=models.CASCADE, default = None)
     districtRole = models.ForeignKey(DistrictRole, on_delete = models.CASCADE)
 
     class Meta:
         verbose_name = 'District Report'
         verbose_name_plural = 'District Reports'
 
-    def __str__(self):
-        return f'{self.districtRole.distRoleName}-{self.reportingMonth}'
 
 class Task(models.Model) :
     taskId = models.AutoField(primary_key = True)
@@ -44,3 +54,4 @@ class Response(models.Model) :
     driveLink = models.CharField(blank = True, max_length = 100, verbose_name = "Drive Link")
     modifiedOn = models.DateTimeField(verbose_name = "Modified on", default=None, null = True, blank = True)
     allottedBy = models.CharField(blank = True, max_length=2, choices = (("0","DSA"),("1","Self")), verbose_name = "Allotted By", default='0')
+
