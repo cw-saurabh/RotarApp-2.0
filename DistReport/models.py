@@ -42,7 +42,7 @@ class DistReport(models.Model):
 
 class Task(models.Model) :
     taskId = models.AutoField(primary_key = True)
-    taskText = models.CharField(blank = True, max_length = 100, verbose_name = 'Task')
+    taskText = models.CharField(blank = True, max_length = 2000, verbose_name = 'Task')
     taskPoolStatus = models.BooleanField(verbose_name = "Task Pool Status", default = True, null = True, blank = True)
 
 class Response(models.Model) :

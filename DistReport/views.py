@@ -5,11 +5,39 @@ from .models import DistReport, Task, Response, Month
 import json
 from django.db import transaction
 import datetime
+import xlrd
+import pandas as pd
 
 year = datetime.datetime.now().year
 reportingMonth = '09'
 
 def admin_getMonth(request):
+    if request.POST :
+        print(request.FILES['files'])
+        file_name = request.FILES['files']
+        file = pd.read_excel(file_name, sheet_name='Sheet1')
+        del file['District Role']
+        dictx = file.set_index('Role Id').T.to_dict(orient='list')
+
+        month = Month.objects.filter(id=(request.POST['monthId'])).first()
+        
+        for row in dictx.keys():
+            reportId = month.month+"-"+month.year+"-"+str(row)
+            role = DistrictRole.objects.filter(distRoleId=str(row)).first()
+           
+            report, created = DistReport.objects.get_or_create(dReportId=reportId, month=month, districtRole = role)
+            print(report)
+            
+            for text in dictx[row] :
+                if(str(text)!='nan') :
+                    
+                    with transaction.atomic() :
+                        newTask = Task(taskText=text)
+                        newTask.save()
+                    
+                        newResponse = Response(dReport = report, task = newTask)
+                        newResponse.save()
+
     months = Month.objects.filter(view=True).order_by('year','month').all()
     council = dict()
     roleList = DistrictRole.objects.all()

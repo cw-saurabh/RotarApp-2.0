@@ -73,29 +73,31 @@
         </div>
         <br>
         <br>
-        <form>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="row">
                 <div class="col-lg-3  text-center">
                     <p class="label desktop" style="float:left">Upload tasks :</p>
                     <p class="label mobile" style="">Upload tasks :</p><br class="desktop"><br class="desktop">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
+                        <input type="file" class="custom-file-input" id="customFile" oninput="$('.custom-file-label').addClass('selected').html($(this).val().slice(12));" name="files">
                         <label class="custom-file-label" for="customFile">Upload CSV File</label>
                     </div>
+                    <input type="text" value='`+months[index][0]+`' style="display:none" name='monthId'>
                 </div>
                 <div class="col-lg-3 text-center">
                     <br class="desktop"><br class="desktop">
-                    <button class="uploadButton" style="width:100%;"><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;&nbsp;Upload</button>
+                    <button type="submit" class="uploadButton" style="width:100%;"><i class="fa fa-upload" aria-hidden="true"></i>&nbsp;&nbsp;Upload</button>
                 </div>
                 <div class="col-lg-3 text-center">
                     <br class="desktop"><br class="desktop">
-                    <button class="downloadButton" style="width:100%;"><i class="fa fa-download"></i>&nbsp;&nbsp;Format File</button>
+                    <button type="button" class="downloadButton" style="width:100%;"><i class="fa fa-download"></i>&nbsp;&nbsp;Format File</button>
                 </div>
                 <div class="col-lg-3 text-center">
                     <br class="mobile"><br class="mobile">
                     <p class="label desktop" style="float:left">Download reports :</p>
                     <p class="label mobile">Download reports :</p><br class="desktop"><br class="desktop">
-                    <button class="downloadButton" style="width:100%;"><i class="fa fa-download"></i>&nbsp;&nbsp;Reports</button>
+                    <button type="button" class="downloadButton" style="width:100%;"><i class="fa fa-download"></i>&nbsp;&nbsp;Reports</button>
                 </div>
             </div>
         </form>
@@ -169,6 +171,8 @@
         {% endfor %}
         
         updateMonth(thisMonth);
+        
     });
 </script>
+
 {% endblock javascript %}
