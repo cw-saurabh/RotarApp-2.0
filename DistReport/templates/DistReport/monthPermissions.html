@@ -1,0 +1,220 @@
+{% extends "Main/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags }
+{% block content %}
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+</style>
+<div class="card">
+    <div class="tasks" id="tiles">
+        <h3 class="header text-center" id="header"><b>Council Reporting</b></h3>
+        <h6 class="subheader text-center">Manage Access</h6>
+        <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;">
+        <br class="desktop"><hr class="desktop">
+        {% csrf_token %}
+        <div id="d_months" class="desktop">
+            
+        </div>
+        <div id="m_months" class="mobile text-center">
+
+        </div>
+        <br>
+    </div>
+    
+</div>
+{% endblock content%}
+{% block javascript %}
+<script>
+let months = {};
+let monthNames = {
+    "01" : "January",
+    "02" : "February",
+    "03" : "March",
+    "04" : "April",
+    "05" : "May",
+    "06" : "June",
+    "07" : "July",
+    "08" : "August",
+    "09" : "September",
+    "10" : "October",
+    "11" : "November",
+    "12" : "December",
+};       
+    
+$(document).ready(function(){
+
+    months = {};
+
+    {% for value in Months %}
+        months['{{value.id}}']=['{{value.month}}','{{value.year}}','{{value.edit}}','{{value.view}}'];
+        $('#d_months').append(`
+            <div class="col-lg-3" style="padding:0">
+                <p class="label" style="color:#2196F3">`+monthNames['{{value.month}}']+` {{value.year}}</p>
+            </div>
+            <div class="col-lg-1">
+                <label class="switch">
+                <input type="checkbox" id="d_edit{{value.id}}">
+                <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="col-lg-1">
+                <label class="switch">
+                <input type="checkbox" id="d_view{{value.id}}">
+                <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="col-lg-1">
+                <button class="downloadButton" id="d_save{{value.id}}" onclick="changePermission('d','{{value.id}}')" style="margin-top:0;background-color: #D41367;border-radius:30px;vertical-align: baseline;width: 60%;height: 34px;"><i class="fa fa-check" aria-hidden="true"></i></button>
+            </div>    
+        
+        `);
+        $('#m_months').append(`
+            <div class="card" style="margin-bottom:0">
+                <div class="col-lg-3" style="padding:0">
+                    <h4 style="color:#D41367"><b>Month : `+monthNames['{{value.month}}']+` {{value.year}}</b></h4>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-1 col-xs-6" style="vertical-align:middle">
+                        <p class="label" style="color:#337ab7">Edit</p>
+                    </div>
+                    <div class="col-lg-1 col-xs-6">
+                        <label class="switch">
+                        <input type="checkbox" id="m_edit{{value.id}}">
+                        <span class="slider round"></span>
+                        </label>
+                    </div>  
+                    <div class="col-lg-1 col-xs-6" style="vertical-align:middle">
+                        <p class="label" style="color:#337ab7">View</p>
+                    </div>
+                    <div class="col-lg-1 col-xs-6">
+                        <label class="switch">
+                        <input type="checkbox" id="m_view{{value.id}}">
+                        <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <hr>
+                <div class="col-lg-1" style="padding:0;">
+                    <button class="downloadButton" id="m_save{{value.id}}" onclick="changePermission('m','{{value.id}}')" style="margin-top:0;background-color: #D41367;border-radius:30px;vertical-align: baseline;width: 60%;height: 34px;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                </div>    
+            </div>
+        `);
+        
+        {% ifequal value.view 1 %}
+            $("#d_view{{value.id}}").prop('checked','true');
+            $("#m_view{{value.id}}").prop('checked','true');
+        {% endifequal %}
+        {% ifequal value.edit 1 %}
+            $("#d_edit{{value.id}}").prop('checked','true');
+            $("#m_edit{{value.id}}").prop('checked','true');
+        {% endifequal %}
+    {% endfor %}
+        
+});
+
+function changePermission(mode, monthId = null) {
+    if(monthId!=null) 
+    {
+        if(mode=='d')
+        {
+            $('#d_save'+monthId).css('background-color','grey');
+            data = {};
+            data['monthId']=monthId;
+            data['view']=$('#d_view'+monthId).prop('checked');
+            data['edit']=$('#d_edit'+monthId).prop('checked');
+
+            $.post( "{% url 'distReport_a_changePermission' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                    if(response['success'])
+                    {
+                        setTimeout(function(){ $('#d_save'+monthId).css('background-color','#D41367'); }, 1000);
+                    }
+                    else {
+                        
+                    }
+                });
+        }
+        else if(mode=='m')
+        {
+            $('#m_save'+monthId).css('background-color','grey');
+            data = {};
+            data['monthId']=monthId;
+            data['view']=$('#m_view'+monthId).prop('checked');
+            data['edit']=$('#m_edit'+monthId).prop('checked');
+
+            $.post( "{% url 'distReport_a_changePermission' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                    if(response['success'])
+                    {
+                        setTimeout(function(){ $('#m_save'+monthId).css('background-color','#D41367'); }, 1000);
+                    }
+                    else {
+                        
+                    }
+                });
+        }
+    }
+}
+
+</script>   
+
+{% endblock javascript %}

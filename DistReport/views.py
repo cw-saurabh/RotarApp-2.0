@@ -68,6 +68,28 @@ def admin_getTasks(request, monthId, distRoleId):
     response = Response.objects.filter(dReport=report).all().values_list('responseId','task__taskId','task__taskText','driveLink','completionStatus','response','modifiedOn','allottedBy')
     return render(request, 'DistReport/getTasks.html',{'title':'Tasks','Tab':'Tasks','DRole':'0','Response':response,'DistrictRole':districtRole,'ReportId':report.dReportId,'Month':month})
 
+def admin_manageAccess(request):
+    months = Month.objects.all()
+    return render(request, 'DistReport/monthPermissions.html',{'title':'Access','Tab':'Access','DRole':'0','Months':months})
+
+def admin_changePermission(request):
+    data = json.loads(request.POST.get('data'))
+    print(data['view'])
+    print(data['edit'])
+    try :
+        month = Month.objects.filter(id=data['monthId']).update(view=data['view'],edit=data['edit'])
+        data = {
+            'success': True
+        }    
+
+    except Exception as e :
+        print(e)
+        data = {
+            'success': False
+        }
+    
+    return JsonResponse(data)
+
 def admin_addTask(request):
     
     try :
