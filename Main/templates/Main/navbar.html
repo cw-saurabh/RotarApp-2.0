@@ -19,7 +19,7 @@
     <a href="{% url 'main_home' %}" id="desktop-home">Home</a>
     {% if user.is_authenticated %}
         {% if user.loginType == '0' %}
-            {% if DRole == '0' %}
+            {% if DRole == '04' %}
                 <a href="{% url 'distReport_a_getMonth' %}" id="desktop-Tasks">Tasks - Admin</a>
                 <a href="{% url 'distReport_a_manageAccess' %}" id="desktop-Access">Tasks - Manage Access</a>
             {% elif DRole != None %}
@@ -41,7 +41,7 @@
 
       {% if user.is_authenticated %}
           {% if user.loginType == '0' %}
-          {% if DRole == '0' %}
+          {% if DRole == '04' %}
                 <a href="{% url 'distReport_a_getMonth' %}" id="mobile-Tasks">Tasks - Admin</a>
                 <a href="{% url 'distReport_a_manageAccess' %}" id="mobile-Access">Tasks - Manage Access</a>
             {% elif DRole != None %}

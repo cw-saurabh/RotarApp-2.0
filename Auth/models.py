@@ -34,7 +34,7 @@ class Account(AbstractUser):
 class District(models.Model):
     distId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     distName = models.CharField(verbose_name = "District Id", max_length = 5, blank=True, null=True)
-    distLogo = models.ImageField(verbose_name = "District Logo", upload_to="distLogos")
+    distLogo = models.ImageField(verbose_name = "District Logo", upload_to="distLogos", null=True)
 
     def __str__(self):
         return f'{self.distName}'
@@ -176,8 +176,8 @@ class DistrictCouncil(models.Model):
     distId =  models.ForeignKey(District, on_delete = models.CASCADE)
     districtRole = models.ForeignKey(DistrictRole, on_delete = models.CASCADE)
     accountId = models.ForeignKey(Account, on_delete = models.CASCADE)
-    tenureStarts = models.DateTimeField(verbose_name = "Tenure starts on")
-    tenureEnds = models.DateTimeField(verbose_name = "Tenure ends on", blank = True)
+    tenureStarts = models.DateTimeField(verbose_name = "Tenure starts on", null=True)
+    tenureEnds = models.DateTimeField(verbose_name = "Tenure ends on", blank = True, null=True)
     status = models.BooleanField('District Council Status', default=True)
 
     def __str__(self):

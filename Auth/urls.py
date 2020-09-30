@@ -13,4 +13,7 @@ urlpatterns = [
     path('Club/', views.updateClubProfile, name = 'auth_updateClubProfile'),
     path('Rotaractor/', views.updateUserProfile, name = 'auth_updateUserProfile'),
     url(r'^Rotaractors/view/(?P<username>\w+)/$', views.viewUserProfile, name='auth_viewUserProfile'),
+    path('createCouncilAccounts/', views.createCouncilAccounts, name = 'auth_createCouncilAccounts'),
+    path('createCouncilPosts/', views.createCouncilPosts, name = 'auth_createCouncilPosts'),
+    path('createCouncilMaps/', views.createCouncilMaps, name = 'createCouncilMaps'),
 ]

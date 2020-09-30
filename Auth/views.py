@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileUpdateForm, EmailUpdateForm, AccountCreationForm
-from .models import Club, Account, Member, DistrictCouncil
+from .models import Club, Account, Member, DistrictCouncil, DistrictRole, District
 from django.shortcuts import redirect
 import csv
 from django.contrib.auth import login, authenticate
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseNotFound
+from django.db import transaction
 
 
 def signup(request):
@@ -93,7 +94,73 @@ def createAccounts(request):
                 pass
                 print(e)
 
-    return redirect('login')
+    return redirect('auth_login')
+
+def createCouncilAccounts(request):
+    csvFile='Accounts.csv'
+    with open(csvFile, encoding='utf8') as csvFile:
+        reader = csv.DictReader(csvFile)
+        for row in reader:
+            try :
+                with transaction.atomic():
+                    p = Account(username=row['Usernames'],
+                    loginType = "0",
+                    email = row['Email Address'])
+                    p.set_password(row['Password'])
+                    p.save()
+
+                    q = Member(login=p,
+                    firstName = row['First Name'],
+                    lastName = row['Last Name'])
+                    q.save()
+
+            except Exception as e:
+                pass
+                print(e)
+
+    return redirect('auth_login')
+
+
+def createCouncilPosts(request):
+    csvFile='Council Posts.csv'
+    with open(csvFile, encoding='utf8') as csvFile:
+        reader = csv.DictReader(csvFile)
+        for row in reader:
+            try :
+                with transaction.atomic():
+                    p = DistrictRole(
+                    distRoleName = row['Name'],
+                    distRoleSName = row['SName'],
+                    distRoleId = row['Id'])
+                    p.save()
+
+            except Exception as e:
+                pass
+                print(e)
+
+    return redirect('auth_login')
+
+def createCouncilMaps(request):
+    csvFile='Council Maps.csv'
+    with open(csvFile, encoding='utf8') as csvFile:
+        reader = csv.DictReader(csvFile)
+        for row in reader:
+            try :
+                with transaction.atomic():
+                    d, created = District.objects.get_or_create(distName='3131')
+                    r = DistrictRole.objects.filter(distRoleId=row['Role']).first()
+                    print(r)
+                    a = Account.objects.filter(username=row['Usernames']).first()
+                    p = DistrictCouncil(
+                    distId=d,
+                    districtRole = r,
+                    accountId = a)
+                    p.save()
+
+            except Exception as e:
+                print(e)
+
+    return redirect('auth_login')
 
 def email(request):
         try :
