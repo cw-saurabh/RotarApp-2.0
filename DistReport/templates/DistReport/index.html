@@ -285,6 +285,14 @@
 
     }
 
+    function validateUrl(id) {
+        let input=document.getElementById(id);
+        var str=input.value;
+        var patt1=/^(https:\/\/www.instagram.com\/|-|https:\/\/drive.google.com\/)/g;
+        var res=patt1.test(str);
+        return res;
+        }
+
     function renderForm(taskId = null, responseId = null, taskText = null, status = null, response = null, link = null, allottedBy = null, modifiedOn = null, index ) {
 
         if (responseId==null) responseId = '0';
@@ -320,7 +328,7 @@
                         <div class="col-lg-8">
                             <p class="label" style="color:#337ab7">Drive Link</p>
                             <br><br>
-                            <input type="text" id = 'link`+responseId+`'>
+                            <input type="text" id = 'link`+responseId+`' onchange="validateUrl(this.id)||(value='');">
                         </div>
                         <div class="col-lg-1">
                             <br><br>
