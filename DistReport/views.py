@@ -7,6 +7,8 @@ from django.db import transaction
 import datetime
 import xlrd, xlwt
 import pandas as pd
+from django.db.models import IntegerField
+from django.db.models.functions import Cast
 
 year = datetime.datetime.now().year
 reportingMonth = '09'
@@ -41,9 +43,7 @@ def admin_getMonth(request):
 
     months = Month.objects.filter(view=True).order_by('year','month').all()
     council = dict()
-    roleList = DistrictRole.objects.filter(flag=True).extra(
-    select={'myinteger': 'CAST(distRoleId AS INTEGER)'}
-).order_by('myinteger').all()
+    roleList = DistrictRole.objects.filter(flag=True).annotate(id=Cast('distRoleId', IntegerField())).order_by('id').all()
     for role in roleList :
         count = DistrictCouncil.objects.filter(districtRole=role).count()
         if count==1:
@@ -201,9 +201,7 @@ def admin_exportFormatFile(request):
         font_style = xlwt.XFStyle()
         font_style.alignment.wrap = 1
         
-        rows = DistrictRole.objects.filter(flag=True).extra(
-    select={'myinteger': 'CAST(distRoleId AS INTEGER)'}
-).order_by('myinteger').all().values_list('distRoleName','distRoleId')
+        rows = DistrictRole.objects.filter(flag=True).annotate(id=Cast('distRoleId', IntegerField())).order_by('id').all().values_list('distRoleName','distRoleId')
         for row in rows:
             row_num += 1
             for col_num in range(len(row)):
@@ -221,7 +219,7 @@ def admin_exportReports(request, monthId):
     try :
         response = HttpResponse(content_type='application/ms-excel')
         month = Month.objects.filter(id=monthId).first()
-        Reports = DistReport.objects.filter(month=month).all()
+        Reports = DistReport.objects.filter(month=month).filter(districtRole__flag=True).annotate(id=Cast('districtRole__distRoleId', IntegerField())).order_by('id').all()
         response['Content-Disposition'] = 'attachment; filename="'+'Tasks'+"-"+str(month.month)+'-'+str(month.year)+'.xls"'
         wb = xlwt.Workbook(encoding='utf-8')
         colwidth = int(13*260)

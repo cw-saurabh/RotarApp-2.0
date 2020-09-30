@@ -110,9 +110,9 @@
                 <div class="card text-center" onclick="location.href = '/tasks/`+months[index][0]+`/{{key.distRoleId}}'" style="height:90%">
                     {% ifequal value.count 1 %}
                         {% ifequal value.data.gender "M" %}
-                        <img src="{% static 'Main/images/avatar.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
+                        <img src="{% static 'Main/images/16363.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
                         {% else %}
-                        <img src="{% static 'Main/images/avatar.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
+                        <img src="{% static 'Main/images/16363.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
                         {% endifequal %}
                         <br><hr>
                         <div class="zero-padding zero-margin">
@@ -120,7 +120,7 @@
                             <h6><b style="color:#337ab7">Rtr. {{value.data.firstName}} {{value.data.lastName|make_list|first}}</b></h6>
                         </div>
                     {% else %}
-                        <img src="{% static 'Main/images/team.png' %}" alt="Avatar" style="width:100%">
+                        <img src="{% static 'Main/images/team2.png' %}" alt="Avatar" style="width:100%;">
                         <br><hr>
                         <div class="zero-padding zero-margin">
                             <h5><b style="color:black">{{key.distRoleName}}</b></h5>

@@ -46,6 +46,7 @@
         
         let date = new Date(modifiedOn);
         console.log(modifiedOn);
+        if(modifiedOn!='') console.log(date.toISOString());
         if(responseId==''||responseId==null||taskId==''||taskId==null||driveLink==''||driveLink==null||status==''||status==null||response==''||response==null||allottedBy==null||allottedBy==''||modifiedOn==''||modifiedOn==null)
         {
             $('#taskList').append(`
@@ -119,7 +120,7 @@
                             <p class="label" style="color:#337ab7"><b>Modified on</b></p>
                         </div>
                         <div class="col-lg-10" style="white-space: nowrap;">
-                            `+date.toDateString()+`, <br class="mobile">`+date.toLocaleTimeString()+`
+                            `+date.toUTCString().replace('GMT','')+`
                         </div>
                     </div>
                     <br>
