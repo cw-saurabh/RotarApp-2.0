@@ -59,7 +59,7 @@ def admin_getMonth(request):
         council1['data'] = memberProfiles
         council[role] = council1
 
-    return render(request, 'DistReport/getMonth.html',{'title':'Tasks','Tab':'Tasks','DRole':'0','Council':council,'Months':months})
+    return render(request, 'DistReport/getMonth.html',{'title':'Tasks','Tab':'Tasks','DRole':'4','Council':council,'Months':months})
 
 def admin_getTasks(request, monthId, distRoleId):
     districtRole = DistrictRole.objects.filter(distRoleId=distRoleId).first()
@@ -67,11 +67,11 @@ def admin_getTasks(request, monthId, distRoleId):
     reportId = month.month+"-"+month.year+"-"+str(districtRole.distRoleId)
     report, created = DistReport.objects.get_or_create(dReportId=reportId, month=month, districtRole=districtRole)
     response = Response.objects.filter(dReport=report).all().values_list('responseId','task__taskId','task__taskText','driveLink','completionStatus','response','modifiedOn','allottedBy')
-    return render(request, 'DistReport/getTasks.html',{'title':'Tasks','Tab':'Tasks','DRole':'0','Response':response,'DistrictRole':districtRole,'ReportId':report.dReportId,'Month':month})
+    return render(request, 'DistReport/getTasks.html',{'title':'Tasks','Tab':'Tasks','DRole':'4','Response':response,'DistrictRole':districtRole,'ReportId':report.dReportId,'Month':month})
 
 def admin_manageAccess(request):
     months = Month.objects.all()
-    return render(request, 'DistReport/monthPermissions.html',{'title':'Access','Tab':'Access','DRole':'0','Months':months})
+    return render(request, 'DistReport/monthPermissions.html',{'title':'Access','Tab':'Access','DRole':'4','Months':months})
 
 def admin_changePermission(request):
     data = json.loads(request.POST.get('data'))
