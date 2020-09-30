@@ -41,7 +41,9 @@ def admin_getMonth(request):
 
     months = Month.objects.filter(view=True).order_by('year','month').all()
     council = dict()
-    roleList = DistrictRole.objects.filter(flag=True).all()
+    roleList = DistrictRole.objects.filter(flag=True).extra(
+    select={'myinteger': 'CAST(distRoleId AS INTEGER)'}
+).order_by('myinteger').all()
     for role in roleList :
         count = DistrictCouncil.objects.filter(districtRole=role).count()
         if count==1:
@@ -191,7 +193,7 @@ def admin_exportFormatFile(request):
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
         font_style.alignment.wrap = 1
-        columns = ['District Role','District Role id','Task 1','Task 2','Task 3','Task 4','Task 5','Task 6','Task 7','Task 8','Task 9','Task 10']
+        columns = ['District Post','Role Id','Task 1','Task 2','Task 3','Task 4','Task 5','Task 6','Task 7','Task 8','Task 9','Task 10']
         for i in range(len(columns)):
             ws.col(i).width = colwidth
         for col_num in range(len(columns)):
@@ -199,7 +201,9 @@ def admin_exportFormatFile(request):
         font_style = xlwt.XFStyle()
         font_style.alignment.wrap = 1
         
-        rows = DistrictRole.objects.all().values_list('distRoleName','distRoleId')
+        rows = DistrictRole.objects.filter(flag=True).extra(
+    select={'myinteger': 'CAST(distRoleId AS INTEGER)'}
+).order_by('myinteger').all().values_list('distRoleName','distRoleId')
         for row in rows:
             row_num += 1
             for col_num in range(len(row)):
