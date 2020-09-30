@@ -18,13 +18,14 @@ def admin_getMonth(request):
         file = pd.read_excel(file_name, sheet_name='Sheet1')
         del file['District Role']
         dictx = file.set_index('Role Id').T.to_dict(orient='list')
-
+        print(dictx)
         month = Month.objects.filter(id=(request.POST['monthId'])).first()
         
         for row in dictx.keys():
             reportId = month.month+"-"+month.year+"-"+str(row)
+            print(reportId)
             role = DistrictRole.objects.filter(distRoleId=str(row)).first()
-           
+            print(role)
             report, created = DistReport.objects.get_or_create(dReportId=reportId, month=month, districtRole = role)
             print(report)
             
@@ -40,7 +41,7 @@ def admin_getMonth(request):
 
     months = Month.objects.filter(view=True).order_by('year','month').all()
     council = dict()
-    roleList = DistrictRole.objects.all()
+    roleList = DistrictRole.objects.filter(flag=True).all()
     for role in roleList :
         count = DistrictCouncil.objects.filter(districtRole=role).count()
         if count==1:

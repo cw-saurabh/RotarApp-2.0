@@ -1,27 +1,21 @@
 Name,SName,Id
-District Rotaract Representative,DRR,00
-Deputy District Rotaract Representative,DDRR,01
-District Secretary - Events & Protocols,DS-EP,02
-District General Secretary,DS-G,03
-District Secretary - Administration,DS-A,04
-District Club Advisor,ClubAdvisor,05
-District Secretary - Reporting,DS-R,06
-District Secretary - RI Reporting,DS-RR,07
-District Treasurer,Treasurer,08
-Immediate Past DRR,IPDRR,09
+District Rotaract Representative,DRR,0
+Deputy District Rotaract Representative,DDRR,1
+District Secretary - Events & Protocols,DS-EP,2
+District General Secretary,DS-G,3
+District Secretary - Administration,DS-A,4
+District Club Advisor,ClubAdvisor,5
+District Secretary - Reporting,DS-R,6
+District Secretary - RI Reporting,DS-RR,7
+District Treasurer,Treasurer,8
+Immediate Past DRR,IPDRR,9
 District Mentor,Mentor,10
-District Zonal Representative - 1,DZR1,11
-District Zonal Representative - 2,DZR2,12
-District Zonal Representative - 3,DZR3,13
-District Zonal Representative - 4,DZR4,14
-District Zonal Representative - 5,DZR5,15
-District Zonal Representative - 6,DZR6,16
-Assistant Zonal Represntative - 1,AZR1,17
-Assistant Zonal Representative - 2,AZR2,18
-Assistant Zonal Representative - 3,AZR3,19
-Assistant Zonal Representative - 4,AZR4,20
-Assistant Zonal Representative - 5,AZR5,21
-Assistant Zonal Representative - 6,AZR6,22
+District Zonal Representative - 1,ZR1,11
+District Zonal Representative - 2,ZR2,12
+District Zonal Representative - 3,ZR3,13
+District Zonal Representative - 4,ZR4,14
+District Zonal Representative - 5,ZR5,15
+District Zonal Representative - 6,ZR6,16
 District Director - Professional Development,PDD,23
 District Director - Club Service,CSD,24
 District Director- Community Service,CMD,25
@@ -29,21 +23,23 @@ District Director - International Service,ISD,26
 District Professional Assistant Officer,PAO,27
 District Director - Membership Development,MembershipD,28
 District Officer - Public Relations,PRO,29
-District Editor,Editor,30
-District Sports Head,SportsHead,31
-District Snapper,Snapper,32
-District Director- Public Image,Public Image,33
-District Director- Finance,Finance,34
-District Sergeant-At-Arms,SAA,35
-District Officer- Rotary Rotaract Relations,RRRO,36
-District Women's Representative,WR,37
-District Director- Communication(Whatsapp),Whatsapp Comm,38
-District Coordinator - Rotasia,Rotasia Cord,39
-District Chairperson- World Rotaract Week,WRW,40
-District Chairperson- E-Ryla,ERyla,41
-District Website Coordinator,Website,42
-District Director Without Portfolio - 1,WithoutPortfolio1,43
-District Director Without Portfolio - 2,WithoutPortfolio2,44
-District Director Without Portfolio - 3,WithoutPortfolio3,45
-COPS Secretary,COPS-S,46
-COPS President,COPS-P,47
+District Editor-1,Editor1,30
+District Editor-2,Editor2,31
+District Editor-3,Editor3,32
+District Sports Head,SportsHead,33
+District Snapper,Snapper,34
+District Director- Public Image,Public Image,35
+District Director- Finance,Finance,36
+District Sergeant-At-Arms,SAA,37
+District Officer- Rotary Rotaract Relations,RRRO,38
+District Women's Representative,WR,39
+District Director- Communication(Whatsapp),Whatsapp Comm,40
+District Coordinator - Rotasia,Rotasia Cord,41
+District Chairperson- World Rotaract Week,WRW,42
+District Chairperson- E-Ryla,ERyla,43
+District Website Coordinator,Website,44
+District Director Without Portfolio - 1,WithoutPortfolio1,45
+District Director Without Portfolio - 2,WithoutPortfolio2,46
+District Director Without Portfolio - 3,WithoutPortfolio3,47
+COPS Secretary,COPS-S,48
+COPS President,COPS-P,49

@@ -110,9 +110,9 @@
                 <div class="card text-center" onclick="location.href = '/tasks/`+months[index][0]+`/{{key.distRoleId}}'" style="height:90%">
                     {% ifequal value.count 1 %}
                         {% ifequal value.data.gender "M" %}
-                        <img src="{% static 'Main/images/img_avatar.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
+                        <img src="{% static 'Main/images/avatar.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
                         {% else %}
-                        <img src="{% static 'Main/images/img_avatar2.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
+                        <img src="{% static 'Main/images/avatar.png' %}" alt="Avatar" style="width:100%;border-radius:50%">
                         {% endifequal %}
                         <br><hr>
                         <div class="zero-padding zero-margin">
