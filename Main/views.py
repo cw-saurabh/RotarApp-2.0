@@ -9,5 +9,4 @@ def home(request):
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-        print(dRole)
     return render(request, 'Main/home.html',{'Tab':'home','DRole':dRole})

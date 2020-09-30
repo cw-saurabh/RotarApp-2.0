@@ -45,8 +45,6 @@
     function updateTaskList(responseId=null,taskId=null,taskText=null,driveLink=null,status=null,response=null, modifiedOn = null, allottedBy = null) {
         
         let date = new Date(modifiedOn);
-        console.log(modifiedOn);
-        if(modifiedOn!='') console.log(date.toISOString());
         if(responseId==''||responseId==null||taskId==''||taskId==null||driveLink==''||driveLink==null||status==''||status==null||response==''||response==null||allottedBy==null||allottedBy==''||modifiedOn==''||modifiedOn==null)
         {
             $('#taskList').append(`
@@ -271,7 +269,6 @@
         
         {
             $('#deleteError'+ResponseId).html('').show();
-            console.log("Trying to delete");
             data["ResponseId"]=ResponseId;
 
             $.post( "{% url 'distReport_a_deletetask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
@@ -289,7 +286,6 @@
                     }
                 }
                 else {
-                    console.log("Error");
                     $('#deleteError'+ResponseId).html('Failed').delay(5000).fadeOut();
 
                 }

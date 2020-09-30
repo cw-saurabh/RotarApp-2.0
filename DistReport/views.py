@@ -9,27 +9,21 @@ import xlrd, xlwt
 import pandas as pd
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
+from .decorators import is_DSA, is_council
 
-year = datetime.datetime.now().year
-reportingMonth = '09'
-
+@is_DSA
 def admin_getMonth(request):
     if request.POST :
-        print(request.FILES['files'])
         file_name = request.FILES['files']
         file = pd.read_excel(file_name, sheet_name='Sheet1')
         del file['District Role']
         dictx = file.set_index('Role Id').T.to_dict(orient='list')
-        print(dictx)
         month = Month.objects.filter(id=(request.POST['monthId'])).first()
         
         for row in dictx.keys():
             reportId = month.month+"-"+month.year+"-"+str(row)
-            print(reportId)
             role = DistrictRole.objects.filter(distRoleId=str(row)).first()
-            print(role)
             report, created = DistReport.objects.get_or_create(dReportId=reportId, month=month, districtRole = role)
-            print(report)
             
             for text in dictx[row] :
                 if(str(text)!='nan') :
@@ -63,6 +57,7 @@ def admin_getMonth(request):
 
     return render(request, 'DistReport/getMonth.html',{'title':'Tasks','Tab':'Tasks','DRole':'4','Council':council,'Months':months})
 
+@is_DSA
 def admin_getTasks(request, monthId, distRoleId):
     districtRole = DistrictRole.objects.filter(distRoleId=distRoleId).first()
     month = Month.objects.filter(id=monthId).first()
@@ -71,14 +66,14 @@ def admin_getTasks(request, monthId, distRoleId):
     response = Response.objects.filter(dReport=report).all().values_list('responseId','task__taskId','task__taskText','driveLink','completionStatus','response','modifiedOn','allottedBy')
     return render(request, 'DistReport/getTasks.html',{'title':'Tasks','Tab':'Tasks','DRole':'4','Response':response,'DistrictRole':districtRole,'ReportId':report.dReportId,'Month':month})
 
+@is_DSA
 def admin_manageAccess(request):
     months = Month.objects.all()
     return render(request, 'DistReport/monthPermissions.html',{'title':'Access','Tab':'Access','DRole':'4','Months':months})
 
+@is_DSA
 def admin_changePermission(request):
     data = json.loads(request.POST.get('data'))
-    print(data['view'])
-    print(data['edit'])
     try :
         month = Month.objects.filter(id=data['monthId']).update(view=data['view'],edit=data['edit'])
         data = {
@@ -93,6 +88,7 @@ def admin_changePermission(request):
     
     return JsonResponse(data)
 
+@is_DSA
 def admin_addTask(request):
     
     try :
@@ -127,6 +123,7 @@ def admin_addTask(request):
         
     return JsonResponse(data)
 
+@is_DSA
 def admin_deleteTask(request):
     try :
         data = json.loads(request.POST.get('data'))
@@ -154,6 +151,7 @@ def admin_deleteTask(request):
         
     return JsonResponse(data)
 
+@is_DSA
 def admin_editTask(request):
     
     try :
@@ -181,6 +179,7 @@ def admin_editTask(request):
         
     return JsonResponse(data)
 
+@is_DSA
 def admin_exportFormatFile(request):
     try :
         response = HttpResponse(content_type='application/ms-excel')
@@ -215,6 +214,7 @@ def admin_exportFormatFile(request):
         response = None
         return response
 
+@is_DSA
 def admin_exportReports(request, monthId):
     try :
         response = HttpResponse(content_type='application/ms-excel')
@@ -251,15 +251,15 @@ def admin_exportReports(request, monthId):
         response = None
         return response
 
+@is_council
 def council_index(request):
     months = Month.objects.filter(view=True).order_by('year','month').all()
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
     return render(request, 'DistReport/index.html',{'title':'Tasks','Tab':'Tasks','DRole':'1','DistRole':Council.districtRole.distRoleName,'Months':months})
 
+@is_council
 def council_getTasks(request):
-    months = Month.objects.filter(view=True).order_by('year','month').all()
-    print("hii")
-    print(months)    
+    months = Month.objects.filter(view=True).order_by('year','month').all()   
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
     
     report = DistReport.objects.filter(districtRole = Council.districtRole)
@@ -283,8 +283,6 @@ def council_getTasks(request):
             'tasks':jsonResponse
         }
 
-        print(jsonResponse)
-
     except Exception as Error :
         print(Error)
         data = {
@@ -294,6 +292,7 @@ def council_getTasks(request):
         
     return JsonResponse(data)
 
+@is_council
 def council_saveTask(request):
 
     data = json.loads(request.POST.get('data'))
@@ -303,7 +302,6 @@ def council_saveTask(request):
     try :
         
         response = Response.objects.filter(responseId = data['responseId'])
-        print(response)
         response.update(modifiedOn=datetime.datetime.now(), **task)
     
     except Exception as e :
@@ -346,6 +344,7 @@ def council_saveTask(request):
         
     return JsonResponse(data)
 
+@is_council
 def council_addTask(request):
 
     try :
@@ -353,11 +352,9 @@ def council_addTask(request):
         data = json.loads(request.POST.get('data'))
         
         Council = DistrictCouncil.objects.filter(accountId = request.user).first()
-        print(data['monthId'])
 
         month = Month.objects.filter(id=data['monthId']).first()
         reportId = month.month+"-"+month.year+"-"+str(Council.districtRole.distRoleId)
-        print(reportId)
 
         with transaction.atomic() :
             
@@ -406,9 +403,9 @@ def council_addTask(request):
         
     return JsonResponse(data)
 
+@is_council
 def council_deleteTask(request):
     try :
-        print("in")
         data = json.loads(request.POST.get('data'))
         
         with transaction.atomic() :
@@ -447,7 +444,7 @@ def council_deleteTask(request):
         
     return JsonResponse(data)
 
-
+@is_council
 def council_editTask(request):
     
     try :

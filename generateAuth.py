@@ -16,7 +16,6 @@ df['username'] = df['rc']+df['Name2']
 for row, index in df.iterrows() :
     username = str(index['username']).lower().replace(' ','')
     password = get_random_password_string(8)
-    print(index)
     df.at[row,'password']=password
     df.at[row,'username']=username
 df.drop('rc',axis=1,inplace=True)
