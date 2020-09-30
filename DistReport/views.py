@@ -5,7 +5,7 @@ from .models import DistReport, Task, Response, Month
 import json
 from django.db import transaction
 import datetime
-import xlrd
+import xlrd, xlwt
 import pandas as pd
 
 year = datetime.datetime.now().year
@@ -129,7 +129,6 @@ def admin_deleteTask(request):
         data = json.loads(request.POST.get('data'))
         
         with transaction.atomic() :
-            # districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRole']).first()
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
             Response.objects.filter(responseId=data['ResponseId']).delete()
 
@@ -144,6 +143,7 @@ def admin_deleteTask(request):
         }
 
     except Exception as Error :
+        print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
@@ -157,7 +157,6 @@ def admin_editTask(request):
         data = json.loads(request.POST.get('data'))
         
         with transaction.atomic() :
-            # districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRole']).first()
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
             Task.objects.filter(taskId=data['taskId']).update(taskText=data['taskText'])
 
@@ -178,6 +177,76 @@ def admin_editTask(request):
         }
         
     return JsonResponse(data)
+
+def admin_exportFormatFile(request):
+    try :
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="'+'Tasks'+'.xls"'
+        wb = xlwt.Workbook(encoding='utf-8')
+        colwidth = int(30*260)
+
+        ws = wb.add_sheet('Sheet1')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        font_style.alignment.wrap = 1
+        columns = ['District Role','District Role id','Task 1','Task 2','Task 3','Task 4','Task 5','Task 6','Task 7','Task 8','Task 9','Task 10']
+        for i in range(len(columns)):
+            ws.col(i).width = colwidth
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        font_style.alignment.wrap = 1
+        
+        rows = DistrictRole.objects.all().values_list('distRoleName','distRoleId')
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+        wb.save(response)
+        return response
+
+    except Exception as e :
+        print(e)
+        response = None
+        return response
+
+def admin_exportReports(request, monthId):
+    try :
+        response = HttpResponse(content_type='application/ms-excel')
+        month = Month.objects.filter(id=monthId).first()
+        Reports = DistReport.objects.filter(month=month).all()
+        response['Content-Disposition'] = 'attachment; filename="'+'Tasks'+"-"+str(month.month)+'-'+str(month.year)+'.xls"'
+        wb = xlwt.Workbook(encoding='utf-8')
+        colwidth = int(13*260)
+
+        for Report in Reports :
+            ws = wb.add_sheet(Report.districtRole.distRoleSName)
+            row_num = 0
+            font_style = xlwt.XFStyle()
+            font_style.font.bold = True
+            font_style.alignment.wrap = 1
+            columns = ['Task','Status','Response','Drive Link','Assigned by','Last Modified']
+            for i in range(len(columns)):
+                ws.col(i).width = colwidth
+            for col_num in range(len(columns)):
+                ws.write(row_num, col_num, columns[col_num], font_style)
+            font_style = xlwt.XFStyle()
+            font_style.alignment.wrap = 1
+            rows = Response.objects.filter(dReport=Report).all().values_list('task__taskText','completionStatus','response','driveLink','allottedBy','modifiedOn')
+            for row in rows:
+                row_num += 1
+                for col_num in range(len(row)):
+                    ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+        wb.save(response)
+        return response
+
+    except Exception as e :
+        print(e)
+        response = None
+        return response
 
 def council_index(request):
     months = Month.objects.filter(view=True).order_by('year','month').all()
@@ -334,3 +403,84 @@ def council_addTask(request):
         
     return JsonResponse(data)
 
+def council_deleteTask(request):
+    try :
+        print("in")
+        data = json.loads(request.POST.get('data'))
+        
+        with transaction.atomic() :
+            Response.objects.filter(responseId=data['responseId']).delete()
+
+        Council = DistrictCouncil.objects.filter(accountId = request.user).first()
+
+        report = DistReport.objects.filter(districtRole = Council.districtRole)
+    
+        jsonResponse = {}
+        months = Month.objects.filter(view=True).order_by('year','month').all()
+        for month in months :
+            
+            jsonResponse[month.id] = {}
+
+            report1 = report.filter(month=month).first()
+            
+            response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
+            
+            for item in response1 :
+                jsonResponse[month.id][item['responseId']] = item
+
+        data = {
+            'success': True,
+            'tasks':jsonResponse
+        }
+
+
+
+    except Exception as Error :
+        print(Error)
+        data = {
+            'error' : "An error has occurred, Contact the website coordinators",
+            'success': False
+        }
+        
+    return JsonResponse(data)
+
+
+def council_editTask(request):
+    
+    try :
+        data = json.loads(request.POST.get('data'))
+        
+        with transaction.atomic() :
+            Task.objects.filter(taskId=data['taskId']).update(taskText=data['taskText'])
+
+        Council = DistrictCouncil.objects.filter(accountId = request.user).first()
+
+        report = DistReport.objects.filter(districtRole = Council.districtRole)
+    
+        jsonResponse = {}
+        months = Month.objects.filter(view=True).order_by('year','month').all()
+        for month in months :
+            
+            jsonResponse[month.id] = {}
+
+            report1 = report.filter(month=month).first()
+            
+            response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
+            
+            for item in response1 :
+                jsonResponse[month.id][item['responseId']] = item
+
+        data = {
+            'success': True,
+            'tasks':jsonResponse
+        }
+
+
+
+    except Exception as Error :
+        data = {
+            'error' : "An error has occurred, Contact the website coordinators",
+            'success': False
+        }
+        
+    return JsonResponse(data)

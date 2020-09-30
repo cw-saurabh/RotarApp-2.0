@@ -140,7 +140,7 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-11">
-                        <input type="text" id="newtask`+index+`"  name="newTask" placeholder="Add a self allocated task">
+                        <input type="text" id="newtask`+index+`"  name="newTask" placeholder="Add a self assigned task">
                     </div>
         </form>
                     <div class="col-lg-1 text-center">
@@ -208,6 +208,59 @@
         }
     }
 
+    let data = {};
+
+    function deleteTask(responseId=null, index) {
+
+        if(responseId!=null)
+        {
+            $('#deleteError'+responseId).html('').show();
+            console.log("Trying to delete");
+            data["responseId"]=responseId;
+
+            $.post( "{% url 'distReport_c_deletetask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                if(response['success'])
+                {
+                    tasks = response['tasks'];
+                    updateMonth(index);
+                }
+                else {
+                    updateMonth(index);
+                    $('#deleteError'+responseId).html('Failed').delay(5000).fadeOut();
+
+                }
+            });
+        }
+        else {
+            $('#deleteError'+responseId).html('Failed').delay(5000).fadeOut();
+        }
+    }
+
+    function changeTask(taskId=null, index) {
+        
+        if(taskId!=null) {
+            $('#editError'+taskId).html('').show();
+            data['taskId']=taskId;
+            data['taskText']=$('#editInput'+taskId).val();
+
+            $.post( "{% url 'distReport_c_edittask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                    if(response['success'])
+                    {
+                        tasks = response['tasks'];
+                        updateMonth(index);
+                    }
+                    else {
+                        updateMonth(index);
+                        $('#editError'+taskId).html('Failed').delay(5000).fadeOut();
+                    }
+                });
+        }
+        else {
+            $('#editError'+taskId).html('Failed').delay(5000).fadeOut();
+        }
+    }
+
+
     function addNewTask(index) {
         $('#addError'+index).html('').show();
         if($("input[name=newTask]").val()=='')
@@ -243,7 +296,7 @@
             $('#taskContainer').append(`
                 <div class="taskRow">
                     <h4><p style="color:#D41367" id = 'taskText`+responseId+`'><b></b></p></h4>
-                    <p class="label" style="color:#337ab7">Allocated by, `+allottedBy+`</p>
+                    <p class="label" style="color:#337ab7">Assigned by, `+allottedBy+`</p>
                     <br>
                     <hr style="border-width: 2px;border-color:#337ab7;border-radius : 4px;">
                     <form>
@@ -281,11 +334,32 @@
                         </div>
 
                     </div>
-                    <br><hr>
+                    <br>
+                    <hr>
                     <small class="desktop" style="float:right">Last Modified at : <span id='timestamp1`+responseId+`'>NA</span></small>
                     <small class="mobile">Last Modified at : <span id='timestamp2`+responseId+`'>NA</span></small>
-                    <br class="mobile"><br class="mobile">
-                    </form>                    
+                    <br><br class="mobile">
+                    
+                    </form>                
+
+                    <hr style="border-width: 2px;border-color:#337ab7;border-radius : 4px;">
+                    
+                    <div class="row" style="display:none" id="edit`+taskId+`">
+                        <div class="col-lg-9 text-center">
+                            <input type="text" id="editInput`+taskId+`" style="display:none">
+                            <div class="errorBox" id="editError`+taskId+`"></div>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" id="editDone`+taskId+`" onclick="changeTask('`+taskId+`','`+index+`')" style="background-color:#4caf50;display:none;border-radius:10px;vertical-align: baseline;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" onclick="$('#editDone`+taskId+`,#editInput`+taskId+`').show();$('#editInput`+taskId+`').val('`+taskText+`');" style="border-radius:10px;vertical-align: baseline;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1 text-center">
+                            <button class="downloadButton" onclick="deleteTask('`+responseId+`','`+index+`')" style="background-color:#D41367;border-radius:10px"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            <div class="errorBox" id="deleteError`+responseId+`"></div>
+                        </div>
+                    </div>
                 </div>
                 <br>
         `);
@@ -298,6 +372,10 @@
         let date = new Date(modifiedOn);
         if (modifiedOn!=null) $('#timestamp1'+responseId ).html(date.toDateString()+', '+date.toLocaleTimeString());
         if (modifiedOn!=null) $('#timestamp2'+responseId ).html(date.toDateString()+', <br>'+date.toLocaleTimeString());
+        if (allottedBy=='Self') {
+            $('#edit'+taskId).show();
+        }
+
     }
 
     $(document).ready(function(){

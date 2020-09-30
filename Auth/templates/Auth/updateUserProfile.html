@@ -29,10 +29,13 @@
   }
 }
 </style>
+<div class="card">
 <div id="listSection" style="padding-bottom:0">
 <div class="row"  style="padding:5%;margin:0">
   <div class="col-lg-4" style="padding:0">
+    {% if profile.photo %}
     <img id="reportImage1" src="{{STATIC_URL}}{{ profile.photo.url }}" alt="Rotaract">
+    {% endif %}
     <br class="mobile"><br class="mobile">
   </div>
   
@@ -145,5 +148,5 @@
 
 {% endif %}
 </div>
-  
+</div>
 {% endblock content%}

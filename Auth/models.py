@@ -163,6 +163,7 @@ class ClubRole(models.Model):
 class DistrictRole(models.Model):
     distRoleId = models.CharField(max_length=2,primary_key=True)
     distRoleName = models.CharField(max_length=60,verbose_name = "District Role Name")
+    distRoleSName = models.CharField(max_length=60,verbose_name = "District Role Short", default='')
 
     def __str__(self):
         return f'{self.distRoleId}-{self.distRoleName}'

@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileUpdateForm, EmailUpdateForm, AccountCreationForm
-from .models import Club, Account, Member
+from .models import Club, Account, Member, DistrictCouncil
 from django.shortcuts import redirect
 import csv
 from django.contrib.auth import login, authenticate
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import HttpResponseNotFound
+
 
 def signup(request):
     if request.method == 'POST':
@@ -53,6 +54,7 @@ def updateClubProfile(request):
 
 @login_required
 def updateUserProfile(request):
+    Council = DistrictCouncil.objects.filter(accountId = request.user).first()
     profile = Member.objects.filter(login=request.user).first()
     if request.user.loginType == "1" :
         return HttpResponseNotFound("Page not found") 
@@ -66,7 +68,7 @@ def updateUserProfile(request):
     else :
         p_form = UserProfileUpdateForm(instance = Member.objects.filter(login=request.user).first())
         
-    return render(request, 'Auth/updateUserProfile.html',{'title':'Rotaractor','Tab':'userProfile','pform':p_form,'profile':profile,'edit':True,'club':'RC Panvel Central','clubRole':'Secretary','districtRole':'DES'})
+    return render(request, 'Auth/updateUserProfile.html',{'title':'Rotaractor','Tab':'userProfile','pform':p_form,'profile':profile,'edit':True,'club':'RC Panvel Central','districtRole':Council.districtRole.distRoleName,'DRole':0})
 
 @login_required
 def viewUserProfile(request, username):
