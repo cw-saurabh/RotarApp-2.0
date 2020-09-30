@@ -120,7 +120,7 @@
                             <p class="label" style="color:#337ab7"><b>Modified on</b></p>
                         </div>
                         <div class="col-lg-10" style="white-space: nowrap;">
-                            `+date.toUTCString().replace('GMT','')+`
+                            `+(date.toString().substring(0,date.toString().indexOf('GMT')))+`
                         </div>
                     </div>
                     <br>

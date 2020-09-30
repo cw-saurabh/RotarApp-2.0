@@ -370,8 +370,8 @@
         if (link!=null) $('#link'+responseId).val(link);
         if (status!=null) $('#status'+responseId).val(status);
         let date = new Date(modifiedOn);
-        if (modifiedOn!=null) $('#timestamp1'+responseId ).html(date.toUTCString().replace('GMT',''));
-        if (modifiedOn!=null) $('#timestamp2'+responseId ).html(date.toUTCString().replace('GMT',''));
+        if (modifiedOn!=null) $('#timestamp1'+responseId ).html(date.toString().substring(0,date.toString().indexOf('GMT')));
+        if (modifiedOn!=null) $('#timestamp2'+responseId ).html(date.toString().substring(0,date.toString().indexOf('GMT')));
         if (allottedBy=='Self') {
             $('#edit'+taskId).show();
         }
