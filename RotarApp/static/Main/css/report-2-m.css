@@ -22,7 +22,7 @@
   }
   .tablinks.active {
     font-weight: bolder;
-    font-size: 4vw;
+    font-size: 5vw;
   }
   .tabcontent {
     display: none;

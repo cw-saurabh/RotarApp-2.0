@@ -7,7 +7,7 @@
     <div id="monthSelect">
 
     </div>
-    <div class="card">        
+    <div class="card">
             <h3 class="header text-center" id="header"><b>Council Reporting</b></h3>
             <h6 class="subheader text-center">{{DistRole}}</h6>
             <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;width:100%">
@@ -15,18 +15,18 @@
                 You can not update this report. Contact District Administration Secretary for any queries.
             </div>
             <div id="taskContainer" class="">
-                
+
             </div>
             <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;width:100%">
             <div style="float:left;padding:0.2em">
                 <div id="addButton">
-                    
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-    
+
 </div>
 {% endblock content%}
 {% block javascript %}
@@ -34,7 +34,7 @@
 
     let months = [];
     let tasks = {};
-    
+
     let monthNames = {
             "01" : "January",
             "02" : "February",
@@ -48,8 +48,8 @@
             "10" : "October",
             "11" : "November",
             "12" : "December",
-    };       
-    
+    };
+
     function getAllottedBy(allottedBy=null) {
         if (allottedBy=='0')
         return 'District Secretary - Administration';
@@ -77,10 +77,10 @@
             if(index==0) {
                 console.log("Info:Month Index = 0");
             }
-            else 
+            else
             updateMonth((index-1));
         }
-        else 
+        else
         {
             console.log("Error:Month Index = null");
         }
@@ -92,19 +92,19 @@
             if(index==months.length-1) {
                 console.log("Info:Month Index = Max");
             }
-            else 
+            else
             updateMonth((index+1));
         }
-        else 
+        else
         {
             console.log("Error:Month Index = null");
         }
     }
-    
+
     function updateMonth(index) {
 
         $('#cantEdit').hide();
-        
+
         $("#taskContainer").html('');
 
         $('#header').html('<b>Council Reporting : '+monthNames[months[index][1]]+' '+months[index][2]+'</b>');
@@ -124,7 +124,7 @@
         <br class="desktop">
         <hr class="desktop" style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
         `);
-        
+
         if(index==0) {
             $('#prev'+index).hide();
         }
@@ -133,7 +133,7 @@
         }
 
         $("#addButton").html(`
-        
+
         <form action="" method="POST" id="theForm">
                 {% csrf_token %}
                 <div class="row">
@@ -149,40 +149,40 @@
                 </div>
                 <div id="addSuccess">
                 </div>
-        
+
         `);
-        
+
         let len = Object.keys(tasks[months[index][0]]).length;
         if(len==0) {
-            $('#taskContainer').html('<div class="text-center"><h3 style="color:white;margin:0"><b>No task found</b></h3></div>');    
+            $('#taskContainer').html('<div class="text-center"><h3 style="color:white;margin:0"><b>No task found</b></h3></div>');
         }
         else {
             let counter = 0;
             for(var key in tasks[months[index][0]]) {
                 counter+=1;
                 let dict = tasks[months[index][0]][key];
-                renderForm(dict['task__taskId'],dict['responseId'],dict['task__taskText'],(dict['completionStatus']),dict['response'],dict['driveLink'],getAllottedBy(dict['allottedBy']),dict['modifiedOn'],index);   
+                renderForm(dict['task__taskId'],dict['responseId'],dict['task__taskText'],(dict['completionStatus']),dict['response'],dict['driveLink'],getAllottedBy(dict['allottedBy']),dict['modifiedOn'],index);
             }
         }
-        if(months[index][3]=='False') 
+        if(months[index][3]=='False')
         {
-        
-            $('input,textarea,select').attr('disabled',true); 
+
+            $('input,textarea,select').attr('disabled',true);
 
             $('#cantEdit').show();
             // alert('disable');
-            
+
         }
 
     }
 
     function saveTask(responseId=null, index) {
-        
+
         if(responseId!=null) {
             $('#saveError'+responseId).html('').show();
             data = {
                 'responseId': responseId,
-                'data' : {            
+                'data' : {
                     'response':$('#response'+responseId).val(),
                     'completionStatus':$('#status'+responseId).val(),
                     'driveLink':$('#link'+responseId).val()
@@ -190,7 +190,7 @@
             };
 
             if(data['data']['response']=='' || data['data']['driveLink']=='' || data['data']['completionStatus']=='')
-            $("#saveError"+responseId).html('Check if all of the three fields are filled !').delay(3000).fadeOut(); 
+            $("#saveError"+responseId).html('Check if all of the three fields are filled !').delay(3000).fadeOut();
             else {
                 $.post( "{% url 'distReport_c_savetask' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
                     if(response['success']) {
@@ -199,7 +199,7 @@
                     }
                     else {
                         updateMonth(index);
-                        $("#saveError"+responseId).html('Save failed !<br>'+response['error']).delay(5000).fadeOut(); 
+                        $("#saveError"+responseId).html('Save failed !<br>'+response['error']).delay(5000).fadeOut();
                     }
             });
             }
@@ -235,7 +235,7 @@
     }
 
     function changeTask(taskId=null, index) {
-        
+
         if(taskId!=null) {
             $('#editError'+taskId).html('').show();
             data['taskId']=taskId;
@@ -274,7 +274,7 @@
                 if(response['success'])
                 {
                     tasks = response['tasks'];
-                    updateMonth(index); 
+                    updateMonth(index);
                 }
                 else {
                     updateMonth(index);
@@ -319,12 +319,12 @@
                             <select id='status`+responseId+`'>
                                 <option disabled selected value>Select :</option>
                                 <option value="0">Incomplete</option>
-                                <option value="1">Partially Complete</option>
+
                                 <option value="2">Complete</option>
                             </select>
                             <br class="mobile"><br class="mobile">
                         </div>
-                        
+
                         <div class="col-lg-8">
                             <p class="label" style="color:#337ab7">Drive Link</p>
                             <br><br>
@@ -345,11 +345,11 @@
                     <small class="desktop" style="float:right">Last Modified at : <span id='timestamp1`+responseId+`'>NA</span></small>
                     <small class="mobile">Last Modified at : <span id='timestamp2`+responseId+`'>NA</span></small>
                     <br><br class="mobile">
-                    
-                    </form>                
+
+                    </form>
 
                     <hr style="border-width: 2px;border-color:#337ab7;border-radius : 4px;">
-                    
+
                     <div class="row" style="display:none" id="edit`+taskId+`">
                         <div class="col-lg-9 text-center">
                             <input type="text" id="editInput`+taskId+`" style="display:none">
@@ -394,8 +394,8 @@
 
         let now = new Date();
         let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
-        
-        
+
+
         {% for value in Months %}
             months.push(['{{value.id}}','{{value.month}}','{{value.year}}','{{value.edit}}']);
             if('{{value.edit}}'=='True') {
@@ -411,19 +411,19 @@
         // alert(months);
         // alert(thisMonthObject);
         // alert(months[thisMonthObject]);
-        
+
         if(active!=null) {
             updateMonth(active);
         }
         else if(thisMonth!=null) {
-            
+
             updateMonth(thisMonth);
         }
 
         $.post("{% url 'distReport_c_gettasks' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
                 if(response['success'])
                 {
-                    tasks = response['tasks'];                    
+                    tasks = response['tasks'];
                     if(active!=null) {
                         updateMonth(active);
                     }
@@ -433,19 +433,19 @@
 
                 }
                 else {
-                    
+
                     if(active!=null) {
                         updateMonth(active);
                     }
                     else if(thisMonth!=null) {
-                        
+
                         updateMonth(thisMonth);
                     }
 
                 }
         });
-        
+
     });
 
-</script>   
+</script>
 {% endblock javascript %}

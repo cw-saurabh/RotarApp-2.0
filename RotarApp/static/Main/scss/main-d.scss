@@ -4,11 +4,17 @@
     display :none;
 }
 
+
+.card {
+    border:none !important;
+}
+
+
 /* Sass Testing */
 
 body,html {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vw;
     background: #F8F9FA;
     // background: lightgrey;
     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
@@ -41,18 +47,28 @@ p, div, h1, h2, h3, h4, h5, h6, a, span {
 // Main wrapper container - Touch at your own risk
 
 .container {
-    width:90vw;
+    width: 20vw;
     margin: 0 auto;
-    margin-top:2em;
-    margin-bottom:2em;
-    padding:2em;
-    border-radius:4px;
+    padding: 3em 2em;
+    width:90%;
+    min-width:90%;
 }
 
 #mainWrapperContainer {
     min-height:39vw;
-    background:white;
-    box-shadow: -3px -3px 10px grey;
+    // background:white;
+    // box-shadow: -3px -3px 10px grey;
+    width:90%;
+    min-width:90%;
+}
+
+.card {
+    margin-top:2em;
+    margin-bottom:2em;
+    padding:2em;
+    border-radius:4px;
+    background-color:white;
+    box-shadow: 3px 3px 10px grey;
 }
 
 // HomePage - Touch at your own risk

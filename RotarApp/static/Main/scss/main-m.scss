@@ -10,19 +10,25 @@
 // Main wrapper container - Touch at your own risk
 
 .container {
-    width:85%;
+    width:95%;
     margin: 0 auto;
-    margin-top:2em;
-    margin-bottom:6em;
-    padding-top:0;
-    padding:2em;
+    
 }
 
-
-#mainWrapperContainer {
-    // border:solid black;
+.card {
+    margin-top:2em;
+    margin-bottom:6em;
+    padding:1em;
     background-color:white;
     box-shadow: 3px 3px 10px grey;
+}
+
+#mainWrapperContainer {
+    width:90%;
+    min-width:90%;
+    // border:solid black;
+    // background-color:white;
+    // box-shadow: 3px 3px 10px grey;
 }
 // HomePage - Touch at your own risk
 

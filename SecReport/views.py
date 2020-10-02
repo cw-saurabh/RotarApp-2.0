@@ -113,7 +113,7 @@ def get_report(request,reportId,club):
 @login_required
 @is_Club
 def present_report(request):
-
+    print(reportingMonth)
     _club = Club.objects.filter(login=request.user).first()
     _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
     report = Report.objects.filter(reportId=_reportId)
