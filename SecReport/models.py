@@ -37,7 +37,7 @@ class Report(models.Model):
     reportingDate = models.DateTimeField(verbose_name = "Reported on", default=datetime.now, null = True, blank = True)
     duesPaidAlready = models.CharField(blank = True, max_length=6, verbose_name = "District Dues paid upto the last month")
     duesPaidInThisMonth = models.CharField(blank = True, max_length=6,verbose_name = "District Dues paid in this month")
-    suggestions = models.TextField(blank = True, max_length=350,verbose_name = "Suggestions", default="")
+    suggestions = models.TextField(blank = True, max_length=1000,verbose_name = "Suggestions", default="")
     status = models.CharField(blank = True, max_length = 2, verbose_name = "Report Status", choices = (("0","Incomplete"),("1","Complete")), default = "0")
 
     class Meta:

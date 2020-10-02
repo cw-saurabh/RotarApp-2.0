@@ -357,7 +357,7 @@ def save_report(request) :
     except Exception as Error :
         print(Error)
         data = {
-            'error' : "An error has occurred, Contact the website coordinators",
+            'error' : "The data has not been saved, make sure that the data you filled is emoji-free. DON'T REFRESH. Contact the website coordinators, if required.",
             'success': False
         }
 
