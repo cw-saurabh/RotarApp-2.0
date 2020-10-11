@@ -196,4 +196,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'rotaract3131web@gmail.com'
-EMAIL_HOST_PASSWORD = 'district@3131'
+EMAIL_HOST_PASSWORD = 'babubhaiya'

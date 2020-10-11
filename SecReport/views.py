@@ -118,7 +118,7 @@ def present_report(request):
     _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
     report = Report.objects.filter(reportId=_reportId)
 
-    if (True) : #Has permission
+    if (False) : #Has permission
         FAQs = FAQ.objects.all()
 
         if report.exists() :
@@ -161,7 +161,7 @@ def present_report(request):
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
 
             except Exception as e :
-                return redirect('presentReport')
+                return redirect('secReport_presentReport')
 
     else :
 
@@ -418,7 +418,7 @@ def submit_report(request, reportId) :
         email_report(request, reportId)
     except Exception as e:
         print(e)
-    return redirect('presentReport')
+    return redirect('secReport_presentReport')
 
 @login_required
 @has_Access
@@ -570,7 +570,7 @@ def email_report(request,reportId):
     subject = 'Secretarial Report Received'
     message = 'We have received your report for the previous month. Find a copy of your report that has been attached herewith.<br><br>For any queries, Contact - <br><br>Rtr. Prasad Seth (District Secretary - Reporting)<br>Call : +91 - 9623134392<br>Whatsapp : +91 - 9623134392<br>Mail Id: rtrprasadseth@gmail.com'
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['saurabh.s1999@gmail.com']
+    recipient_list = ['saurabh.s1999@gmail.com','rtrprasadseth@gmail.com']
     recipient_list.append(emailId)
     # send_mail( subject, message, email_from, recipient_list )
 

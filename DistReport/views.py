@@ -19,19 +19,19 @@ def admin_getMonth(request):
         del file['District Role']
         dictx = file.set_index('Role Id').T.to_dict(orient='list')
         month = Month.objects.filter(id=(request.POST['monthId'])).first()
-        
+
         for row in dictx.keys():
             reportId = month.month+"-"+month.year+"-"+str(row)
             role = DistrictRole.objects.filter(distRoleId=str(row)).first()
             report, created = DistReport.objects.get_or_create(dReportId=reportId, month=month, districtRole = role)
-            
+
             for text in dictx[row] :
                 if(str(text)!='nan') :
-                    
+
                     with transaction.atomic() :
                         newTask = Task(taskText=text)
                         newTask.save()
-                    
+
                         newResponse = Response(dReport = report, task = newTask)
                         newResponse.save()
 
@@ -49,7 +49,7 @@ def admin_getMonth(request):
             for person in people :
                 memberProfile = Member.objects.filter(login=person.accountId).first()
                 memberProfiles.append(memberProfile)
-        
+
         council1 = {}
         council1['count'] = count
         council1['data'] = memberProfiles
@@ -78,29 +78,30 @@ def admin_changePermission(request):
         month = Month.objects.filter(id=data['monthId']).update(view=data['view'],edit=data['edit'])
         data = {
             'success': True
-        }    
+        }
 
     except Exception as e :
+        print(request.user)
         print(e)
         data = {
             'success': False
         }
-    
+
     return JsonResponse(data)
 
 @is_DSA
 def admin_addTask(request):
-    
+
     try :
         data = json.loads(request.POST.get('data'))
-        
+
         with transaction.atomic() :
             newTask = Task(taskText=data['taskText'])
             newTask.save()
-        
+
             # districtRole = DistrictRole.objects.filter(distRoleId=data['DistrictRoleId']).first()
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
-        
+
             newResponse = Response(dReport = report, task = newTask)
             newResponse.save()
 
@@ -115,19 +116,20 @@ def admin_addTask(request):
         }
 
     except Exception as Error :
+        print(request.user)
         print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
-        
+
     return JsonResponse(data)
 
 @is_DSA
 def admin_deleteTask(request):
     try :
         data = json.loads(request.POST.get('data'))
-        
+
         with transaction.atomic() :
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
             Response.objects.filter(responseId=data['ResponseId']).delete()
@@ -148,15 +150,15 @@ def admin_deleteTask(request):
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
-        
+
     return JsonResponse(data)
 
 @is_DSA
 def admin_editTask(request):
-    
+
     try :
         data = json.loads(request.POST.get('data'))
-        
+
         with transaction.atomic() :
             report = DistReport.objects.filter(dReportId=data['ReportId']).first()
             Task.objects.filter(taskId=data['taskId']).update(taskText=data['taskText'])
@@ -172,11 +174,13 @@ def admin_editTask(request):
         }
 
     except Exception as Error :
+        print(request.user)
+        print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
-        
+
     return JsonResponse(data)
 
 @is_DSA
@@ -199,7 +203,7 @@ def admin_exportFormatFile(request):
             ws.write(row_num, col_num, columns[col_num], font_style)
         font_style = xlwt.XFStyle()
         font_style.alignment.wrap = 1
-        
+
         rows = DistrictRole.objects.filter(flag=True).annotate(id=Cast('distRoleId', IntegerField())).order_by('id').all().values_list('distRoleName','distRoleId')
         for row in rows:
             row_num += 1
@@ -210,6 +214,7 @@ def admin_exportFormatFile(request):
         return response
 
     except Exception as e :
+        print(request.user)
         print(e)
         response = None
         return response
@@ -247,6 +252,7 @@ def admin_exportReports(request, monthId):
         return response
 
     except Exception as e :
+        print(request.user)
         print(e)
         response = None
         return response
@@ -259,22 +265,22 @@ def council_index(request):
 
 @is_council
 def council_getTasks(request):
-    months = Month.objects.filter(view=True).order_by('year','month').all()   
+    months = Month.objects.filter(view=True).order_by('year','month').all()
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
-    
+
     report = DistReport.objects.filter(districtRole = Council.districtRole)
-    
+
     try :
         jsonResponse = {}
-        
+
         for month in months :
-            
+
             jsonResponse[month.id] = {}
 
             report1 = report.filter(month=month).first()
-            
+
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
-            
+
             for item in response1 :
                 jsonResponse[month.id][item['responseId']] = item
 
@@ -284,27 +290,29 @@ def council_getTasks(request):
         }
 
     except Exception as Error :
+        print(request.user)
         print(Error)
         data = {
             'success': False,
             'error' : "An error has occurred, Contact the website coordinators"
         }
-        
+
     return JsonResponse(data)
 
 @is_council
 def council_saveTask(request):
 
     data = json.loads(request.POST.get('data'))
-    
+
     task = data['data']
 
     try :
-        
+
         response = Response.objects.filter(responseId = data['responseId'])
         response.update(modifiedOn=datetime.datetime.now(), **task)
-    
+
     except Exception as e :
+        print(request.user)
         print(e)
         data = {
             'success': False,
@@ -315,18 +323,18 @@ def council_saveTask(request):
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
 
     report = DistReport.objects.filter(districtRole = Council.districtRole)
-    
+
     try :
         jsonResponse = {}
         months = Month.objects.filter(view=True).order_by('year','month').all()
         for month in months :
-            
+
             jsonResponse[month.id] = {}
 
             report1 = report.filter(month=month).first()
-            
+
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
-            
+
             for item in response1 :
                 jsonResponse[month.id][item['responseId']] = item
 
@@ -336,40 +344,41 @@ def council_saveTask(request):
         }
 
     except Exception as Error :
+        print(request.user)
         print(Error)
         data = {
             'success': False,
             'error' : "An error has occurred, Contact the website coordinators"
         }
-        
+
     return JsonResponse(data)
 
 @is_council
 def council_addTask(request):
 
     try :
-        
+
         data = json.loads(request.POST.get('data'))
-        
+
         Council = DistrictCouncil.objects.filter(accountId = request.user).first()
 
         month = Month.objects.filter(id=data['monthId']).first()
         reportId = month.month+"-"+month.year+"-"+str(Council.districtRole.distRoleId)
 
         with transaction.atomic() :
-            
+
             newTask = Task(taskText=data['taskText'])
             newTask.save()
 
             Council = DistrictCouncil.objects.filter(accountId = request.user).first()
             report = DistReport.objects.filter(dReportId = reportId)
-            
+
             if report.exists() :
                 newResponse = Response(dReport = report.first(), task = newTask, allottedBy = '1')
                 newResponse.save()
 
             else :
-                report = DistReport(districtRole=Council.districtRole, month=month, dReportId=reportId) 
+                report = DistReport(districtRole=Council.districtRole, month=month, dReportId=reportId)
                 report.save()
                 newResponse = Response(dReport = report, task = newTask, allottedBy = '1')
                 newResponse.save()
@@ -377,13 +386,13 @@ def council_addTask(request):
         jsonResponse = {}
         months = Month.objects.filter(view=True).order_by('year','month').all()
         for month in months :
-            
+
             jsonResponse[month.id] = {}
 
             report1 = report.filter(month=month).first()
-            
+
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
-            
+
             for item in response1 :
                 jsonResponse[month.id][item['responseId']] = item
 
@@ -394,37 +403,37 @@ def council_addTask(request):
 
 
     except Exception as Error :
-    
+        print(request.user)
         print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
-        
+
     return JsonResponse(data)
 
 @is_council
 def council_deleteTask(request):
     try :
         data = json.loads(request.POST.get('data'))
-        
+
         with transaction.atomic() :
             Response.objects.filter(responseId=data['responseId']).delete()
 
         Council = DistrictCouncil.objects.filter(accountId = request.user).first()
 
         report = DistReport.objects.filter(districtRole = Council.districtRole)
-    
+
         jsonResponse = {}
         months = Month.objects.filter(view=True).order_by('year','month').all()
         for month in months :
-            
+
             jsonResponse[month.id] = {}
 
             report1 = report.filter(month=month).first()
-            
+
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
-            
+
             for item in response1 :
                 jsonResponse[month.id][item['responseId']] = item
 
@@ -436,37 +445,39 @@ def council_deleteTask(request):
 
 
     except Exception as Error :
+        print(request.user)
         print(Error)
+
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
-        
+
     return JsonResponse(data)
 
 @is_council
 def council_editTask(request):
-    
+
     try :
         data = json.loads(request.POST.get('data'))
-        
+
         with transaction.atomic() :
             Task.objects.filter(taskId=data['taskId']).update(taskText=data['taskText'])
 
         Council = DistrictCouncil.objects.filter(accountId = request.user).first()
 
         report = DistReport.objects.filter(districtRole = Council.districtRole)
-    
+
         jsonResponse = {}
         months = Month.objects.filter(view=True).order_by('year','month').all()
         for month in months :
-            
+
             jsonResponse[month.id] = {}
 
             report1 = report.filter(month=month).first()
-            
+
             response1 = Response.objects.filter(dReport=report1).values('responseId','task__taskId','task__taskText','completionStatus','response','driveLink','modifiedOn','allottedBy')
-            
+
             for item in response1 :
                 jsonResponse[month.id][item['responseId']] = item
 
@@ -478,9 +489,11 @@ def council_editTask(request):
 
 
     except Exception as Error :
+        print(request.user)
+        print(Error)
         data = {
             'error' : "An error has occurred, Contact the website coordinators",
             'success': False
         }
-        
+
     return JsonResponse(data)
