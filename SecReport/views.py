@@ -16,6 +16,14 @@ from django.core.mail import EmailMessage
 from .decorators import is_Club, has_Access
 import string
 import random
+import pandas as pd
+from os import walk
+
+reportingMonth = str((datetime.now().month)-1) if ((datetime.now().month)-1)>9 else "0"+str((datetime.now().month)-1)
+year = datetime.now().year
+
+@login_required
+@has_Access
 def migrate_data(request):
 
     # p = FAQ(question='Where should we add PR Events ?',answer='Under Club Service')
@@ -50,9 +58,6 @@ def migrate_data(request):
     # p.save()
 
     return redirect('auth_login')
-
-reportingMonth = str((datetime.now().month)-1) if ((datetime.now().month)-1)>9 else "0"+str((datetime.now().month)-1)
-year = datetime.now().year
 
 @login_required
 @has_Access
@@ -114,11 +119,11 @@ def get_report(request,reportId,club):
 @is_Club
 def present_report(request):
     print(reportingMonth)
-    _club = Club.objects.filter(login=request.user).first()
+    _club = Club.objects.filter(login=request.user).all()
     _reportId = str(reportingMonth)+"-"+str(year)+"-"+str(request.user.username)
     report = Report.objects.filter(reportId=_reportId)
 
-    if (False) : #Has permission
+    if (True) : #Has permission
         FAQs = FAQ.objects.all()
 
         if report.exists() :
@@ -161,7 +166,7 @@ def present_report(request):
                 return render(request, 'SecReport/report.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'ClubProfile':club,'FAQs':FAQs,'Edit':True})
 
             except Exception as e :
-                return redirect('secReport_presentReport')
+                return redirect('presentReport')
 
     else :
 
@@ -378,7 +383,6 @@ def view_report(request,reportId) :
     else :
         return render(request, 'SecReport/response.html',{'Title':'Reporting','Tab':'Reporting','Messages':{'danger':{'Message':'Report not found. Contact the website coordinators if needed.' }}})
 
-
 @login_required
 @has_Access
 def finish_report(request,reportId):
@@ -418,7 +422,7 @@ def submit_report(request, reportId) :
         email_report(request, reportId)
     except Exception as e:
         print(e)
-    return redirect('secReport_presentReport')
+    return redirect('presentReport')
 
 @login_required
 @has_Access
@@ -570,7 +574,7 @@ def email_report(request,reportId):
     subject = 'Secretarial Report Received'
     message = 'We have received your report for the previous month. Find a copy of your report that has been attached herewith.<br><br>For any queries, Contact - <br><br>Rtr. Prasad Seth (District Secretary - Reporting)<br>Call : +91 - 9623134392<br>Whatsapp : +91 - 9623134392<br>Mail Id: rtrprasadseth@gmail.com'
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['saurabh.s1999@gmail.com','rtrprasadseth@gmail.com']
+    recipient_list = ['saurabh.s1999@gmail.com']
     recipient_list.append(emailId)
     # send_mail( subject, message, email_from, recipient_list )
 
@@ -737,3 +741,190 @@ def export_report(request,reportId):
     except Exception as e :
         response = None
         return response
+
+@login_required
+@has_Access
+def load_reports(request): #July Only
+    print("Hii")
+    f = []
+    for (dirpath, dirnames, filenames) in walk('.\SecReport - August'):
+        f.extend(filenames)
+        break
+
+    for filename in f :
+        _clubname, _year, _month = filename.split('-')[0], filename.split('-')[1], filename.split('-')[2].split('.')[0]
+        _reportId = str(_month)+"-"+str(_year)+"-"+str(_clubname)
+        
+        clubAccount = Account.objects.filter(username=_clubname).first()
+        club = Club.objects.filter(login=clubAccount).first()
+
+        #report object
+        report_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='Reports')
+        report_dictx = report_file.set_index('Month').T.to_dict(orient='list')
+        date = report_dictx['2020-07'][0]
+        duesPaidAlready = report_dictx['2020-07'][1]
+        duesPaidInThisMonth = report_dictx['2020-07'][2]
+        suggestions = report_dictx['2020-07'][3]
+        
+        report = Report.objects.filter(reportId=_reportId)
+        if report.exists() :
+            report.update(reportId=_reportId,reportingClub=club,reportingMonth=_month,reportingDate=date,duesPaidAlready=duesPaidAlready,duesPaidInThisMonth=duesPaidInThisMonth,suggestions=suggestions,status='1')
+        else :
+            report = Report(reportId=_reportId,reportingClub=club,reportingMonth=_month,reportingDate=date,duesPaidAlready=duesPaidAlready,duesPaidInThisMonth=duesPaidInThisMonth,suggestions=suggestions,status='1')
+            report.save()
+        
+        report = Report.objects.filter(reportId=_reportId)
+        
+        # gbm object
+        gbm_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='GBMs')
+        gbm_dictx = gbm_file.set_index('Meeting No.').T.to_dict(orient='list')
+        gbmsData = dict()
+        for gbm in gbm_dictx.keys() :
+            gbmId = 'M-' + str(gbm) + '-' + _month + ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k = 5))
+            gbmsData[gbmId] = {
+                'meetingNo' : gbm,
+                'meetingDate' : gbm_dictx[gbm][0] if gbm_dictx[gbm][0]!='None' else None,
+                'meetingAgenda' : gbm_dictx[gbm][1],
+                'bylawsBoolean' : gbm_dictx[gbm][2],
+                'budgetBoolean' : gbm_dictx[gbm][3],
+                'meetingAttendance' : gbm_dictx[gbm][4]
+            }
+            incomingGBM = Meeting.objects.filter(meetingId=gbmId)
+            if incomingGBM.exists():
+                incomingGBM.update(**gbmsData[gbmId])
+            else :
+                with transaction.atomic() :
+                    newGBM = Meeting(hostClub=club,meetingId=gbmId,meetingType="2",**gbmsData[gbmId])
+                    newGBM.save()
+                    newMap = ReportMeetingMapping(meeting = newGBM, report = report.first())
+                    newMap.save()
+
+        # BOD object
+        bod_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='BODs')
+        bod_dictx = bod_file.set_index('Meeting No.').T.to_dict(orient='list')
+        bodsData = dict()
+        for bod in bod_dictx.keys() :
+            bodId = 'M-' + str(bod) + '-' + _month + ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k = 5))
+            bodsData[bodId] = {
+                'meetingNo' : bod,
+                'meetingDate' : bod_dictx[bod][0] if bod_dictx[bod][0]!='None' else None,
+                'meetingAgenda' : bod_dictx[bod][1],
+                'bylawsBoolean' : bod_dictx[bod][2],
+                'budgetBoolean' : bod_dictx[bod][3],
+                'meetingAttendance' : bod_dictx[bod][4],
+            }
+            incomingBOD = Meeting.objects.filter(meetingId=bodId)
+            if incomingBOD.exists():
+                incomingBOD.update(**bodsData[bodId])
+            else :
+                with transaction.atomic() :
+                    newBOD = Meeting(hostClub=club,meetingId=bodId,meetingType="1",**bodsData[bodId])
+                    newBOD.save()
+                    newMap = ReportMeetingMapping(meeting = newBOD, report = report.first())
+                    newMap.save()
+
+        # event object
+        event_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='Events')
+        event_dictx = event_file.set_index('Name').T.to_dict(orient='list')
+        eventsData = dict()
+        eventCounter = 0
+
+        for eventName in event_dictx.keys() :
+            eventId = 'E-' + str(eventCounter) + '-' + _month + ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k = 5))
+            eventCounter+=1
+            eventsData[eventId] = {
+                'eventName' : eventName,
+                'eventStartDate' : event_dictx[eventName][0] if event_dictx[eventName][0]!='None' else None,
+                'eventEndDate' : event_dictx[eventName][1] if event_dictx[eventName][1]!='None' else None,
+                'eventAvenue' : event_dictx[eventName][2],
+                'eventAttendance' : event_dictx[eventName][3],
+                'eventHours' : event_dictx[eventName][4],
+                'eventFundRaised' : event_dictx[eventName][5],
+                'eventDescription' : event_dictx[eventName][6],
+                'eventLink' : event_dictx[eventName][7],
+            }
+            incomingEvent = Event.objects.filter(eventId=eventId)
+
+            if incomingEvent.exists():
+                incomingEvent.update(**eventsData[eventId])
+            else :
+                with transaction.atomic() :
+                    newEvent = Event(hostClub=club,eventId=eventId,eventType="1",**eventsData[eventId])
+                    newEvent.save()
+                    newMap = ReportEventMapping(event = newEvent, report = report.first())
+                    newMap.save()
+
+        # fevent object
+        fevent_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='Future Events')
+        fevent_dictx = fevent_file.set_index('Event Name').T.to_dict(orient='list')
+        feventsData = dict()
+        feventCounter = 0
+
+        for feventName in fevent_dictx.keys() :
+            feventId = 'E-' + str(feventCounter) + '-' + _month + ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k = 5))
+            feventCounter+=1
+            feventsData[feventId] = {
+                'eventName' : feventName,
+                'eventStartDate' : fevent_dictx[feventName][0] if fevent_dictx[feventName][0]!='None' else None,
+                'eventEndDate' : fevent_dictx[feventName][1] if fevent_dictx[feventName][1]!='None' else None,
+                'eventAvenue' : fevent_dictx[feventName][2],
+                'eventDescription' : fevent_dictx[feventName][3],
+            }
+            incomingFEvent = Event.objects.filter(eventId=feventId)
+
+            if incomingFEvent.exists():
+                incomingFEvent.update(**feventsData[feventId])
+            else :
+                with transaction.atomic() :
+                    newFEvent = Event(hostClub=club,eventId=feventId,eventType="2",**feventsData[feventId])
+                    newFEvent.save()
+                    newMap = ReportEventMapping(event = newFEvent, report = report.first())
+                    newMap.save()
+
+        # Bulletin object
+        bulletin_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='Bulletin')
+        bulletin_dictx = bulletin_file.set_index('Bulletin Name').T.to_dict(orient='list')
+        bulletinData = dict()
+        bulletinCounter = 0
+        for bulletinName in bulletin_dictx.keys() :
+            bulletinId = 'B-' + str(bulletinCounter) + '-' + _month + '-' + ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k = 5))
+            bulletinCounter+=1
+            bulletinData[bulletinId] = {
+                'bulletinName' : bulletinName,
+                'bulletinIssuedOn' : bulletin_dictx[bulletinName][2] if bulletin_dictx[bulletinName][2]!='None' else None,
+                'lastBulletinIssuedOn' : bulletin_dictx[bulletinName][3] if bulletin_dictx[bulletinName][3]!='None' else None,
+                'bulletinType' : bulletin_dictx[bulletinName][0],
+                'bulletinLink' : bulletin_dictx[bulletinName][1],
+                'bulletinFrequency' : bulletin_dictx[bulletinName][4],
+            }
+            with transaction.atomic() :
+                newBulletin = Bulletin(bulletinId=bulletinId, hostClub = club, **bulletinData[bulletinId])
+                newBulletin.save()
+                newBulletinMap = ReportBulletinMapping(report=report.first(),bulletin=newBulletin)
+                newBulletinMap.save()
+
+        # Feedback object
+        feedback_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='Feedback')
+        feedback_dictx = feedback_file.set_index('Question').T.to_dict(orient='list')
+
+        for feedback in feedback_dictx.keys() :
+            feedbackInstance = FeedbackQuestion.objects.filter(questionText=feedback).first()
+            incomingFeedback = Feedback(reportId=report.first(),feedbackQuestion=feedbackInstance, booleanResponse = feedback_dictx[feedback][0])
+            incomingFeedback.save()
+
+        # Member matrix object
+        matrix_file = pd.read_excel(".\SecReport - August\\"+filename, sheet_name='Member Matrix')
+        matrix_dictx = matrix_file.set_index('Attribute').T.to_dict(orient='list')
+        for attribute in matrix_dictx.keys() :
+            attributeInstance = MemberMatrixAttribute.objects.filter(attribute=attribute).first()
+            incomingMatrix = MemberMatrix(reportId=report.first(),attribute=attributeInstance, maleCount = matrix_dictx[attribute][0], femaleCount = matrix_dictx[attribute][1], othersCount = matrix_dictx[attribute][2])
+            incomingMatrix.save()
+        
+    return redirect('auth_login')
+
+    
