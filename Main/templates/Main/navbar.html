@@ -22,12 +22,17 @@
             {% if DRole == '4' %}
                 <a href="{% url 'distReport_a_getMonth' %}" id="desktop-Tasks">Tasks - Admin</a>
                 <a href="{% url 'distReport_a_manageAccess' %}" id="desktop-Access">Tasks - Manage Access</a>
-            {% elif DRole != None %}
+            {% elif DRole == '44' %}
+                <a href="{% url 'secReport_responses' %}" id="desktop-s_responses">SecReport - Responses</a>
+                <a href="{% url 'secReport_manageAccess' %}" id="desktop-s_access">SecReport - Manage Access</a>
+            {% endif %}
+            {% if DRole != None %}
                 <a href="{% url 'distReport_c_index' %}" id="desktop-Tasks">Tasks</a>
             {% endif %}
             <!-- <a href="{% url 'auth_updateUserProfile' %}" id="desktop-userProfile">My Profile</a> -->
         {% elif user.loginType == '1' %}
-        <a href="{% url 'secReport_presentReport' %}" id="desktop-Reporting">Reporting</a>
+        <!-- <a href="{% url 'secReport_presentReport' %}" id="desktop-Reporting">Reporting</a> -->
+        <a href="{% url 'secReport_presentReport1' %}" id="desktop-Reporting">Reporting</a>
         {% endif %}
         <a href="{% url 'auth_logout' %}" id="desktop-logout">Logout</a>
     {% else %}
@@ -40,16 +45,21 @@
       <a href="{% url 'main_home' %}" id="mobile-home">Home</a>
 
       {% if user.is_authenticated %}
-          {% if user.loginType == '0' %}
-          {% if DRole == '4' %}
-                <a href="{% url 'distReport_a_getMonth' %}" id="mobile-Tasks">Tasks - Admin</a>
-                <a href="{% url 'distReport_a_manageAccess' %}" id="mobile-Access">Tasks - Manage Access</a>
-            {% elif DRole != None %}
-                <a href="{% url 'distReport_c_index' %}" id="mobile-Tasks">Tasks</a>
-            {% endif %}
+            {% if user.loginType == '0' %}
+                {% if DRole == '4' %}
+                    <a href="{% url 'distReport_a_getMonth' %}" id="mobile-Tasks">Tasks - Admin</a>
+                    <a href="{% url 'distReport_a_manageAccess' %}" id="mobile-Access">Tasks - Manage Access</a>
+                {% elif DRole == '44' %}
+                    <a href="{% url 'secReport_responses' %}" id="mobile-s_responses">SecReport - Responses</a>
+                    <a href="{% url 'secReport_manageAccess' %}" id="mobile-s_access">SecReport - Manage Access</a>
+                {% endif %}
+                {% if DRole != None %}
+                    <a href="{% url 'distReport_c_index' %}" id="mobile-Tasks">Tasks</a>
+                {% endif %}
           <!-- <a href="{% url 'auth_updateUserProfile' %}" id="mobile-userProfile">My Profile</a> -->
           {% elif user.loginType == '1' %}
-          <a href="{% url 'secReport_presentReport' %}" id="mobile-Reporting">Reporting</a>
+          <!-- <a href="{% url 'secReport_presentReport' %}" id="mobile-Reporting">Reporting</a> -->
+          <a href="{% url 'secReport_presentReport1' %}" id="mobile-Reporting">Reporting</a>
           {% endif %}
           <a href="{% url 'auth_logout' %}" id="mobile-logout">Logout</a>
       {% else %}

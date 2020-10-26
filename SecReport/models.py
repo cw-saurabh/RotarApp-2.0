@@ -18,6 +18,31 @@ months = (
     ("12","December")
 )
 
+class Month(models.Model) :
+    month = models.CharField(blank = True, max_length=2, choices = months, verbose_name = "Month")
+    year = models.CharField(blank = True, max_length=4, verbose_name = "Year")
+
+    class Meta:
+        verbose_name = 'Month'
+        verbose_name_plural = 'Months'
+
+    def __str__(self):
+        return f'{self.month}-{self.year}'
+
+class ReportAccess(models.Model) :
+    club = models.ForeignKey(Club, on_delete = models.CASCADE, null = True, blank = True)
+    month = models.ForeignKey(Month, on_delete = models.CASCADE, null = True, blank = True)
+    edit = models.BooleanField(verbose_name = "Edit permission", default = False, null = True, blank = True)
+    view = models.BooleanField(verbose_name = "View permission", default = True, null = True, blank = True)
+
+    class Meta:
+        verbose_name = 'Permission'
+        verbose_name_plural = 'Permissions'
+
+    def __str__(self):
+        return f'{self.club.login.username}-{self.month.month}-{self.month.year}'
+
+
 class DuesPaid(models.Model) :
     club = models.ForeignKey(Club, on_delete = models.CASCADE, null = True, blank = True)
     dues = models.IntegerField(blank = True, null = True, default = 0, verbose_name="Total Dues Paid")
@@ -29,24 +54,22 @@ class DuesPaid(models.Model) :
     def __str__(self):
         return f'{self.club.clubName}-{self.dues}'
 
-
 class Report(models.Model):
     reportId = models.CharField(blank = True, max_length=32, verbose_name = "Report Id", primary_key = True)
     reportingClub = models.ForeignKey(Club, on_delete = models.CASCADE, null = True, blank = True)
+    month = models.ForeignKey(Month, on_delete = models.CASCADE, null = True, blank = True, default = None)
     reportingMonth = models.CharField(blank = True, max_length=2, choices = months, verbose_name = "Month")
     reportingDate = models.DateTimeField(verbose_name = "Reported on", default=datetime.now, null = True, blank = True)
     duesPaidAlready = models.CharField(blank = True, max_length=6, verbose_name = "District Dues paid upto the last month")
     duesPaidInThisMonth = models.CharField(blank = True, max_length=6,verbose_name = "District Dues paid in this month")
     suggestions = models.TextField(blank = True, max_length=1000,verbose_name = "Suggestions", default="")
-    status = models.CharField(blank = True, max_length = 2, verbose_name = "Report Status", choices = (("0","Incomplete"),("1","Complete")), default = "0")
-
+    status = models.CharField(blank = True, max_length = 2, verbose_name = "Report Status", choices = (("0","Incomplete"),("1","Complete"),('2',"Partially Complete")), default = "0")
     class Meta:
         verbose_name = 'Report'
         verbose_name_plural = 'Reports'
 
     def __str__(self):
         return f'{self.reportingClub.clubName}-{self.reportingMonth}'
-
 
 class MemberMatrixAttribute(models.Model):
     attribute = models.CharField(blank = True, max_length = 40, verbose_name = "Members Matrix Attribute")
@@ -190,7 +213,3 @@ class EventJointClubMapping(models.Model):
 class BulletinJointClubMapping(models.Model):
     bulletin = models.ForeignKey(Bulletin, on_delete=models.CASCADE)
     jointClub = models.ForeignKey(Club, on_delete=models.CASCADE)
-
-class ReportViewPermission(models.Model) :
-    club = models.ForeignKey(Club, on_delete = models.CASCADE, null = True, blank = True)
-    hasPermission = models.BooleanField(default = False, verbose_name="Has permission?")

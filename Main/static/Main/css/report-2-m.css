@@ -21,8 +21,9 @@
     font-size: 3vw;
   }
   .tablinks.active {
+    color: black;
     font-weight: bolder;
-    font-size: 5vw;
+    font-size: 3vw;
   }
   .tabcontent {
     display: none;
@@ -42,7 +43,10 @@
   }
   #reportHeading2 {
     color: #337ab7;
-    font-size: 4vw;
+    font-size: 4vw !important;
+  }
+  #reportForm #generalBodyMeetings, #reportForm #boardOfDirectorsMeetings, #reportForm #memberMatrix, #reportForm #memberMatrixTotal, #reportForm #events, #reportForm #feedback, #reportForm #futureEvents, #reportForm #bulletins, #reportForm #dues, #reportForm #suggestions {
+    padding: 5%;
   }
   #reportForm #errorMessages {
     color: red;
@@ -70,6 +74,13 @@
   }
   #reportForm .container-fluid {
     padding: 8vw;
+  }
+  #reportForm .col-lg-2, #reportForm .col-lg-3, #reportForm .col-lg-4, #reportForm .col-lg-5, #reportForm .col-lg-6, #reportForm .col-lg-8, #reportForm .col-lg-9, #reportForm .col-lg-12 {
+    padding: 1vw 1vw 1vw 1vw;
+  }
+  #reportForm .col-lg-2 select, #reportForm .col-lg-2 input[type=text], #reportForm .col-lg-2 input[type=date], #reportForm .col-lg-2 input[type=month], #reportForm .col-lg-2 input[type=password], #reportForm .col-lg-2 input[type=number], #reportForm .col-lg-2 input[type=url], #reportForm .col-lg-2 textarea, #reportForm .col-lg-3 select, #reportForm .col-lg-3 input[type=text], #reportForm .col-lg-3 input[type=date], #reportForm .col-lg-3 input[type=month], #reportForm .col-lg-3 input[type=password], #reportForm .col-lg-3 input[type=number], #reportForm .col-lg-3 input[type=url], #reportForm .col-lg-3 textarea, #reportForm .col-lg-4 select, #reportForm .col-lg-4 input[type=text], #reportForm .col-lg-4 input[type=date], #reportForm .col-lg-4 input[type=month], #reportForm .col-lg-4 input[type=password], #reportForm .col-lg-4 input[type=number], #reportForm .col-lg-4 input[type=url], #reportForm .col-lg-4 textarea, #reportForm .col-lg-5 select, #reportForm .col-lg-5 input[type=text], #reportForm .col-lg-5 input[type=date], #reportForm .col-lg-5 input[type=month], #reportForm .col-lg-5 input[type=password], #reportForm .col-lg-5 input[type=number], #reportForm .col-lg-5 input[type=url], #reportForm .col-lg-5 textarea, #reportForm .col-lg-6 select, #reportForm .col-lg-6 input[type=text], #reportForm .col-lg-6 input[type=date], #reportForm .col-lg-6 input[type=month], #reportForm .col-lg-6 input[type=password], #reportForm .col-lg-6 input[type=number], #reportForm .col-lg-6 input[type=url], #reportForm .col-lg-6 textarea, #reportForm .col-lg-8 select, #reportForm .col-lg-8 input[type=text], #reportForm .col-lg-8 input[type=date], #reportForm .col-lg-8 input[type=month], #reportForm .col-lg-8 input[type=password], #reportForm .col-lg-8 input[type=number], #reportForm .col-lg-8 input[type=url], #reportForm .col-lg-8 textarea, #reportForm .col-lg-9 select, #reportForm .col-lg-9 input[type=text], #reportForm .col-lg-9 input[type=date], #reportForm .col-lg-9 input[type=month], #reportForm .col-lg-9 input[type=password], #reportForm .col-lg-9 input[type=number], #reportForm .col-lg-9 input[type=url], #reportForm .col-lg-9 textarea, #reportForm .col-lg-12 select, #reportForm .col-lg-12 input[type=text], #reportForm .col-lg-12 input[type=date], #reportForm .col-lg-12 input[type=month], #reportForm .col-lg-12 input[type=password], #reportForm .col-lg-12 input[type=number], #reportForm .col-lg-12 input[type=url], #reportForm .col-lg-12 textarea {
+    margin-top: 5vw !important;
+    margin-bottom: 5vw !important;
   }
   #reportForm .col-lg-2 input, #reportForm .col-lg-2 button, #reportForm .col-lg-3 input, #reportForm .col-lg-3 button, #reportForm .col-lg-4 input, #reportForm .col-lg-4 button, #reportForm .col-lg-5 input, #reportForm .col-lg-5 button, #reportForm .col-lg-6 input, #reportForm .col-lg-6 button, #reportForm .col-lg-8 input, #reportForm .col-lg-8 button, #reportForm .col-lg-9 input, #reportForm .col-lg-9 button, #reportForm .col-lg-12 input, #reportForm .col-lg-12 button {
     margin-top: 5vw;

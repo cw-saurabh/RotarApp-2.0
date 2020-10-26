@@ -1,0 +1,408 @@
+{% extends "Main/base.html" %}
+{% load static %}
+{% block content %}
+<style>
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* all Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+<div class="tasks">
+    <div id="monthSelect">
+
+    </div>
+    <div class="card text-center disabled-card">
+        <h3 class="header text-center" id="header"><b>Secretarial Reporting</b></h3>
+        <h6 class="subheader text-center">Manage Access</h6>
+        <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;margin-bottom:0">
+        {% csrf_token %}
+        <div class="container-fluid desktop"  style="margin:0;width:90%;margin: 2% auto;padding:1%">
+        <div class="row">
+            <div class="col-lg-6" style="padding:0">
+                <p class="label">Club Name</p>
+            </div>
+            <div class="col-lg-2">
+                <p class="label">Edit</p>
+            </div>
+            <div class="col-lg-2">
+                <p class="label">View</p>
+            </div>
+            <div class="col-lg-2">
+                
+            </div>
+        </div>
+        </div>
+        <hr class="desktop" style="margin:0">
+        <div id="d_months" class="container-fluid desktop"  style="margin:0;width:90%;margin: 2% auto">
+        
+        </div>
+        <div id="m_months" class="mobile text-center" style="pointer-events:auto;">
+            
+        </div>
+        <br>
+    </div>
+</div>
+{% endblock content%}
+{% block javascript %}
+<script>
+
+    let months = [];
+    let permissions = {};
+    let monthNames = {
+            "01" : "January",
+            "02" : "February",
+            "03" : "March",
+            "04" : "April",
+            "05" : "May",
+            "06" : "June",
+            "07" : "July",
+            "08" : "August",
+            "09" : "September",
+            "10" : "October",
+            "11" : "November",
+            "12" : "December",
+    };
+
+    function prevMonth(index) {
+        
+        if(index!=null)
+        {
+            if(index==0) {
+                console.log("Info:Month Index = 0");
+            }
+            else
+            updateMonth((index-1));
+        }
+        else
+        {
+            console.log("Error:Month Index = null");
+        }
+    
+    }
+
+    function nextMonth(index) {
+        if(index!=null)
+        {
+            if(index==months.length-1) {
+                console.log("Info:Month Index = Max");
+            }
+            else
+            updateMonth((index+1));
+        }
+        else
+        {
+            console.log("Error:Month Index = null");
+        }
+    }
+    
+    function updateMonth(index) {
+
+        $('#reportHeading1').html('<b>Secretarial Reporting : '+monthNames[months[index][1]]+' '+months[index][2]+'</b>');
+
+        $("#monthSelect").html(`
+        <div class = "row text-center heading">
+            <div class="col-lg-1 col-xs-2" onclick="$('#navigationAlert').show();$('#extraBr').hide();prevMonth(`+index+`)">
+                <span class="navIcons" id="prev`+index+`"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            </div>
+            <div class = "col-lg-10 col-xs-8 text-center">
+                <p id="monthName">`+monthNames[months[index][1]]+` `+months[index][2]+`</p>
+            </div>
+            <div class="col-lg-1 col-xs-2" onclick="$('#navigationAlert').show();$('#extraBr').hide();nextMonth(`+index+`)">
+                <span class="navIcons" id="next`+index+`"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+            </div>
+        </div>
+        <br class="desktop">
+        <hr class="desktop" style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+        `);
+
+        // Toggle extreme buttons
+        if(index==0) {
+            $('#prev'+index).hide();
+        }
+        else if(index==months.length-1) {
+            $('#next'+index).hide();
+        }
+        renderPermissions(months[index][0]);
+
+        // Render the indexed report
+    }
+
+    function renderPermissions(monthId=null) {
+        if(monthId!=null)
+        {
+            $('#d_months').html(`
+                <div class="row">
+                    <div class="col-lg-6" style="padding:0">
+                        <p class="label"  style="color:#2196F3">All
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="switch">
+                        <input type="checkbox" id="d_editall">
+                        <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="switch">
+                        <input type="checkbox" id="d_viewall" checked>
+                        <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="downloadButton" id="d_saveall" onclick="changePermission('d','all',`+monthId+`)" style="margin-top:0;background-color: #D41367;border-radius:30px;vertical-align: baseline;width: 60%;height: 34px;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <hr class="desktop">
+    
+            `);
+            $('#m_months').html(`
+                <div class="card" style="margin-bottom:0;width:90%;margin-left:auto;margin-right:auto">
+                    <div class="col-lg-3" style="padding:0">
+                        <h4 style="color:#D41367"><b>All</b></h4>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-1 col-xs-6" style="vertical-align:middle">
+                            <p class="label" style="color:#337ab7">Edit</p>
+                        </div>
+                        <div class="col-lg-1 col-xs-6">
+                            <label class="switch">
+                            <input type="checkbox" id="m_editall">
+                            <span class="slider round"></span>
+                            </label>
+                        </div>  
+                        <div class="col-lg-1 col-xs-6" style="vertical-align:middle">
+                            <p class="label" style="color:#337ab7">View</p>
+                        </div>
+                        <div class="col-lg-1 col-xs-6">
+                            <label class="switch">
+                            <input type="checkbox" id="m_viewall" checked>
+                            <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-lg-1" style="padding:0;">
+                        <button class="downloadButton" id="m_saveall" onclick="changePermission('m','all',`+monthId+`)" style="margin-top:0;background-color: #D41367;border-radius:30px;vertical-align: baseline;width: 60%;height: 34px;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                    </div>    
+                </div>
+        
+            `);
+            for (let value in permissions[monthId])
+            {
+                if(permissions[monthId][value]['month__id']==monthId)
+                {
+                    $('#d_months').append(`                
+                        <div class="row">
+                            <div class="col-lg-6" style="padding:0">
+                                <p class="label"  style="color:#2196F3">`+permissions[monthId][value]['club__clubName']+`
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="switch">
+                                <input type="checkbox" id="d_edit`+permissions[monthId][value]['id']+`">
+                                <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="switch">
+                                <input type="checkbox" id="d_view`+permissions[monthId][value]['id']+`">
+                                <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="col-lg-2">
+                                <button class="downloadButton" id="d_save`+permissions[monthId][value]['id']+`" onclick="changePermission('d','`+permissions[monthId][value]['id']+`',`+null+`)" style="margin-top:0;background-color: #D41367;border-radius:30px;vertical-align: baseline;width: 60%;height: 34px;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    `);
+                    $('#m_months').append(`
+                    <div class="card" style="margin-bottom:0;width:90%;margin-left:auto;margin-right:auto">
+                        <div class="col-lg-3" style="padding:0">
+                            <h4 style="color:#D41367"><b>`+permissions[monthId][value]['club__clubName']+`</b></h4>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-lg-1 col-xs-6" style="vertical-align:middle">
+                                <p class="label" style="color:#337ab7">Edit</p>
+                            </div>
+                            <div class="col-lg-1 col-xs-6">
+                                <label class="switch">
+                                <input type="checkbox" id="m_edit`+permissions[monthId][value]['id']+`">
+                                <span class="slider round"></span>
+                                </label>
+                            </div>  
+                            <div class="col-lg-1 col-xs-6" style="vertical-align:middle">
+                                <p class="label" style="color:#337ab7">View</p>
+                            </div>
+                            <div class="col-lg-1 col-xs-6">
+                                <label class="switch">
+                                <input type="checkbox" id="m_view`+permissions[monthId][value]['id']+`">
+                                <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="col-lg-1" style="padding:0;">
+                            <button class="downloadButton" id="m_save`+permissions[monthId][value]['id']+`" onclick="changePermission('m','`+permissions[monthId][value]['id']+`',`+null+`)" style="margin-top:0;background-color: #D41367;border-radius:30px;vertical-align: baseline;width: 60%;height: 34px;"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </div>    
+                    </div>
+                    `);
+                    
+                    if(permissions[monthId][value]['view'])
+                    {
+                        $("#d_view"+permissions[monthId][value]['id']).prop('checked','true');
+                        $("#m_view"+permissions[monthId][value]['id']).prop('checked','true');
+                    }
+                    if(permissions[monthId][value]['edit'])
+                    {
+                        $("#d_edit"+permissions[monthId][value]['id']).prop('checked','true');
+                        $("#m_edit"+permissions[monthId][value]['id']).prop('checked','true');
+                    }
+                }
+            }
+        }
+    } 
+    
+    function changePermission(mode, permissionId = null, monthId = null) {
+    if(permissionId!=null) 
+    {
+        if(mode=='d')
+        {
+            $('#d_save'+permissionId).css('background-color','grey');
+            data = {};
+            data['permissionId']=permissionId;
+            data['monthId']=monthId;
+            data['view']=$('#d_view'+permissionId).prop('checked');
+            data['edit']=$('#d_edit'+permissionId).prop('checked');
+            
+            $.post( "{% url 'secReport_changePermission' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                    if(response['success'])
+                    {
+                        setTimeout(function(){ $('#d_save'+permissionId).css('background-color','#D41367'); }, 1000);
+                        if(permissionId=='all') {
+                            location.reload();
+                        }
+                    }
+                    else {
+                        
+                    }
+                });
+        }
+        else if(mode=='m')
+        {
+            $('#m_save'+permissionId).css('background-color','grey');
+            data = {};
+            data['permissionId']=permissionId;
+            data['view']=$('#m_view'+permissionId).prop('checked');
+            data['edit']=$('#m_edit'+permissionId).prop('checked');
+            data['monthId']=monthId;
+
+            $.post( "{% url 'secReport_changePermission' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data)}, function(response, status){
+                    if(response['success'])
+                    {
+                        setTimeout(function(){ $('#m_save'+permissionId).css('background-color','#D41367'); }, 1000);
+                        if(permissionId=='all') {
+                            location.reload();
+                        }
+                    }
+                    else {
+                        
+                    }
+                });
+        }
+    }
+}
+
+
+    $(document).ready(function(){
+
+        months = [];
+        permissions = {};
+
+        // Decide which month should go first
+        let thisMonth = null;
+        let now = new Date();
+        let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+        {% for value in Months %}
+            months.push(['{{value.id}}','{{value.month}}','{{value.year}}']);
+            if(nowMonth=='{{value.month}}') {
+                thisMonth = {{forloop.counter0}};
+            }
+        {% endfor %}
+
+        // Once decided call the updateMonth function, with defaults
+        if(thisMonth!=null) {
+            updateMonth(thisMonth);
+        }
+
+        $.post("{% url 'secReport_getPermissions' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
+                if(response['success'])
+                {
+                    permissions = response['data'];
+                    if(thisMonth!=null) {
+                        updateMonth(thisMonth);
+                    }
+                }
+                else {
+                    console.log("Error");
+                }
+        });
+    });
+
+</script>
+{% endblock javascript %}

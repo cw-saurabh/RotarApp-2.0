@@ -15,6 +15,10 @@ body {
         box-shadow: 0 8px 32px 0 rgba(0,0,0,0.4);
         border-radius: 5px;
     }
+
+    .disabled-card:hover {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2) !important;
+    }
     
     .label {
         color : $pinkcolor;
