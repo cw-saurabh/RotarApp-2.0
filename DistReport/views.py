@@ -259,9 +259,11 @@ def admin_exportReports(request, monthId):
 
 @is_council
 def council_index(request):
+    dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
+    dRole = dRole.districtRole.distRoleId if dRole!=None else None
     months = Month.objects.filter(view=True).order_by('year','month').all()
     Council = DistrictCouncil.objects.filter(accountId = request.user).first()
-    return render(request, 'DistReport/index.html',{'title':'Tasks','Tab':'Tasks','DRole':'1','DistRole':Council.districtRole.distRoleName,'Months':months})
+    return render(request, 'DistReport/index.html',{'title':'Tasks','Tab':'Tasks','DRole':dRole,'DistRole':Council.districtRole.distRoleName,'Months':months})
 
 @is_council
 def council_getTasks(request):

@@ -26,12 +26,13 @@
 
 .tablinks {
     color: $pinkcolor;
-    font-size:$m-small;
+    font-size:3vw;
 }
 
 .tablinks.active {
+    color:black;
     font-weight: bolder;
-    font-size:$m-extraMedium;
+    font-size:3vw;
 }
 
 .tabcontent {
@@ -58,13 +59,16 @@
 
 #reportHeading2 {
     color: $textcolor1;
-    font-size: $m-medium;
+    font-size: $m-medium !important;
 }
 
 //Form
 
 #reportForm {
 
+    #generalBodyMeetings, #boardOfDirectorsMeetings, #memberMatrix, #memberMatrixTotal, #events, #feedback, #futureEvents, #bulletins, #dues, #suggestions {
+        padding:5%;
+    }
     #errorMessages {
         color : red;
         font-weight : bold;
@@ -97,6 +101,12 @@
     }
 
     .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-8, .col-lg-9, .col-lg-12 {
+        padding:1vw 1vw 1vw 1vw;
+
+        select, input[type=text], input[type=date], input[type=month],  input[type=password], input[type=number], input[type=url], textarea {
+            margin-top:5vw !important;
+            margin-bottom:5vw !important;
+        }
 
         input,button {
             margin-top:5vw;

@@ -81,7 +81,16 @@
         {% endif %}
 
         {% for key, value in Report.EventData.items %}
-            appendEvent(`{{value.eventId}}`,`{{value.eventName}}`,`{{value.eventStartDate|date:"Y-m-d"}}`,`{{value.eventEndDate|date:"Y-m-d"}}`,`{{value.eventAvenue}}`,`{{value.eventAttendance}}`,`{{value.eventHours}}`,`{{value.eventFundRaised}}`,`{{value.eventDescription}}`,`{{value.eventLink}}`);
+            appendEvent(`{{value.eventId}}`,
+            `{{value.eventName}}`,
+            `{{value.eventStartDate|date:"Y-m-d"}}`,
+            `{{value.eventEndDate|date:"Y-m-d"}}`,
+            `{{value.eventAvenue}}`,
+            `{{value.eventAttendance}}`,
+            `{{value.eventHours}}`,
+            `{{value.eventFundRaised}}`,
+            `{{value.eventDescription}}`,
+            `{{value.eventLink}}`);
         {% endfor %}
         {% if not Report.EventData %}
             appendEvent();
@@ -125,8 +134,6 @@
         updatePaid(`{{Report.duesPaidInThisMonth|default:0}}`);
         updateOwedMoney();
         updatePending();
-
-
 
     });
     {% endautoescape%}

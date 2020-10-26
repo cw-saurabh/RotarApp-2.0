@@ -122,7 +122,10 @@
   #reportForm .col-lg-3, #reportForm .col-lg-6, #reportForm .col-lg-2, #reportForm .col-lg-8, #reportForm .col-lg-4, #reportForm .col-lg-5, #reportForm .col-lg-9, #reportForm .col-lg-12 {
     padding: 1vw 1vw 1vw 1vw;
   }
-  #reportForm .col-lg-3 input, #reportForm .col-lg-6 input, #reportForm .col-lg-2 input, #reportForm .col-lg-8 input, #reportForm .col-lg-4 input, #reportForm .col-lg-5 input, #reportForm .col-lg-9 input, #reportForm .col-lg-12 input {
+  #reportForm .col-lg-3 select, #reportForm .col-lg-3 input[type=text], #reportForm .col-lg-3 input[type=date], #reportForm .col-lg-3 input[type=month], #reportForm .col-lg-3 input[type=password], #reportForm .col-lg-3 input[type=number], #reportForm .col-lg-3 input[type=url], #reportForm .col-lg-3 textarea, #reportForm .col-lg-6 select, #reportForm .col-lg-6 input[type=text], #reportForm .col-lg-6 input[type=date], #reportForm .col-lg-6 input[type=month], #reportForm .col-lg-6 input[type=password], #reportForm .col-lg-6 input[type=number], #reportForm .col-lg-6 input[type=url], #reportForm .col-lg-6 textarea, #reportForm .col-lg-2 select, #reportForm .col-lg-2 input[type=text], #reportForm .col-lg-2 input[type=date], #reportForm .col-lg-2 input[type=month], #reportForm .col-lg-2 input[type=password], #reportForm .col-lg-2 input[type=number], #reportForm .col-lg-2 input[type=url], #reportForm .col-lg-2 textarea, #reportForm .col-lg-8 select, #reportForm .col-lg-8 input[type=text], #reportForm .col-lg-8 input[type=date], #reportForm .col-lg-8 input[type=month], #reportForm .col-lg-8 input[type=password], #reportForm .col-lg-8 input[type=number], #reportForm .col-lg-8 input[type=url], #reportForm .col-lg-8 textarea, #reportForm .col-lg-4 select, #reportForm .col-lg-4 input[type=text], #reportForm .col-lg-4 input[type=date], #reportForm .col-lg-4 input[type=month], #reportForm .col-lg-4 input[type=password], #reportForm .col-lg-4 input[type=number], #reportForm .col-lg-4 input[type=url], #reportForm .col-lg-4 textarea, #reportForm .col-lg-5 select, #reportForm .col-lg-5 input[type=text], #reportForm .col-lg-5 input[type=date], #reportForm .col-lg-5 input[type=month], #reportForm .col-lg-5 input[type=password], #reportForm .col-lg-5 input[type=number], #reportForm .col-lg-5 input[type=url], #reportForm .col-lg-5 textarea, #reportForm .col-lg-9 select, #reportForm .col-lg-9 input[type=text], #reportForm .col-lg-9 input[type=date], #reportForm .col-lg-9 input[type=month], #reportForm .col-lg-9 input[type=password], #reportForm .col-lg-9 input[type=number], #reportForm .col-lg-9 input[type=url], #reportForm .col-lg-9 textarea, #reportForm .col-lg-12 select, #reportForm .col-lg-12 input[type=text], #reportForm .col-lg-12 input[type=date], #reportForm .col-lg-12 input[type=month], #reportForm .col-lg-12 input[type=password], #reportForm .col-lg-12 input[type=number], #reportForm .col-lg-12 input[type=url], #reportForm .col-lg-12 textarea {
+    margin-top: 1vw !important;
+  }
+  #reportForm .col-lg-3 input, #reportForm .col-lg-3 select, #reportForm .col-lg-6 input, #reportForm .col-lg-6 select, #reportForm .col-lg-2 input, #reportForm .col-lg-2 select, #reportForm .col-lg-8 input, #reportForm .col-lg-8 select, #reportForm .col-lg-4 input, #reportForm .col-lg-4 select, #reportForm .col-lg-5 input, #reportForm .col-lg-5 select, #reportForm .col-lg-9 input, #reportForm .col-lg-9 select, #reportForm .col-lg-12 input, #reportForm .col-lg-12 select {
     margin-top: 1vw;
     margin-bottom: 1vw;
     width: 100%;
@@ -205,6 +208,7 @@
     padding-left: 1vw;
     padding-right: 1vw;
     box-shadow: 2px 2px 2px #555;
+    margin-top: 1vw;
   }
   #reportForm input[type=text]:hover, #reportForm input[type=date]:hover, #reportForm input[type=month]:hover, #reportForm input[type=password]:hover, #reportForm input[type=number]:hover, #reportForm input[type=url]:hover, #reportForm textarea:hover, #reportForm input[type=text]:focus, #reportForm input[type=date]:focus, #reportForm input[type=month]:focus, #reportForm input[type=password]:focus, #reportForm input[type=number]:focus, #reportForm input[type=url]:focus, #reportForm textarea:focus {
     border: 2px solid #337ab7;
@@ -372,7 +376,7 @@
     margin: 0;
     padding: 0;
   }
-  #reportFormView input[type=text], #reportFormView input[type=date], #reportFormView input[type=month], #reportFormView input[type=password], #reportFormView input[type=number], #reportFormView input[type=url], #reportFormView textarea {
+  #reportFormView input[type=number], #reportFormView input[type=text], #reportFormView input[type=date], #reportFormView input[type=month], #reportFormView input[type=password], #reportFormView input[type=number], #reportFormView input[type=url], #reportFormView textarea {
     height: 2.5vw;
     border: 1px solid lightgrey;
     border-radius: 4px;

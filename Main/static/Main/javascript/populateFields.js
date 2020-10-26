@@ -81,7 +81,9 @@ function appendGeneralBodyMeeting(meetingId=null,meetingNo=null, meetingDate=nul
   if(meetingNo!=null) $("#"+"gbm"+gbmsIndex+"-no").val(meetingNo); 
   $("#"+"gbm"+gbmsIndex+"-date").val(meetingDate);
   if(meetingAgenda!=null) $("#"+"gbm"+gbmsIndex+"-agenda").val(meetingAgenda); 
+  if(bylawsBoolean!='None')
   $("#"+"gbm"+gbmsIndex+"-bylawsBoolean").val(bylawsBoolean);
+  if(budgetBoolean!='None')
   $("#"+"gbm"+gbmsIndex+"-budgetBoolean").val(budgetBoolean);
   if(meetingAttendance!=null) $("#"+"gbm"+gbmsIndex+"-attendance").val(meetingAttendance); 
 
@@ -148,7 +150,9 @@ function appendBODMeeting(meetingId=null,meetingNo=null, meetingDate=null,meetin
   if(meetingNo!=null) $("#"+"bod"+bodsIndex+"-no").val(meetingNo); 
   $("#"+"bod"+bodsIndex+"-date").val(meetingDate);
   if(meetingAgenda!=null) $("#"+"bod"+bodsIndex+"-agenda").val(meetingAgenda); 
+  if(bylawsBoolean!='None')
   $("#"+"bod"+bodsIndex+"-bylawsBoolean").val(bylawsBoolean);
+  if(budgetBoolean!='None')
   $("#"+"bod"+bodsIndex+"-budgetBoolean").val(budgetBoolean);
   if(meetingAttendance!=null) $("#"+"bod"+bodsIndex+"-attendance").val(meetingAttendance); 
 
@@ -201,9 +205,8 @@ function appendFEvent(eventId=null, eventName=null, eventStartDate=null, eventEn
 
   `);
 
-  console.log(today.getUTCMonth());
   day1 = year+'-'+((today.getMonth()<10)?("0"+today.getMonth()):today.getMonth())+'-01';
-  console.log(day1);
+  
   $("#fevent"+feventsIndex+"-startDate").attr("min", day1);
   $("#fevent"+feventsIndex+"-endDate").attr("min", day1);
 
@@ -334,9 +337,7 @@ function appendBulletin(bulletinId=null,bulletinName=null,bulletinType=null,bull
       <input tab="Others" oninput="updateList(this.id,'bulletin','`+bulletinId+`')" type="text" maxlength="20" name="bulletinFrequency" id="bulletin`+bulletinsIndex+`-frequency">
     </div>
   `);
-  
 
-  
   day1 = year+'-'+monthNo+'-01';
   daylast = year+'-'+monthNo+'-31';
   $("#bulletin"+bulletinsIndex+"-issuedOn").attr("min", day1);
@@ -368,6 +369,7 @@ function appendFeedback(questionText = '', questionId = '', booleanResponse = ''
                 </select>
             </div>
             `);
+            if(booleanResponse!='None')
             $("#"+questionId+"-feedback").val(booleanResponse);
 
     updateProgress();

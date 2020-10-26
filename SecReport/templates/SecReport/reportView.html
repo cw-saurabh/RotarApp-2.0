@@ -11,8 +11,23 @@
 
     <script>
     {% autoescape off %}
+    let monthNames = {
+            "01" : "January",
+            "02" : "February",
+            "03" : "March",
+            "04" : "April",
+            "05" : "May",
+            "06" : "June",
+            "07" : "July",
+            "08" : "August",
+            "09" : "September",
+            "10" : "October",
+            "11" : "November",
+            "12" : "December",
+    };
     $(document).ready(function(){
-        updateMonth(`{{Report.ReportingMonth}}`);
+        
+        $('#reportHeading1').html('<b>Secretarial Reporting : '+monthNames["{{Report.month}}"]+' {{Report.year}}</b>');
         $("#suggestion00").val(`{{Report.suggestions}}`);
 
         {% for key, value in Report.GBMData.items %}
@@ -70,10 +85,13 @@
 <div id="reportForm">
 
 <div id="reportHeadingSection" class="text-center">
-    <h4 id="reportHeading1" ><b>Secretarial Reporting</b></h4>
-    <h6 id="reportHeading2" >Read-only</h6>
+    <h4 id="reportHeading1" onclick="AutoFill()"><b>Secretarial Reporting</b></h4>
+    {% if profile.zone %}
+    <h4 id="reportHeading2"><b>{{ profile.clubName }}<br><h5><b>Zone {{ profile.zone }} - {{ profile.rotaryId }}</b></h5></b></h4>
+    {% else %}
+    <h4 id="reportHeading2"><b>{{ profile.clubName }}<br><h5><b>{{ profile.rotaryId }}</b></h5></b></h4>
+    {% endif %}
 </div>
-
 <div class="container" id="tabs" style="min-width:100%;">
     <br>
     <div class="progress" style="margin:0;height:1vw">
@@ -98,26 +116,15 @@
 {% csrf_token %}
 
 <div id="Admin" class="tabcontent active" style="padding-bottom:0">
-
-<div class="row" style="margin:0">
-    <div class="col-lg-3">
-        <p class="label" id = "">Reporting for the month of :</p>
-    </div>
-    <br class="mobile"><br class="mobile">
-    <div class="col-lg-3" >
-        <input  oninput="updateMonth()" type="month" style="margin:0" id="month" name="month" readonly>
-    </div>
-</div>
-    <br><br>
-    {% include "SecReport/adminM.html" %}
+    {% include "SecReport/adminView.html" %}
 </div>
 
 <div id="Avenue" class="tabcontent">
-    {% include "SecReport/avenueM.html" %}
+    {% include "SecReport/avenueView.html" %}
 </div>
 
 <div id="Others" class="tabcontent">
-    {% include "SecReport/othersM.html" %}
+    {% include "SecReport/othersView.html" %}
 </div>
 
 <div class="container" id="reportButtons" style="padding-bottom:0;min-width:100%">

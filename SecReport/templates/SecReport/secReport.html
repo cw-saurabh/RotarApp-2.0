@@ -1,0 +1,808 @@
+{% extends "Main/base.html" %}
+{% load static %}
+{% block content %}
+<div class="tasks">
+    <div id="monthSelect">
+
+    </div>
+    <div class="card">
+        <div id="reportForm">
+            <div id="reportHeadingSection" class="text-center">
+                <h4 id="reportHeading1" onclick="AutoFill()"><b>Secretarial Reporting</b></h4>
+                {% if profile.zone %}
+                <h4 id="reportHeading2"><b>{{ profile.clubName }}<br><h5><b>Zone {{ profile.zone }} - {{ profile.rotaryId }}</b></h5></b></h4>
+                {% else %}
+                <h4 id="reportHeading2"><b>{{ profile.clubName }}<br><h5><b>{{ profile.rotaryId }}</b></h5></b></h4>
+                {% endif %}
+            </div>         
+            <br><hr style="margin:0;border-width: medium;border-color: #D41367;width:100%"><br>
+            
+            <form action="" method="POST" id="theForm">
+            {% csrf_token %}
+            <div id="reportContainer">
+
+            </div>
+            </form>
+            <br><hr>
+            <br>
+            <button class="collapsible heading" style="outline:none">FAQs</button>
+            <div class="collapsedContent">
+                <br>
+                {% for FAQ in FAQs %}
+                <p class="label" style="color:#D41367;white-space:normal;padding:0;margin:0">{{FAQ.question|linebreaksbr}}</p><br>
+                <p class="label" style="color:#337ab7;white-space:normal;padding:0;margin:0;text-align:justify">{{FAQ.answer|linebreaksbr}}</p><br><br>
+                {% endfor %}
+                <br>
+                <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%"><br>
+                <p class="label" style="color:#D41367;white-space:normal;padding:0;margin:0">Disclaimer</p><br>
+                <p class="label" style="color:#337ab7;white-space:normal;padding:0;margin:0;text-align:justify">Do not add emojis in the text fields. Technical issues won't be entertained on the last day of reporting.</p><br><br>
+                <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%"><br>
+                <p class="label" style="color:#337ab7;white-space:normal;padding:0;margin:0;text-align:justify">
+                For any queries, Contact -<br><br>
+                Rtr. Prasad Seth<br class="mobile">
+                (District Secretary - Reporting)<br><br>
+
+                <i class="fa fa-mobile" aria-hidden="true"></i>&nbsp;&nbsp;Call : <a href="tel:+919623134392">+91 - 9623134392</a><br>
+                <i class="fa fa-whatsapp" aria-hidden="true"></i>&nbsp;&nbsp;Whatsapp : <a href="https://api.whatsapp.com/send?phone=919623134392#">+91 - 9623134392</a><br>
+                <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Mail : <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=rtrprasadseth@gmail.com" target="_blank">rtrprasadseth@gmail.com</a>
+                </p>
+                <br><br>
+            </div>
+
+        </div> 
+    </div>
+</div>
+{% endblock content%}
+{% block javascript %}
+<script src="{% static 'Main/javascript/memberMatrix.js' %}"></script>
+<script src="{% static 'Main/javascript/populateFields.js' %}"></script>
+<script src="{% static 'Main/javascript/updateProgress.js' %}"></script>
+<script src="{% static 'Main/javascript/validation.js' %}"></script>
+<script src="{% static 'Main/javascript/main.js' %}"></script>
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active2");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight){
+            content.style.maxHeight = null;
+            } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+</script>
+<script>
+
+    function save() {
+        console.log("Saving initialised !");
+        console.log(data);
+        console.log(deletedData);
+
+        $('#errorMessages').html('');
+        $("#loader").show();
+        $.post( "{% url 'secReport_saveReport1' %}", {'reportId':$("#report").val(),'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val(),'data':JSON.stringify(data),'deletedData':JSON.stringify(deletedData)}, function(response, status){
+            $("#loader").hide();
+            if(response['error'])
+            {
+                $('#errorMessages').html(response['error']);
+                console.log("Saving failed !");
+                console.log(data);
+                console.log(deletedData);
+            }
+            if(response['success'])
+            {
+                console.log("Saving successful !");
+                $("#successMessages").show().delay(5000).fadeOut();
+                data={'gbm':{},'bod':{},'event':{},'fevent':{},'feedback':{},'bulletin':{},'matrix':{}};
+                deletedData={'gbm':[],'bod':[],'event':[],'fevent':[]};
+                console.log(data);
+                console.log(deletedData);
+            }
+        });
+    }
+
+    function finish() {
+
+        var flag = true;
+        var empty = [];
+
+        $("input").not("input[name=bulletinIssuedOn],input[name=lastBulletinIssuedOn]").each(function() {
+        var element = $(this);
+        element.removeClass("empty");
+        if (element.val() == "") {
+            flag = false;
+            element.addClass("empty");
+            if (empty.includes(element.attr('tab')));
+            else empty.push(element.attr('tab'));
+        }
+        });
+        $("select").each(function() {
+            var element = $(this);
+            element.removeClass("empty");
+            if (element.val() == null) {
+                flag = false;
+                element.addClass("empty");
+                if (empty.includes(element.attr('tab')));
+                else
+                empty.push(element.attr('tab'));
+            }
+        });
+        $("textarea").each(function() {
+            var element = $(this);
+            element.removeClass("empty");
+            if (element.val() == "") {
+                flag = false;
+                element.addClass("empty");
+                if (empty.includes(element.attr('tab')));
+                else
+                empty.push(element.attr('tab'));
+            }
+        });
+        if(empty.length!=0) {
+            $("#errorMessages").html("<p>You may have missed some of the input fields, in the following tabs : "+empty.toString()+"</p>");
+            openSection(empty[0]);
+        }
+        if(flag)
+        {
+            save();
+            $('#successMessages').hide();
+            console.log(reports);
+            console.log("Saving initialised !");
+            console.log(data);
+            console.log(deletedData);
+            $('#errorMessages').html('');
+            $("#loader").show();
+            setTimeout( function()
+            { 
+            $.post( "{% url 'secReport_finishReport1' %}", {'reportId':$("#report").val(),'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
+                $("#loader").hide();
+                if(response['error'])
+                {
+                    $('#errorMessages').html(response['error']);
+                    console.log("Saving failed !");
+                }
+                if(response['success'])
+                {
+                    let acive = null;
+                    let monthId = null;
+                    for(let report in reports) {
+                        if(reports[report]['reportId']==$("#report").val())
+                        {
+                            reports[report]['status']='2';
+                            monthId = reports[report]['month'];
+                            console.log(reports[report]);
+                        }
+                    }
+                    months.forEach(function (value, i) {
+                            console.log('%d: %s', i, value);
+                            if(value[0]==monthId)
+                            active=i;
+                        });
+                    
+                    if(active==null) {
+                        let thisMonth = null;
+                        let now = new Date();
+                        let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+                        
+                        months.forEach(function (value, i) {
+                            console.log('%d: %s', i, value);
+                            if(value[1]==nowMonth)
+                            thisMonth=i;
+                        });
+
+                        if(thisMonth==null)
+                        {
+                            location.reload();
+                        }
+                        else 
+                        updateMonth(thisMonth);
+                    }
+                    else if(active!=null)
+                    {
+                        updateMonth(active);
+                    }
+                    else 
+                    location.reload();
+                    window.scrollTo(0, 0); 
+                }
+            });
+            } , 6000);
+        }
+
+    }
+    
+    function customEdit() {
+    $.post( "{% url 'secReport_editReport1' %}", {'reportId':$("#report").val(),'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
+
+        if(response['error'])
+        {
+            $('#errorMessages').html(response['error']);
+        }
+        if(response['success'])
+        {
+            let acive = null;
+            let monthId = null;
+            for(let report in reports) {
+                if(reports[report]['reportId']==$("#report").val())
+                {
+                    reports[report]['status']='0';
+                    monthId = reports[report]['month'];
+                    console.log(reports[report]);
+                }
+            }
+            months.forEach(function (value, i) {
+                    console.log('%d: %s', i, value);
+                    if(value[0]==monthId)
+                    active=i;
+                });
+            
+            if(active==null) {
+                let thisMonth = null;
+                let now = new Date();
+                let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+                
+                months.forEach(function (value, i) {
+                    if(value[1]==nowMonth)
+                    thisMonth=i;
+                });
+
+                if(thisMonth==null)
+                {
+                    location.reload();
+                }
+                else 
+                updateMonth(thisMonth);
+            }
+            else if(active!=null)
+            {
+                updateMonth(active);
+            }
+            else 
+            location.reload();
+
+        }
+    });
+
+    }
+    
+    function customSubmit() {
+    $.post( "{% url 'secReport_submitReport1' %}", {'reportId':$("#report").val(),'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
+
+        if(response['error'])
+        {
+            $('#errorMessages').html(response['error']);
+        }
+        if(response['success'])
+        {
+            let acive = null;
+            let monthId = null;
+            for(let report in reports) {
+                if(reports[report]['reportId']==$("#report").val())
+                {
+                    reports[report]['status']='1';
+                    monthId = reports[report]['month'];
+                    console.log(reports[report]);
+                }
+            }
+            months.forEach(function (value, i) {
+                    console.log('%d: %s', i, value);
+                    if(value[0]==monthId)
+                    active=i;
+                });
+            
+            if(active==null) {
+                let thisMonth = null;
+                let now = new Date();
+                let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+                
+                months.forEach(function (value, i) {
+                    if(value[1]==nowMonth)
+                    thisMonth=i;
+                });
+
+                if(thisMonth==null)
+                {
+                    location.reload();
+                }
+                else 
+                updateMonth(thisMonth);
+            }
+            else if(active!=null)
+            {
+                updateMonth(active);
+            }
+            else 
+            location.reload();
+
+        }
+    });
+
+    }
+
+</script>
+<script>
+
+    let months = [];
+    let reports = {};
+    let monthNames = {
+            "01" : "January",
+            "02" : "February",
+            "03" : "March",
+            "04" : "April",
+            "05" : "May",
+            "06" : "June",
+            "07" : "July",
+            "08" : "August",
+            "09" : "September",
+            "10" : "October",
+            "11" : "November",
+            "12" : "December",
+    };
+
+    function prevMonth(index) {
+        
+        $('#proceedButton').attr('onclick', "$('#navigationAlert').hide();$('#extraBr').show();prevMonth("+index+")");
+
+        if($('#navigationAlert').length == 0 || ($('#navigationAlert').length == 1 && $('#navigationAlert').css('display')=='none')) {
+            if(index!=null)
+            {
+                if(index==0) {
+                    console.log("Info:Month Index = 0");
+                }
+                else
+                updateMonth((index-1));
+            }
+            else
+            {
+                console.log("Error:Month Index = null");
+            }
+        }
+    }
+
+    function nextMonth(index) {
+        console.log(index);
+        console.log(months[index]);
+        $('#proceedButton').attr('onclick', "$('#navigationAlert').hide();$('#extraBr').show();nextMonth("+index+")");
+
+        if($('#navigationAlert').length == 0 || ($('#navigationAlert').length == 1 && $('#navigationAlert').css('display')=='none')) {
+            if(index!=null)
+            {
+                if(index==months.length-1) {
+                    console.log("Info:Month Index = Max");
+                }
+                else
+                updateMonth((index+1));
+            }
+            else
+            {
+                console.log("Error:Month Index = null");
+            }
+        }
+    }
+
+    function updateMonth(index) {
+
+        $('#reportHeading1').html('<b>Secretarial Reporting : '+monthNames[months[index][1]]+' '+months[index][2]+'</b>');
+
+        $("#monthSelect").html(`
+        <div class = "row text-center heading">
+            <div class="col-lg-1 col-xs-2" onclick="$('#navigationAlert').show();$('#extraBr').hide();prevMonth(`+index+`)">
+                <span class="navIcons" id="prev`+index+`"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            </div>
+            <div class = "col-lg-10 col-xs-8 text-center">
+                <p id="monthName">`+monthNames[months[index][1]]+` `+months[index][2]+`</p>
+            </div>
+            <div class="col-lg-1 col-xs-2" onclick="$('#navigationAlert').show();$('#extraBr').hide();nextMonth(`+index+`)">
+                <span class="navIcons" id="next`+index+`"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+            </div>
+        </div>
+        <br class="desktop">
+        <hr class="desktop" style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+        `);
+
+        // Toggle extreme buttons
+        if(index==0) {
+            $('#prev'+index).hide();
+        }
+        else if(index==months.length-1) {
+            $('#next'+index).hide();
+        }
+
+        // Render the indexed report
+        renderReport(months[index][0], months[index][3], index);
+    }
+
+    function renderReport(monthId=null, flag = false, index) {
+        report = (monthId in reports)?reports[monthId]:{};
+        $('#reportContainer').html('');
+        console.log(report);
+
+        // Error case
+        if(monthId==null || !(monthId in reports)) {
+            $('#reportContainer').html(`
+            
+            `);
+        }
+
+        // Report submitted
+        if(report['status']=='1') {
+            $('#reportContainer').html(`
+                <div class="container-fluid" id="tabs" style="padding:3%;margin:0;border:none">
+                    <div class="alert alert-info">
+                        We have received your report of this month.
+                    </div>            
+                    <hr>
+                    <a id="viewReportLink" target="_blank" href="../viewReport/`+report['reportId']+`">Click here</a> to view your report.
+                    <br>
+                    <a href="../exportReport/`+report['reportId']+`">Click here</a> to export your report into an Excel Sheet.
+                    <hr>
+                    
+                    For any queries, Contact -<br><br>
+                    Rtr. Prasad Seth<br class="mobile">
+                    (District Secretary - Reporting)<br><br>
+
+                    <span><i class="fa fa-mobile" aria-hidden="true"></i><span>&nbsp;&nbsp;Call : <a href="tel:+919623134392">+91 - 9623134392</a></span><br>
+                    <i class="fa fa-whatsapp" aria-hidden="true"></i>&nbsp;&nbsp;Whatsapp : <a href="https://api.whatsapp.com/send?phone=919623134392#">+91 - 9623134392</a><br>
+                    <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Mail : <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=rtrprasadseth@gmail.com" target="_blank">rtrprasadseth@gmail.com</a>
+                </div>
+            `);
+        }
+
+        // Report not submitted, but deadline crossed
+        else if(report['status']=='0' && flag=='False' ) {
+            $('#reportContainer').html(`
+                <div class="container-fluid" id="tabs" style="padding:3%;margin:0;border:none">
+                    <div class="alert alert-danger">
+                        We are not accepting any responses for this month.
+                    </div>            
+                    For any queries, Contact -<br><br>
+                    Rtr. Prasad Seth<br class="mobile">
+                    (District Secretary - Reporting)<br><br>
+
+                    <span><i class="fa fa-mobile" aria-hidden="true"></i><span>&nbsp;&nbsp;Call : <a href="tel:+919623134392">+91 - 9623134392</a></span><br>
+                    <i class="fa fa-whatsapp" aria-hidden="true"></i>&nbsp;&nbsp;Whatsapp : <a href="https://api.whatsapp.com/send?phone=919623134392#">+91 - 9623134392</a><br>
+                    <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;Mail : <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=rtrprasadseth@gmail.com" target="_blank">rtrprasadseth@gmail.com</a>
+                </div>
+            `);
+        }
+
+        // Report not submitted, and deadline is not yet crossed
+        else if(report['status']=='0' && flag=='True' ) {
+            $('#reportContainer').html(`
+            <div class="container-fluid" id="tabs" style="min-width:100%;padding:0%;border:none">
+            <br id="extraBr">
+            <div class="alert alert-danger" id="navigationAlert" style="display:none">
+                    <span>Make sure that you have saved your data, before navigating to another month.</span>
+                    <br class="mobile"><br class="mobile">
+                    <span style="float:right" onclick="$('#navigationAlert').hide();$('#extraBr').show();"><b style="color:red;margin:0 5px">Cancel</b></span>
+                    <span id="proceedButton" style="float:right;"><b style="color:blue;margin:0 5px">Proceed</b></span>
+                    <br class="mobile">
+            </div>   
+            <div class="progress" style="margin:0;height:1vw">
+                <div class="progress-bar" id="bar"></div>
+            </div>
+            <div class="row" style="margin:0">
+                <div class="col-lg-4 col-xs-4 text-center">
+                    <p class="tablinks active" id="AdminLink" onclick="openSection('Admin')">Admin</p>
+                </div>
+                <div class="col-lg-4 col-xs-4 text-center">
+                    <p class="tablinks" id="AvenueLink" onclick="openSection('Avenue')">Avenue</p>
+                </div>
+                <div class="col-lg-4 col-xs-4 text-center">
+                    <p class="tablinks" id="OthersLink" onclick="openSection('Others')">Others</p>
+                </div>
+            </div>
+            <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%">
+            <div class="instructions" style="padding:2%;">
+                <h6><small style="color:red"><b>*&nbsp;&nbsp;:&nbsp;&nbsp;Numeric Fields,&nbsp;&nbsp;All fields are compulsory.</b></small></h6>
+            </div>
+            <div id="errorMessages" style="padding:0;padding-left:2%;margin:0;margin-bottom:0%">
+
+            </div>
+            <div id="successMessages" style="padding-left:2%;padding-top:0;margin:0;color:green;display:none">
+                <b>Saved changes !</b>
+                <br><br>
+            </div>
+        </div>
+
+        <div id="Admin" class="tabcontent active" style="padding-bottom:0">
+            <br>
+            {% include "SecReport/admin.html" %}
+        </div>
+
+        <div id="Avenue" class="tabcontent">
+            {% include "SecReport/avenue.html" %}
+        </div>
+
+        <div id="Others" class="tabcontent">
+            {% include "SecReport/others.html" %}
+        </div>
+
+        </div>
+        <input type='text' id='report' name='report' style="display:none" readonly>
+            `);
+
+            $('#report').val(report['reportId']);
+            updateProgress();
+            
+            if (('GBMData' in report) && Object.keys(report['GBMData']).length != 0)
+                for(var key in report['GBMData'])
+                {
+                    appendGeneralBodyMeeting(report['GBMData'][key]['meetingId'],
+                    report['GBMData'][key]['meetingNo'],
+                    report['GBMData'][key]['meetingDate']?report['GBMData'][key]['meetingDate'].substring(0, 10):null,
+                    report['GBMData'][key]['meetingAgenda'],
+                    report['GBMData'][key]['bylawsBoolean']!=null?(report['GBMData'][key]['bylawsBoolean']==true?'True':'False'):'None',
+                    report['GBMData'][key]['budgetBoolean']!=null?(report['GBMData'][key]['budgetBoolean']==true?'True':'False'):'None',
+                    report['GBMData'][key]['meetingAttendance']);
+                }
+
+            if (('BODData' in report) && Object.keys(report['BODData']).length != 0)
+            for(var key in report['BODData'])
+                {
+                    appendBODMeeting(report['BODData'][key]['meetingId'],
+                    report['BODData'][key]['meetingNo'],
+                    report['BODData'][key]['meetingDate']?report['BODData'][key]['meetingDate'].substring(0, 10):null,
+                    report['BODData'][key]['meetingAgenda'],
+                    report['BODData'][key]['bylawsBoolean']!=null?(report['BODData'][key]['bylawsBoolean']==true?'True':'False'):'None',report['BODData'][key]['budgetBoolean']!=null?(report['BODData'][key]['budgetBoolean']==true?'True':'False'):'None',
+                    report['BODData'][key]['meetingAttendance']);
+                }
+
+            if (('EventData' in report) && Object.keys(report['EventData']).length != 0)
+            for(var key in report['EventData'])
+            {
+                appendEvent(report['EventData'][key]['eventId'],
+                report['EventData'][key]['eventName'],
+                report['EventData'][key]['eventStartDate']?report['EventData'][key]['eventStartDate'].substring(0, 10):null,
+                report['EventData'][key]['eventEndDate']?report['EventData'][key]['eventEndDate'].substring(0, 10):null,
+                report['EventData'][key]['eventAvenue'],
+                report['EventData'][key]['eventAttendance'],
+                report['EventData'][key]['eventHours'],
+                report['EventData'][key]['eventFundRaised'],
+                report['EventData'][key]['eventDescription'],
+                report['EventData'][key]['eventLink']);
+            }
+
+            if (('FEventData' in report) && Object.keys(report['FEventData']).length != 0)
+            for(var key in report['FEventData'])
+            {
+                appendFEvent(report['FEventData'][key]['eventId'],
+                report['FEventData'][key]['eventName'],
+                report['FEventData'][key]['eventStartDate']?report['FEventData'][key]['eventStartDate'].substring(0, 10):null,
+                report['FEventData'][key]['eventEndDate']?report['FEventData'][key]['eventEndDate'].substring(0, 10):null,
+                report['FEventData'][key]['eventAvenue'],
+                report['FEventData'][key]['eventDescription']);
+            }
+
+            appendBulletin(report['Bulletin']['bulletinId'],
+            report['Bulletin']['bulletinName'],
+            report['Bulletin']['bulletinType'],
+            report['Bulletin']['bulletinLink'],
+            report['Bulletin']['bulletinIssuedOn']?report['Bulletin']['bulletinIssuedOn'].substring(0, 10):null,
+            report['Bulletin']['lastBulletinIssuedOn']?report['Bulletin']['lastBulletinIssuedOn'].substring(0, 10):null,
+            report['Bulletin']['bulletinFrequency']);
+
+            if (('Questions' in report) && (report['Questions']).length != 0)
+            for(var key of report['Questions'])
+            {
+                appendFeedback(key['feedbackQuestion__questionText'],key['feedbackQuestion__id'],key['booleanResponse']!=null?(key['booleanResponse']==true?'True':'False'):'None');
+            }
+            
+            if (('MemberMatrix' in report) && (report['MemberMatrix']).length != 0)
+            for(var key of report['MemberMatrix'])
+            {
+                appendMemberMatrixRow(key['attribute__id'],key['attribute__attribute'],key['attribute__operation'],key['maleCount'],key['femaleCount'],key['othersCount']);
+            }
+            updateMatrix();
+
+            $("#suggestion00").val(report['suggestions']);
+            updateTotalNumberOfMembers();
+            updateTotalNumberOfInductedMembers();
+            updateDuesAlreadyPaid(report['DuesPaid']);
+            updatePaid(report['duesPaidInThisMonth']?report['duesPaidInThisMonth']:'0');
+            updateOwedMoney();
+            updatePending();
+
+            var mq = window.matchMedia( "(max-width: 1000px)" );
+            if (mq.matches)
+            $("#reportButton00,#reportButton10,#reportButton20").html("Prev");
+
+        }
+        
+        else if(report['status']=='2' && flag=='True') {
+
+            $('#reportContainer').html(`
+            <div class="alert alert-info" >
+                    <span>Read-only view ! The report won't be considered unless and until it is submitted.</span>
+                    <br><br>
+                    <button id="edit" type="button" class="btn btn-info" onclick="customEdit();"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;Edit</button>
+                    <button id="submit" type="button" class="btn btn-info" onclick="customSubmit()"><i class="fa fa-check-circle" aria-hidden="true"></i>&nbsp;&nbsp;Submit</button>
+                    
+                    <br class="mobile">
+            </div>
+
+            <div class="container-fluid" id="tabs" style="min-width:100%;padding:0;border:none">
+            <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%">       
+            <div class="row" style="margin:0;padding-top:0;">
+                <div class="col-lg-4 col-xs-4 text-center">
+                    <p class="tablinks active" id="AdminLink" onclick="openSection('Admin')">Admin</p>
+                </div>
+                <div class="col-lg-4 col-xs-4 text-center">
+                    <p class="tablinks" id="AvenueLink" onclick="openSection('Avenue')">Avenue</p>
+                </div>
+                <div class="col-lg-4 col-xs-4 text-center">
+                    <p class="tablinks" id="OthersLink" onclick="openSection('Others')">Others</p>
+                </div>
+            </div>
+            <hr style="margin:0;border-width: medium;border-color: #D41367;width:100%">
+            <br>
+            <div id="errorMessages" style="padding:0;padding-left:2%;margin:0">
+
+            </div>
+        </div>
+        <br>
+        <div id="Admin" class="tabcontent active" style="padding-bottom:0">
+            <br>
+            {% include "SecReport/adminView.html" %}
+        </div>
+
+        <div id="Avenue" class="tabcontent">
+            {% include "SecReport/avenueView.html" %}
+        </div>
+
+        <div id="Others" class="tabcontent">
+            {% include "SecReport/othersView.html" %}
+        </div>
+
+        </div>
+        <input type='text' id='report' name='report' style="display:none" readonly>
+            `);
+
+            $('#report').val(report['reportId']);
+            
+            if (('GBMData' in report) && Object.keys(report['GBMData']).length != 0)
+                for(var key in report['GBMData'])
+                {
+                    appendGeneralBodyMeeting(report['GBMData'][key]['meetingId'],
+                    report['GBMData'][key]['meetingNo'],
+                    report['GBMData'][key]['meetingDate']?report['GBMData'][key]['meetingDate'].substring(0, 10):null,
+                    report['GBMData'][key]['meetingAgenda'],
+                    report['GBMData'][key]['bylawsBoolean']!=null?(report['GBMData'][key]['bylawsBoolean']==true?'True':'False'):'None',
+                    report['GBMData'][key]['budgetBoolean']!=null?(report['GBMData'][key]['budgetBoolean']==true?'True':'False'):'None',
+                    report['GBMData'][key]['meetingAttendance']);
+                }
+
+            if (('BODData' in report) && Object.keys(report['BODData']).length != 0)
+            for(var key in report['BODData'])
+                {
+                    appendBODMeeting(report['BODData'][key]['meetingId'],
+                    report['BODData'][key]['meetingNo'],
+                    report['BODData'][key]['meetingDate']?report['BODData'][key]['meetingDate'].substring(0, 10):null,
+                    report['BODData'][key]['meetingAgenda'],
+                    report['BODData'][key]['bylawsBoolean']!=null?(report['BODData'][key]['bylawsBoolean']==true?'True':'False'):'None',report['BODData'][key]['budgetBoolean']!=null?(report['BODData'][key]['budgetBoolean']==true?'True':'False'):'None',
+                    report['BODData'][key]['meetingAttendance']);
+                }
+
+            if (('EventData' in report) && Object.keys(report['EventData']).length != 0)
+            for(var key in report['EventData'])
+            {
+                appendEvent(report['EventData'][key]['eventId'],
+                report['EventData'][key]['eventName'],
+                report['EventData'][key]['eventStartDate']?report['EventData'][key]['eventStartDate'].substring(0, 10):null,
+                report['EventData'][key]['eventEndDate']?report['EventData'][key]['eventEndDate'].substring(0, 10):null,
+                report['EventData'][key]['eventAvenue'],
+                report['EventData'][key]['eventAttendance'],
+                report['EventData'][key]['eventHours'],
+                report['EventData'][key]['eventFundRaised'],
+                report['EventData'][key]['eventDescription'],
+                report['EventData'][key]['eventLink']);
+            }
+
+            if (('FEventData' in report) && Object.keys(report['FEventData']).length != 0)
+            for(var key in report['FEventData'])
+            {
+                appendFEvent(report['FEventData'][key]['eventId'],
+                report['FEventData'][key]['eventName'],
+                report['FEventData'][key]['eventStartDate']?report['FEventData'][key]['eventStartDate'].substring(0, 10):null,
+                report['FEventData'][key]['eventEndDate']?report['FEventData'][key]['eventEndDate'].substring(0, 10):null,
+                report['FEventData'][key]['eventAvenue'],
+                report['FEventData'][key]['eventDescription']);
+            }
+
+            appendBulletin(report['Bulletin']['bulletinId'],
+            report['Bulletin']['bulletinName'],
+            report['Bulletin']['bulletinType'],
+            report['Bulletin']['bulletinLink'],
+            report['Bulletin']['bulletinIssuedOn']?report['Bulletin']['bulletinIssuedOn'].substring(0, 10):null,
+            report['Bulletin']['lastBulletinIssuedOn']?report['Bulletin']['lastBulletinIssuedOn'].substring(0, 10):null,
+            report['Bulletin']['bulletinFrequency']);
+
+            if (('Questions' in report) && (report['Questions']).length != 0)
+            for(var key of report['Questions'])
+            {
+                appendFeedback(key['feedbackQuestion__questionText'],key['feedbackQuestion__id'],key['booleanResponse']!=null?(key['booleanResponse']==true?'True':'False'):'None');
+            }
+            
+            if (('MemberMatrix' in report) && (report['MemberMatrix']).length != 0)
+            for(var key of report['MemberMatrix'])
+            {
+                appendMemberMatrixRow(key['attribute__id'],key['attribute__attribute'],key['attribute__operation'],key['maleCount'],key['femaleCount'],key['othersCount']);
+            }
+            updateMatrix();
+
+            $("#suggestion00").val(report['suggestions']);
+            updateTotalNumberOfMembers();
+            updateTotalNumberOfInductedMembers();
+            updateDuesAlreadyPaid(report['Duespaid']);
+            updatePaid(report['duesPaidInThisMonth']?report['duesPaidInThisMonth']:'0');
+            updateOwedMoney();
+            updatePending();
+
+            var mq = window.matchMedia( "(max-width: 1000px)" );
+            if (mq.matches)
+            $("#reportButton00,#reportButton10,#reportButton20").html("Prev");
+            
+            $("input").not("input[name=csrfmiddlewaretoken]").attr("disabled", true);
+            $("select").attr("disabled", true);
+            $("textarea").attr("disabled", true);
+            $("button").not(".collapsible").not("#edit").not("#submit").attr("disabled", true);
+
+        }
+    }
+
+    $(document).ready(function(){
+
+        months = [];
+        reports = {};
+
+        // Decide which month should go first
+        let active = null;
+        let thisMonth = null;
+        let counter = 0;
+        let now = new Date();
+        let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+        {% for value in Months %}
+            // alert(['{{value.month__id}}','{{value.month__month}}','{{value.month__year}}','{{value.edit}}']);
+            months.push(['{{value.month__id}}','{{value.month__month}}','{{value.month__year}}','{{value.edit}}']);
+            if('{{value.edit}}'=='True') {
+                if(active==null)
+                active = counter;
+                
+            }
+            if(nowMonth=='{{value.month__month}}') {
+                thisMonth = counter;
+            }
+            counter += 1;
+        {% endfor %}
+
+        // Once decided call the updateMonth function, with defaults
+        if(active!=null) {
+            updateMonth(active);
+        }
+        else if(thisMonth!=null) {
+            updateMonth(thisMonth);
+        }
+
+        $.post("{% url 'secReport_fetchReports' %}", {'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()}, function(response, status){
+                if(response['success'])
+                {
+                    reports = response['data'];
+                    if(active!=null) {
+                        updateMonth(active);
+                    }
+                    else if(thisMonth!=null) {
+                        updateMonth(thisMonth);
+                    }
+                }
+                else {
+                    console.log("Error");
+                }
+        });
+    });
+
+</script>
+{% endblock javascript %}

@@ -178,6 +178,7 @@ function changePermission(mode, monthId = null) {
     {
         if(mode=='d')
         {
+            console.log('#d_save'+monthId);
             $('#d_save'+monthId).css('background-color','grey');
             data = {};
             data['monthId']=monthId;

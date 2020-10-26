@@ -1,0 +1,252 @@
+{% extends "Main/base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .info {
+      padding: 0 18px;
+      background-color: white;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+</style>
+    
+<div class="tasks">
+    <div id="monthSelect">
+
+    </div>
+    <div class="card text-center disabled-card">
+        <h3 class="header text-center" id="header"><b>Secretarial Reports</b></h3>
+        <h6 class="subheader text-center">Consolidated</h6>
+        <hr style="border-width: medium;border-color:#D41367;border-radius : 4px;margin-bottom:0">
+        <div id="list">
+            
+        </div>
+
+    </div>
+</div>
+{% endblock content%}
+{% block javascript %}
+<script>
+
+    let months = [];
+    let responses = {};
+    let monthNames = {
+            "01" : "January",
+            "02" : "February",
+            "03" : "March",
+            "04" : "April",
+            "05" : "May",
+            "06" : "June",
+            "07" : "July",
+            "08" : "August",
+            "09" : "September",
+            "10" : "October",
+            "11" : "November",
+            "12" : "December",
+    };
+
+    function prevMonth(index) {
+        
+        if(index!=null)
+        {
+            if(index==0) {
+                console.log("Info:Month Index = 0");
+            }
+            else
+            updateMonth((index-1));
+        }
+        else
+        {
+            console.log("Error:Month Index = null");
+        }
+    
+    }
+
+    function nextMonth(index) {
+        if(index!=null)
+        {
+            if(index==months.length-1) {
+                console.log("Info:Month Index = Max");
+            }
+            else
+            updateMonth((index+1));
+        }
+        else
+        {
+            console.log("Error:Month Index = null");
+        }
+    }
+    
+    function updateMonth(index) {
+
+        $('#reportHeading1').html('<b>Secretarial Reporting : '+monthNames[months[index][1]]+' '+months[index][2]+'</b>');
+
+        $("#monthSelect").html(`
+        <div class = "row text-center heading">
+            <div class="col-lg-1 col-xs-2" onclick="$('#navigationAlert').show();$('#extraBr').hide();prevMonth(`+index+`)">
+                <span class="navIcons" id="prev`+index+`"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+            </div>
+            <div class = "col-lg-10 col-xs-8 text-center">
+                <p id="monthName">`+monthNames[months[index][1]]+` `+months[index][2]+`</p>
+            </div>
+            <div class="col-lg-1 col-xs-2" onclick="$('#navigationAlert').show();$('#extraBr').hide();nextMonth(`+index+`)">
+                <span class="navIcons" id="next`+index+`"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+            </div>
+        </div>
+        <br class="desktop">
+        <hr class="desktop" style="border-width: medium;border-color:#337ab7;border-radius : 4px;">
+        `);
+
+        // Toggle extreme buttons
+        if(index==0) {
+            $('#prev'+index).hide();
+        }
+        else if(index==months.length-1) {
+            $('#next'+index).hide();
+        }
+
+        renderList(months[index][0]);
+    }
+
+    function renderList(monthId=null) {
+        
+        if(monthId!=null)
+        {
+            let reportCounter = 0;
+            $('#list').html(`
+            <br>
+            <div style="padding:1%;margin:0 1%" class="row">
+                <div class="col-lg-8">
+                    <span style="float:left"><b>Total number of completed reports&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</b><b id="reportCount"></b></span>
+                </div>
+                <div class="col-lg-2" style="padding:0 2%;margin:0">
+                    <button type="button" class="downloadButton desktop" id="closeAll" onclick="collapseAll()" style="background-color:#D41367;border-radius:10px;width:100%;"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Close All</button></span>
+                </div>
+                <div class="col-lg-2" style="padding:0 2%;margin:0">
+                    <button type="button" class="downloadButton desktop" id="openAll" onclick="openAll()" style="background-color:#D41367;border-radius:10px;width:100%;"><i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;View All</button></span>
+                </div>
+            </div>
+            <br>
+            <hr style="margin:0">
+            <br>
+            `);
+            // <i class="fa fa-check-square-o" aria-hidden="true" style="color:green"></i>&nbsp;&nbsp;&nbsp;
+            for(var i of responses[monthId])
+            {
+                if(i['status']=='1')
+                {
+                    reportCounter+=1;
+                    $('#list').append(`
+                    <div class="row" style="padding:1%;margin:0 1%;text-align:left">
+                        <div class="col-lg-8">
+                            <span style="float:left"><b style="color:#D41367">`+i['reportingClub__clubName']+`</b></span>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" onclick="window.open('/viewReport/`+i['reportId']+`')" class="downloadButton" style="background-color:#1E90FF;border-radius:10px"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" onclick="window.location.href = '/mailReport/`+i['reportId']+`'" class="downloadButton" style="background-color:#D41367;border-radius:10px"><i class="fa fa-envelope-o" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" onclick="window.location.href = '/exportReport/`+i['reportId']+`'" class="downloadButton" style="background-color:#1E90FF;border-radius:10px"><i class="fa fa-download" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" id="`+i['reportId']+`" class="downloadButton desktop" onclick="collapse(this.id)" style="background-color:#D41367;border-radius:10px"><i class="fa fa-info-circle" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="info row" style="padding:0 1%;margin:0 1%;font-size:1.2vw" id="content`+i['reportId']+`">
+                        <div class="col-lg-12" style="text-align:justify;font-size:0.9vw">
+                            <span style="float:left"><b style="color:#337ab7">Suggestions : </b>`+i['suggestions']+`</span>
+                        </div>
+                        <div class="col-lg-12" style="text-align:justify;font-size:0.9vw">
+                            <span style="float:left"><b style="color:#337ab7">District Dues paid in this month : </b>`+(i['duesPaidInThisMonth']==''?'0':i['duesPaidInThisMonth'])+`</span>
+                        </div>
+                    </div>
+                    <hr>
+                    `);
+                }
+            }
+
+            $('#reportCount').html(reportCounter.toString());
+
+            if(reportCounter==0)
+            {
+                $('#list').append('No report has been submitted yet');
+                $('#closeAll').hide();
+                $('#openAll').hide();
+            }
+        }
+    }
+
+    $(document).ready(function(){
+
+        {% autoescape off %}
+
+        months = [];
+        responses = {};
+
+        {% for key, rows in Reports.items %}
+            responses[`{{key}}`] = [];
+            {% for item in rows %}
+                report = {};
+                {% for attribute, value in item.items %}
+                    report[`{{attribute}}`] = `{{value}}`;        
+                {% endfor %}
+                responses[`{{key}}`].push(report);
+            {% endfor %}
+        {% endfor %}
+        console.log(responses);
+        // Decide which month should go first
+        let thisMonth = null;
+        let now = new Date();
+        let nowMonth = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        {% for value in Months %}
+            months.push(['{{value.id}}','{{value.month}}','{{value.year}}']);
+            if(nowMonth=='{{value.month}}') {
+                thisMonth = {{forloop.counter0}};
+            }
+        {% endfor %}
+
+        // Once decided call the updateMonth function, with defaults
+        if(thisMonth!=null) {
+            updateMonth(thisMonth);
+        }
+
+        {% endautoescape%}
+        
+    });
+
+</script>
+<script>
+    function collapse(id) {
+        let content = document.getElementById('content'+id);
+
+        if (content.style.maxHeight){
+        content.style.maxHeight = null;
+        } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+        }
+    }
+
+    function collapseAll() {
+        let contents = document.getElementsByClassName('info');
+
+        for(let content of contents)
+        {
+            content.style.maxHeight = null;
+        }
+    }
+
+    function openAll() {
+        let contents = document.getElementsByClassName('info');
+
+        for(let content of contents)
+        {
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    }
+    
+</script>
+{% endblock javascript %}

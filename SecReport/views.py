@@ -1,23 +1,28 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from .models import Report, Meeting, Event, Bulletin, MemberMatrix, MemberMatrixAttribute, FeedbackQuestion, ReportBulletinMapping, ReportEventMapping, ReportMeetingMapping, Feedback, DuesPaid
-from Auth.models import Club, Account
+from .models import Report, Meeting, Event, Bulletin, MemberMatrix, MemberMatrixAttribute, FeedbackQuestion, ReportBulletinMapping, ReportEventMapping, ReportMeetingMapping, Feedback, DuesPaid, Month, ReportAccess
+from Auth.models import Club, Account, DistrictCouncil
 from datetime import datetime
 import json
 from django.forms.models import model_to_dict
 from Main.models import FAQ
-from django.db import transaction
+from django.db import transaction, OperationalError
+from django.db.models import IntegerField
+from django.db.models.functions import Cast
 import xlwt
 from django.core.mail import send_mail
 from django.conf import settings
 from io import BytesIO
 from django.core.mail import EmailMessage
-from .decorators import is_Club, has_Access
+from .decorators import is_Club, has_Access, is_DSR
 import string
 import random
 import pandas as pd
 from os import walk
+
+class DeadlineMissed(Exception):
+    pass
 
 reportingMonth = str((datetime.now().month)-1) if ((datetime.now().month)-1)>9 else "0"+str((datetime.now().month)-1)
 year = datetime.now().year
@@ -71,6 +76,8 @@ def get_report(request,reportId,club):
     data['ReportId'] = reportId
     data['ReportingMonth'] = report.reportingMonth
     data['DuesPaid'] = report.duesPaidAlready
+    data['month'] = report.month.month
+    data['year'] = report.month.year
 
     # GBM
     gbmData = {}
@@ -348,8 +355,8 @@ def upload_report(request, reportId, data, deletedData, status) :
 
 @login_required
 def save_report(request) :
-
     data = json.loads(request.POST.get('data'))
+    print(data)
     deletedData = json.loads(request.POST.get('deletedData'))
     reportId = data['reportId']
 
@@ -362,7 +369,7 @@ def save_report(request) :
     except Exception as Error :
         print(Error)
         data = {
-            'error' : "The data has not been saved, make sure that the data you filled is emoji-free. DON'T REFRESH. Contact the website coordinators, if required.",
+            'error' : "The data has not been saved, make sure that the data you filled is emoji-free. DON'T REFRESH. Contact the website coordinators, if required.<br><br>",
             'success': False
         }
 
@@ -371,13 +378,15 @@ def save_report(request) :
 @login_required
 @has_Access
 def view_report(request,reportId) :
-    _club = Club.objects.filter(login=request.user).first()
+    
     report = Report.objects.filter(reportId=reportId)
+    _club = report.first().reportingClub
+    print(_club)
 
     if report.exists() :
         data = get_report(request,reportId,_club)
         if report.first().status == '1' :
-            return render(request, 'SecReport/reportView.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'Edit':False})
+            return render(request, 'SecReport/reportView.html',{'Title':'Reporting','Tab':'Reporting','Report':data,'Edit':False,'profile':_club})
         else :
             return redirect('secReport_presentReport')
     else :
@@ -586,7 +595,8 @@ def email_report(request,reportId):
     filename=str(Club)+"-"+str(Month)+".xls"
     message.attach(filename, f.getvalue(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") #get the stream and set the correct mimetype
     message.send()
-    return redirect('main_home')
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponse(status=204)
 
 @login_required
 @has_Access
@@ -927,4 +937,358 @@ def load_reports(request): #July Only
         
     return redirect('auth_login')
 
+# New format
     
+@login_required 
+@is_Club
+def add_month(request) :
+    reports = Report.objects.all()
+    for report in reports :
+        month = Month.objects.filter(month=report.reportingMonth).first()
+        report.month = month
+        print(month)
+        print(report.month)
+        report.save()
+
+@login_required
+@is_Club
+def createMonths(request) :
+    Month(year='2020',month='01').save()
+    Month(year='2020',month='02').save()
+    Month(year='2020',month='03').save()
+    Month(year='2020',month='04').save()
+    Month(year='2020',month='05').save()
+    Month(year='2020',month='06').save()
+    Month(year='2020',month='07').save()
+    Month(year='2020',month='08').save()
+    Month(year='2020',month='09').save()
+    Month(year='2020',month='10').save()
+    Month(year='2020',month='11').save()
+    Month(year='2020',month='12').save()
+
+@login_required
+@is_Club
+def createPermissions(request):
+    clubs = Club.objects.all()
+    months = Month.objects.all()
+    for club in clubs :
+        for month in months :
+            ReportAccess(club=club, month=month).save()
+    return HttpResponseNotFound('Ho gaya bhai')
+
+@login_required
+@has_Access
+def get_report1(request,reportId,club):
+
+    data = dict()
+    report = Report.objects.filter(reportId=reportId).first()
+
+    data = model_to_dict(report)
+
+    data['ReportId'] = reportId
+    data['ReportingMonth'] = report.reportingMonth
+    data['DuesPaid'] = report.duesPaidAlready
+    print(report.duesPaidAlready)
+    data['status'] = report.status
+
+    # GBM
+    gbmData = {}
+    gbmMappings = ReportMeetingMapping.objects.filter(report=reportId).filter( meeting__meetingType = "2").all().order_by('meeting__meetingNo')
+    for gbmMapping in gbmMappings :
+        gbmData[gbmMapping.meeting.meetingId]=model_to_dict(gbmMapping.meeting)
+    data['GBMData'] = gbmData
+
+    # BOD
+    bodData = {}
+    bodMappings = ReportMeetingMapping.objects.filter(report=reportId).filter( meeting__meetingType = "1").all().order_by('meeting__meetingNo')
+    for bodMapping in bodMappings :
+        bodData[bodMapping.meeting.meetingId]=model_to_dict(bodMapping.meeting)
+    data['BODData'] = bodData
+
+    # Matrix
+    attributes = MemberMatrix.objects.filter(reportId=reportId).values('attribute__attribute','attribute__id','attribute__operation','maleCount','femaleCount','othersCount')
+    data['MemberMatrix'] = list(attributes)
+
+    # Event
+    eventData = {}
+    eventMappings = ReportEventMapping.objects.filter(report=reportId).filter( event__eventType = "1").all().order_by('event__eventStartDate')
+    for eventMapping in eventMappings :
+        eventData[eventMapping.event.eventId]=model_to_dict(eventMapping.event)
+    data['EventData'] = eventData
+
+    # Bulletin
+    bulletinMapping = ReportBulletinMapping.objects.filter(report=report).first()
+    bulletin = model_to_dict(bulletinMapping.bulletin)
+    data['Bulletin'] = bulletin
+
+    # Future Event
+    feventData = {}
+    feventMappings = ReportEventMapping.objects.filter(report=reportId).filter( event__eventType = "2").all().order_by('event__eventStartDate')
+    for feventMapping in feventMappings :
+        feventData[feventMapping.event.eventId]=model_to_dict(feventMapping.event)
+    data['FEventData'] = feventData
+
+    # Feedback
+    feedback = Feedback.objects.filter(reportId=reportId).values('feedbackQuestion__questionText','feedbackQuestion__id','booleanResponse')
+    data['Questions'] = list(feedback)
+
+    return data
+
+@login_required
+@is_Club
+def present_report1(request) :
+    FAQs = FAQ.objects.all()
+    club = Club.objects.filter(login=request.user).first()
+    months = ReportAccess.objects.filter(club=club).filter(view=True).order_by('month__year','month__month').values('month__id','month__month','month__year','edit').all()
+    return render(request, 'SecReport/secReport.html',{'Title':'Reporting','Tab':'Reporting','Months':months,'profile':club,'FAQs':FAQs})
+
+@login_required
+@is_Club
+def fetch_reports(request) :
+    club = Club.objects.filter(login=request.user).first()
+    months = ReportAccess.objects.filter(club=club).filter(view=True).order_by('month__year','month__month').values('month__id','month__month','month__year','edit').all()
+    
+    response = {'success':True}
+    months_dictx = {}
+
+    for month in months :
+        months_dictx[month['month__id']] = {}
+        monthObject = Month.objects.filter(id=month['month__id']).first()
+        _reportId = str(month['month__month'])+"-"+str(month['month__year'])+"-"+str(request.user.username)
+
+        report = Report.objects.filter(reportId=_reportId)
+        if report.exists() :
+            months_dictx[month['month__id']] = get_report1(request, _reportId, club)
+            print("Report exists")
+        else :
+            try :
+                with transaction.atomic() :
+
+                    newReport = Report(reportId=_reportId, month=monthObject, reportingClub=club, status = 0)
+                    newReport.save()
+
+                    salt = ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k = 4))
+                    bulletinId = "B-"+reportingMonth+"-"+salt
+                    newBulletin = Bulletin(bulletinId=bulletinId,hostClub = club)
+                    newBulletin.save()
+                    newBulletinMap = ReportBulletinMapping(report=newReport,bulletin=newBulletin)
+                    newBulletinMap.save()
+
+                    attributes = MemberMatrixAttribute.objects.all()
+                    for attribute in attributes :
+                        newMatrixRow = MemberMatrix(reportId = newReport, attribute=attribute)
+                        newMatrixRow.save()
+
+                    questions = FeedbackQuestion.objects.all()
+                    for question in questions :
+                        newFeedback = Feedback(reportId = newReport, feedbackQuestion=question)
+                        newFeedback.save()
+
+                    duesPaid = DuesPaid.objects.get(club=club)
+                    duesPaidAlreadyVar = duesPaid.dues
+                    Report.objects.filter(reportId=_reportId).update(duesPaidAlready=duesPaidAlreadyVar)
+
+                months_dictx[month['month__id']] = get_report1(request, _reportId, club)
+                print("Report created")
+
+
+            except Exception as e :
+                print(e)
+                response = {'success':False}
+
+    response['data'] = months_dictx
+            
+    
+    return JsonResponse(response)
+
+@login_required
+def save_report1(request) :
+
+    data = json.loads(request.POST.get('data'))
+    deletedData = json.loads(request.POST.get('deletedData'))
+    reportId = request.POST.get('reportId')
+    report = Report.objects.filter(reportId=reportId).first()
+    club = Club.objects.filter(login=request.user).first()
+
+    try :
+        permission = ReportAccess.objects.filter(club=club).filter(month=report.month).first()
+        if permission.edit :
+            upload_report(request, reportId, data, deletedData, 0)
+            data = {
+                'success': True
+            }
+        else :
+            raise DeadlineMissed
+        
+    except DeadlineMissed as Error :
+        print(Error)
+        print(type(Error).__name__)
+        data = {
+            'error' : "You missed the deadline. <br>Contact District Reporting Secretary, if required.<br><br>",
+            'success': False
+        }
+
+    except OperationalError as Error :
+        print(Error)
+        print(type(Error).__name__)
+        data = {
+            'error' : "The data has not been saved, make sure that the data you filled is emoji-free. DON'T REFRESH.<br>Contact the website coordinators, if required.<br><br>",
+            'success': False
+        }
+
+    except Exception as Error :
+        print(Error)
+        print(type(Error).__name__)
+        data = {
+            'error' : "The data has not been saved. Do not refresh the browser.<br>Contact the website coordinators, if required.<br><br>",
+            'success': False
+        }
+
+    return JsonResponse(data)
+
+@login_required
+def finish_report1(request) :
+
+    reportId = request.POST.get('reportId')
+    report = Report.objects.filter(reportId=reportId).first()
+
+    try :
+        report = Report.objects.filter(reportId=reportId)
+        report.update(status="2")
+        
+        data = {
+            'success':True
+        }
+    except Exception as Error :
+        print(Error)
+        print(type(Error).__name__)
+        data = {
+            'error' : "An error has occurred. <br>Contact the website coordinators, if required.<br><br>",
+            'success': False
+        }
+
+    return JsonResponse(data)
+
+@login_required
+def edit_report1(request) :
+
+    reportId = request.POST.get('reportId')
+    report = Report.objects.filter(reportId=reportId).first()
+
+    try :
+        report = Report.objects.filter(reportId=reportId)
+        report.update(status="0")
+        
+        data = {
+            'success':True
+        }
+        
+    except Exception as Error :
+        print(Error)
+        print(type(Error).__name__)
+        data = {
+            'error' : "An error has occurred. <br>Contact the website coordinators, if required.<br><br>",
+            'success': False
+        }
+
+    return JsonResponse(data)
+
+@login_required
+def submit_report1(request) :
+
+    reportId = request.POST.get('reportId')
+    report = Report.objects.filter(reportId=reportId).first()
+
+    try :
+
+        club = Club.objects.filter(login=request.user).first()
+
+        with transaction.atomic() :
+            report = Report.objects.filter(reportId=reportId)
+            report.update(status="1")
+            totalDues = DuesPaid.objects.get(club=club).dues
+            duesPaidInThisMonth = report.first().duesPaidInThisMonth
+            duesPaidAlready = report.first().duesPaidAlready
+            totalDues = (0 if duesPaidAlready=='' else int(duesPaidAlready)) + (0 if duesPaidInThisMonth=='' else int(duesPaidInThisMonth))
+            DuesPaid.objects.filter(club=club).update(dues=totalDues)
+
+
+        data = {
+            'success':True
+        }
+
+    except Exception as Error :
+        print(Error)
+        print(type(Error).__name__)
+        data = {
+            'error' : "An error has occurred. <br>Contact the website coordinators, if required.<br><br>",
+            'success': False
+        }
+
+    return JsonResponse(data)
+
+
+@login_required
+@is_DSR
+def manageAccess(request) :
+    dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
+    dRole = dRole.districtRole.distRoleId if dRole!=None else None
+    months = Month.objects.order_by('year','month').all()
+    return render(request,'SecReport/admin_manageAccess.html',{'Months':months,'Title':'Manage Access','Tab':'s_access','DRole':dRole})
+
+@login_required
+@is_DSR
+def getPermissions(request) :
+    
+    response = {}
+
+    try :
+        months = Month.objects.order_by('year','month').all()
+        permissions = dict()
+        for month in months :
+            row = ReportAccess.objects.filter(month=month).values('id','month__id','club__clubName','edit','view')
+            permissions[month.id] = list(row)
+        
+        response['success'] = True
+        response['data'] = permissions
+
+    except Exception as e :
+        print(e)
+        response['success'] = False
+        response['data'] = None
+
+    return JsonResponse(response)
+
+@login_required
+@is_DSR
+def changePermission(request):
+    data = json.loads(request.POST.get('data'))
+    try :
+        if data['permissionId']=='all' :
+            permission = ReportAccess.objects.filter(month__id=data['monthId']).update(view=data['view'],edit=data['edit'])
+        else :
+            permission = ReportAccess.objects.filter(id=data['permissionId']).update(view=data['view'],edit=data['edit'])
+        data = {
+            'success': True
+        }
+
+    except Exception as e :
+        print(e)
+        data = {
+            'success': False
+        }
+
+    return JsonResponse(data)
+
+@login_required
+@is_DSR
+def responses(request) :
+    dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
+    dRole = dRole.districtRole.distRoleId if dRole!=None else None
+    months = Month.objects.order_by('year','month').all()
+    reports = dict()
+    for month in months :
+        reports[month.id] = list(Report.objects.filter(month=month).annotate(intStatus=Cast('status', IntegerField())).order_by('-intStatus').values('status','reportId','reportingClub__clubName','reportingClub__clubLogo','duesPaidInThisMonth','suggestions'))
+        
+    return render(request,'SecReport/admin_responses.html',{'Months':months,'Title':'Reports','Tab':'s_responses','DRole':dRole,'Reports':reports})
