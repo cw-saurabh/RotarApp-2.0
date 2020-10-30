@@ -1,0 +1,80 @@
+@media screen and (max-width: 1000px) {
+    
+    .container {
+        width:80% !important;
+    }
+    
+    #aboutUs {
+        h1 {
+            font-size : 2.5rem;
+        }
+        .section-image {
+            max-width:15rem;
+            max-height:20rem;
+            margin: 1.5rem auto;
+        }
+        .section-text {
+            text-align: center;
+        }
+        .card {
+            max-width:18rem;
+        }
+    }
+    #council {
+
+        .section-image {
+            height:16rem;
+            width:13rem;
+            border-radius: 5% !important;
+        }
+
+        .card {
+            margin-left:-5rem;
+            min-height:22rem;
+            min-width: 15rem;
+            z-index:-999;
+            width:80%;
+            height:100%;
+            border-radius: 5% !important;
+    
+            
+            h1, h2, h3, h4, h5, h6 {
+                font-weight: bold;
+                font-family: 'Poppins';
+                letter-spacing: 1px;
+            }
+    
+        }
+    
+        h1 {
+            font-family: 'Sofia';
+        }
+        
+        .carousel {
+            max-height:20rem;
+            padding:5%;
+            max-width:20rem;
+            margin:auto;
+        }
+
+        .carousel-item {
+            margin:0 auto;
+            img
+            {
+            border-radius: 10%;
+            max-height:18rem;
+            max-width:15rem;
+            }
+        }
+    }
+    
+    .footer-copyright {
+        text-align: center;
+
+        i {
+            float : none;
+            margin : 5%  1%;
+        }
+    }
+
+}

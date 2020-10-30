@@ -1,0 +1,175 @@
+body {
+    display: flex !important;
+    min-height: 100vh !important;
+    flex-direction: column !important;
+    scroll-behavior: smooth;
+}
+
+body,p,a {
+    font-family: 'Poppins';
+    letter-spacing: 1px;
+}
+
+p {
+    text-align:justify;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Anton';
+    letter-spacing: 2.5px;
+}
+
+main {
+flex: 1 0 auto !important;
+}
+    
+.flex {
+    display: flex;
+    /* flex-wrap: wrap; */
+}
+
+.border {
+    border:solid !important;
+}
+
+.container {
+    width:90%;
+}
+
+.almost-full-screen {
+    min-height:90vh;
+}
+
+#aboutUs {
+    .section-image {
+        max-width:15rem;
+        max-height:20rem;
+        margin:auto;
+    }
+    .section-text {
+        text-align: justify;
+        font-family: 'Poppins' !important;
+    }
+    .card {
+        font-family: 'Poppins';
+        max-width:18rem;
+        min-height:15rem;
+        padding:2%;
+        margin-left:auto;
+        margin-right:auto;
+
+        hr {
+            border:solid white 1px;
+            background-color:white;
+            width:80%;
+            margin-top:8%;
+            margin-bottom:2%;
+        }
+
+        .card-number {
+            font-family: 'Poppins'; 
+            letter-spacing: 1px;
+            font-weight: bold;
+            font-size: 3.5rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins';
+            letter-spacing: 1px;
+        }
+
+    }
+
+}
+
+#council {
+
+    .header {
+        h1 {
+            font-size : 4rem;
+        }
+        hr {
+            border-width:1px;
+            width:90%;
+        }
+    }
+
+    .drr-section {
+        .col{
+            padding:5% !important;
+        }
+        .card-content {
+            margin-left:6rem;
+            margin-right:1rem;
+        }
+    }   
+
+    .section-image {
+        height:16rem;
+        width:13rem;
+        border-radius: 5% !important;
+    }
+
+    .card {
+        background-color: #D41367;
+        margin-left:-5rem;
+        min-height:22rem;
+        min-width: 22rem;
+        z-index:-999;
+        width:80%;
+        height:100%;
+        border-radius: 5% !important;
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: bold;
+            font-family: 'Poppins';
+            letter-spacing: 1px;
+        }
+
+    }
+    
+    .divider-section {
+        height:8vh;
+        padding:1%;
+    }
+    
+    h1 {
+        font-family: 'Sofia';
+    }
+
+    .carousel {
+        max-height:20rem;
+    }
+    
+    .carousel-item {
+        margin:0 auto;
+    
+        img {
+            border-radius: 10%;
+        }
+    }
+
+    .profile-card {
+        width:50% !important;
+        margin:auto;
+        text-align: center;
+
+        .post {
+            color : #D41367;
+        }
+        
+        .name {
+            color : #337ab7;
+        }
+    }
+}
+
+.footer-copyright {    
+    font-size : 1rem;
+
+    i {
+        float : right;
+        margin-left : 1%;
+        margin-right : 1%;
+    }
+}

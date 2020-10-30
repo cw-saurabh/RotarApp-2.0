@@ -753,7 +753,6 @@ def export_report(request,reportId):
         return response
 
 @login_required
-@has_Access
 def load_reports(request): #July Only
     print("Hii")
     f = []

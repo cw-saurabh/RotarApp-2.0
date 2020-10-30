@@ -21,3 +21,10 @@ for row, index in df.iterrows() :
 df.drop('rc',axis=1,inplace=True)
 
 df.to_csv('credentials.csv',index=False) 
+
+
+# Query
+# SELECT sum(FemaleCount) AS Number 
+# FROM SecReport_membermatrix 
+# JOIN SecReport_report ON SecReport_membermatrix.reportId_id = SecReport_report.reportId
+# WHERE SecReport_membermatrix.attribute_id=4 and SecReport_report.month_id=9;

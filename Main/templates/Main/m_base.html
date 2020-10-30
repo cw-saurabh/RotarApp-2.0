@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rotaract</title>
+        <link rel="icon" href="{% static 'Main/images/district_logo.png' %}" type="image/icon type">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+        
+        <link rel="stylesheet" href="{% static 'Main/css/m_pages-d.css' %}">
+        <link rel="stylesheet" href="{% static 'Main/css/m_pages-m.css' %}">
+    </head>
+    <main>
+        <body>
+            {% include "Main/m_navbar.html" %}
+            {% block content %}{% endblock %}
+        </body>
+    </main>
+    {% if not Title %}
+    {% include "Main/m_footer.html" %}
+    {% endif %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+        $('.slider').slider(
+            {
+                'height':700
+            });
+        // $('.carousel').carousel(
+        //     {
+        //         'fullWidth':false
+        //     }
+        // );
+        // var instance = M.Carousel.getInstance($('.carousel'));
+        
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+            var options = {
+                "onCycleTo" : function() {
+                    console.log(this.el.id);
+                },
+                'noWrap' :true,
+            };
+            var elems = document.querySelectorAll('.carousel');
+            var instances = M.Carousel.init(elems, options);
+            for(let instance of instances) {
+                instance.next(2);
+            }
+    });
+    </script>
+
+    {% block javascript %}{% endblock %}
+
+</html>
