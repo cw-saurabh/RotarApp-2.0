@@ -40,6 +40,31 @@ main {
   min-height: 90vh;
 }
 
+.img-logo {
+  margin: 0.8rem;
+  height: 2.5rem;
+  width: inherit;
+  background-image: none;
+}
+
+nav, .nav-wrapper, .nav-wrapper a {
+  height: 3.8rem;
+}
+
+.nav-wrapper a:hover {
+  background-color: white !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+.nav-wrapper a.active {
+  background-color: white !important;
+  color: #D41367 !important;
+  font-size: 1.1rem !important;
+  font-weight: bold !important;
+  border-bottom: solid 4px #D41367;
+}
+
 #aboutUs .section-image {
   max-width: 15rem;
   max-height: 20rem;
@@ -93,18 +118,7 @@ main {
   padding: 5% !important;
 }
 
-#council .drr-section .card-content {
-  margin-left: 6rem;
-  margin-right: 1rem;
-}
-
-#council .section-image {
-  height: 16rem;
-  width: 13rem;
-  border-radius: 5% !important;
-}
-
-#council .card {
+#council .drr-section .card {
   background-color: #D41367;
   margin-left: -5rem;
   min-height: 22rem;
@@ -115,10 +129,21 @@ main {
   border-radius: 5% !important;
 }
 
-#council .card h1, #council .card h2, #council .card h3, #council .card h4, #council .card h5, #council .card h6 {
+#council .drr-section .card h1, #council .drr-section .card h2, #council .drr-section .card h3, #council .drr-section .card h4, #council .drr-section .card h5, #council .drr-section .card h6 {
   font-weight: bold;
   font-family: 'Poppins';
   letter-spacing: 1px;
+}
+
+#council .drr-section .card-content {
+  margin-left: 6rem;
+  margin-right: 1rem;
+}
+
+#council .section-image {
+  height: 16rem;
+  width: 13rem;
+  border-radius: 5% !important;
 }
 
 #council .divider-section {
@@ -148,11 +173,11 @@ main {
   text-align: center;
 }
 
-#council .profile-card .post {
+#council .post {
   color: #D41367;
 }
 
-#council .profile-card .name {
+#council .name {
   color: #337ab7;
 }
 

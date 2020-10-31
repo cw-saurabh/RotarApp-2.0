@@ -56,11 +56,22 @@
             var elems = document.querySelectorAll('.carousel');
             var instances = M.Carousel.init(elems, options);
             for(let instance of instances) {
-                instance.next(2);
+                var mq = window.matchMedia( "(min-width: 1000px)" );
+                if (mq.matches) {
+                    instance.next(3);
+                }
+                
             }
     });
     </script>
-
+    <script>
+        $(document).ready(function() {
+            $("a").removeClass("active");
+            $("#desktop-{{Tab}}").addClass("active");
+            $("#mobile-{{Tab}}").addClass("active");
+            
+        });
+      </script>
     {% block javascript %}{% endblock %}
 
 </html>

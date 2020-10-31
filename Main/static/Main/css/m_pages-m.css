@@ -2,6 +2,15 @@
   .container {
     width: 80% !important;
   }
+  .sidenav-trigger {
+    margin-left: 0.01rem !important;
+  }
+  .sidenav a.active {
+    color: white !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    background-color: #D41367 !important;
+  }
   #aboutUs h1 {
     font-size: 2.5rem;
   }
@@ -16,27 +25,28 @@
   #aboutUs .card {
     max-width: 18rem;
   }
+  #council h1, #council h2, #council h3, #council h4, #council h5, #council h6 {
+    font-family: 'Poppins';
+  }
+  #council .header h1 {
+    font-size: 2.5rem;
+    font-family: 'Sofia';
+  }
   #council .section-image {
     height: 16rem;
     width: 13rem;
     border-radius: 5% !important;
   }
-  #council .card {
-    margin-left: -5rem;
-    min-height: 22rem;
-    min-width: 15rem;
-    z-index: -999;
-    width: 80%;
-    height: 100%;
+  #council .mobile-profile .card {
+    width: 80% !important;
+    margin: auto;
+    border-radius: 5%;
+    margin-top: 2rem;
+  }
+  #council .mobile-profile .section-image {
+    height: 16rem;
+    width: 100%;
     border-radius: 5% !important;
-  }
-  #council .card h1, #council .card h2, #council .card h3, #council .card h4, #council .card h5, #council .card h6 {
-    font-weight: bold;
-    font-family: 'Poppins';
-    letter-spacing: 1px;
-  }
-  #council h1 {
-    font-family: 'Sofia';
   }
   #council .carousel {
     max-height: 20rem;
@@ -49,8 +59,12 @@
   }
   #council .carousel-item img {
     border-radius: 10%;
-    max-height: 18rem;
-    max-width: 15rem;
+    max-height: 13rem;
+    max-width: 13rem;
+  }
+  #council .profile-card {
+    width: 70% !important;
+    margin-bottom: 5rem;
   }
   .footer-copyright {
     text-align: center;

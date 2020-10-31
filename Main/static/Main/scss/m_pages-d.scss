@@ -40,6 +40,33 @@ flex: 1 0 auto !important;
     min-height:90vh;
 }
 
+.img-logo {
+    margin : 0.8rem;
+    height: 2.5rem;
+    width: inherit;
+    background-image: none;
+}
+
+nav, .nav-wrapper, .nav-wrapper a {
+    height: 3.8rem;
+}
+
+
+.nav-wrapper {
+    a:hover {
+        background-color: white !important;
+        color : black !important;
+        font-weight: bold !important;
+    }
+    a.active {
+        background-color: white !important;
+        color : #D41367 !important;
+        font-size: 1.1rem !important;
+        font-weight: bold !important;
+        border-bottom: solid 4px #D41367;
+    }
+}
+
 #aboutUs {
     .section-image {
         max-width:15rem;
@@ -98,6 +125,24 @@ flex: 1 0 auto !important;
         .col{
             padding:5% !important;
         }
+        .card {
+            background-color: #D41367;
+            margin-left:-5rem;
+            min-height:22rem;
+            min-width: 22rem;
+            z-index:-999;
+            width:80%;
+            height:100%;
+            border-radius: 5% !important;
+    
+            h1, h2, h3, h4, h5, h6 {
+                font-weight: bold;
+                font-family: 'Poppins';
+                letter-spacing: 1px;
+            }
+    
+        }
+        
         .card-content {
             margin-left:6rem;
             margin-right:1rem;
@@ -110,24 +155,6 @@ flex: 1 0 auto !important;
         border-radius: 5% !important;
     }
 
-    .card {
-        background-color: #D41367;
-        margin-left:-5rem;
-        min-height:22rem;
-        min-width: 22rem;
-        z-index:-999;
-        width:80%;
-        height:100%;
-        border-radius: 5% !important;
-
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: bold;
-            font-family: 'Poppins';
-            letter-spacing: 1px;
-        }
-
-    }
-    
     .divider-section {
         height:8vh;
         padding:1%;
@@ -153,14 +180,13 @@ flex: 1 0 auto !important;
         width:50% !important;
         margin:auto;
         text-align: center;
-
-        .post {
-            color : #D41367;
-        }
-        
-        .name {
-            color : #337ab7;
-        }
+    }
+    .post {
+        color : #D41367;
+    }
+    
+    .name {
+        color : #337ab7;
     }
 }
 

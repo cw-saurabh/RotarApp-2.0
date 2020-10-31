@@ -4,6 +4,19 @@
         width:80% !important;
     }
     
+    .sidenav-trigger {
+        margin-left:0.01rem !important;
+    }
+
+    .sidenav {
+        a.active {
+            color : white !important;
+            font-size: 1.1rem !important;
+            font-weight: bold !important;
+            background-color: #D41367 !important;
+        }
+    }
+
     #aboutUs {
         h1 {
             font-size : 2.5rem;
@@ -21,35 +34,38 @@
         }
     }
     #council {
-
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins';
+        }
+        .header {
+            h1 {
+                font-size :2.5rem; 
+                font-family: 'Sofia';
+            }
+        }
+        
         .section-image {
             height:16rem;
             width:13rem;
             border-radius: 5% !important;
         }
 
-        .card {
-            margin-left:-5rem;
-            min-height:22rem;
-            min-width: 15rem;
-            z-index:-999;
-            width:80%;
-            height:100%;
-            border-radius: 5% !important;
-    
-            
-            h1, h2, h3, h4, h5, h6 {
-                font-weight: bold;
-                font-family: 'Poppins';
-                letter-spacing: 1px;
+        .mobile-profile {
+            .card {
+                width:80% !important;
+                margin:auto;
+                border-radius : 5%;
+                margin-top : 2rem;
             }
-    
+            .section-image {
+                height:16rem;
+                width:100%;
+                border-radius: 5% !important;
+            }
+            
         }
-    
-        h1 {
-            font-family: 'Sofia';
-        }
-        
+
         .carousel {
             max-height:20rem;
             padding:5%;
@@ -62,9 +78,14 @@
             img
             {
             border-radius: 10%;
-            max-height:18rem;
-            max-width:15rem;
+            max-height:13rem;
+            max-width:13rem;
             }
+        }
+
+        .profile-card {
+            width:70% !important;
+            margin-bottom:5rem;
         }
     }
     

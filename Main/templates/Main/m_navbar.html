@@ -1,47 +1,19 @@
 {% load static %}
-
-<style>    
-
-.img-logo {
-    margin : 0.8rem;
-    height: 2.5rem;
-    width: inherit;
-    background-image: none;
-}
-
-nav, .nav-wrapper {
-    height: 3.8rem;
-}
-
-/* 
-.btn {
-  border-radius: 4rem 4rem;
-  padding: 0 2rem;
-  width: 80%;
-  background-color: #c2185b;
-  color: white !important;
-} */
-
-.btn {
-    margin:5%;
-    border-radius: 4rem 4rem;
-    background-color: white;
-    border:black solid 1    px;
-    color: black !important;
-}
-
+<style>
+    nav, .nav-wrapper, .nav-wrapper a {
+    height: 3.8rem !important;
+    }
 
 </style>
 <ul class="sidenav" id="mobile-demo">
-    <li><a href="{% url 'main_home1' %}">HOME</a></li>
-    <li><a href="#">COUNCIL</a></li>
-    <li><a href="#">EVENTS</a></li>
-    <li>
-      <a href="#" class="waves-effect waves-light btn">LOGIN</a>
-    </li>
+    <li><a href="{% url 'main_home1' %}" id="mobile-home" class="black-text">HOME</a></li>
+    <li><a href="{% url 'main_aboutUs' %}" id="mobile-aboutUs" class="black-text">ABOUT US</a></li>
+    <li><a href="{% url 'main_council' %}" id="mobile-council" class="black-text">COUNCIL</a></li>
+    <li><a href="#" class="black-text">WHAT WE DO</a></li>
+    <li><a href="#" class="black-text">LOGIN</a></li>
 </ul>
 <div class="navbar-fixed">
-    <nav class="nav-wrapper white  z-depth-3">
+    <nav class="nav-wrapper white z-depth-3">
         <div class="container white" style="min-width:90%;">
         <a href="{% url 'main_home1' %}" class="brand-logo">
             <img src="{% static 'Main/images/Rotaract Logo-min.png' %}" alt="District 3131 - Rotaract" class="img-logo"/>
@@ -50,13 +22,11 @@ nav, .nav-wrapper {
             <i class="medium material-icons">menu</i>
         </a>
         <ul class="right hide-on-med-and-down">
-            <li><a href="{% url 'main_home1' %}" class="black-text">HOME</a></li>
-            <li><a href="{% url 'main_aboutUs' %}" class="black-text">ABOUT US</a></li>
-            <li><a href="{% url 'main_council' %}" class="black-text">COUNCIL</a></li>
+            <li><a href="{% url 'main_home1' %}" id="desktop-home" class="black-text">HOME</a></li>
+            <li><a href="{% url 'main_aboutUs' %}" id="desktop-aboutUs" class="black-text">ABOUT US</a></li>
+            <li><a href="{% url 'main_council' %}" id="desktop-council" class="black-text">COUNCIL</a></li>
             <li><a href="#" class="black-text">WHAT WE DO</a></li>
-            <li>
-            <a href="#" class="waves-effect waves-light btn">LOGIN</a>
-            </li>
+            <li><a href="#" class="black-text">LOGIN</a></li>
         </ul>
     </nav>
 </div>

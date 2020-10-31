@@ -16,18 +16,18 @@ def home1(request):
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    return render(request, 'Main/m_home.html')
+    return render(request, 'Main/m_home.html',{'Tab':'home'})
 
 def aboutUs(request):
     dRole = None
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    return render(request, 'Main/m_aboutUs.html')
+    return render(request, 'Main/m_aboutUs.html',{'Tab':'aboutUs'})
 
 def council(request):
     dRole = None
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    return render(request, 'Main/m_council.html')
+    return render(request, 'Main/m_council.html',{'Tab':'council'})
