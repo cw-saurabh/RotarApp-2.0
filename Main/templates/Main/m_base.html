@@ -46,28 +46,471 @@
         // var instance = M.Carousel.getInstance($('.carousel'));
         
     });
-    let coreCouncil = {
-        0 : {
-            "Name" : "Rtr. Bhavesh Joshi",
-            "Post" : "Deputy DRR",
-            "Quote" : ""
-        },
-        1 : {
-            "Name" : "Rtr. Ramesh Joshi",
-            "Post" : "DRR",
-            "Quote" : ""
-        },
-        2 : {
-            "Name" : "Rtr. Bhavesh",
-            "Post" : "Deputy DRR",
-            "Quote" : ""
-        },
-        3 : {
-            "Name" : "Rtr. Joshi",
-            "Post" : "Deputy Secretary",
-            "Quote" : ""
-        }
+let coreCouncil = {
+    1 :
+    {
+        "Name" : "Rtr. Akash Chikate",
+        "Post" : "District General Secretary",
+        "Img" :"",
+        "Quote" : " "
+    },
+    6 :
+    {
+        "Name" : "Rtr. Pranav Tukshetti",
+        "Post" : "District Treasurer",
+        "Img" :"",
+        "Quote" : " "
+    },
+    0 :
+    {
+        "Name" : "Rtr. Dwijesh Nashikkar",
+        "Post" : "District Secretary - Events & Protocols",
+        "Img" :"",
+        "Quote" : " "
+    },
+    2 :
+    {
+        "Name" : "Rtr. Shivam Pawaragi",
+        "Post" : "District Secretary - Administration",
+        "Img" :"",
+        "Quote" : " "
+    },
+    5 :
+    {
+        "Name" : "Rtr. Sayali Dudhane",
+        "Post" : "District Secretary - RI Reporting",
+        "Img" :"",
+        "Quote" : " "
+    },
+    4 :
+    {
+        "Name" : "Rtr. Prasad Seth",
+        "Post" : "District Secretary - Reporting",
+        "Img" :"",
+        "Quote" : " "
+    },
+    3 :
+    {
+        "Name" : "Rtr. Umang Shah",
+        "Post" : "District Club Advisor",
+        "Img" :"",
+        "Quote" : " "
+    },
+    7 : 
+    {
+        "Name" : "Rtr. Akshay More",
+        "Post" : "Immediate Past DRR",
+        "Img" :"",
+        "Quote" : " "
     }
+
+};
+let dzr ={
+    0 :
+    {
+        "Name" : "Rtr. Vikrant Ahire",
+        "Post" : "District Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    3 :
+    {
+        "Name" : "Rtr. Aniruddha Burkule",
+        "Post" : "District Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    5 :
+    {
+        "Name" : "Rtr. Meet Shah",
+        "Post" : "District Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    4 :
+    {
+        "Name" : "Rtr. Tejal Naik",
+        "Post" : "District Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    2 :
+    {
+        "Name" : "Rtr. Lokesh Sharma",
+        "Post" : "District Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    1 :
+    {
+        "Name" : "Rtr. Darpan Jadhav",
+        "Post" : "District Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    }
+};
+
+let azr ={
+    3 :
+    {
+        "Name" : "Rtr. Riya Gupta",
+        "Post" : "Assistant Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    2 :
+    {
+        "Name" : "Rtr. Bhavna Mirpuri",
+        "Post" : "Assistant Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    5 :
+    {
+        "Name" : "Rtr. Aditya Panchal",
+        "Post" : "Assistant Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    1 :
+    {
+        "Name" : "Rtr. Mriti Agarwal",
+        "Post" : "Assistant Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    4 :
+    {
+        "Name" : "Rtr. Kedar Mitkari",
+        "Post" : "Assistant Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    0 :
+    {
+        "Name" : "Rtr. Sanskruti More",
+        "Post" : "Assistant Zonal Representative",
+        "Img" :"",
+        "Quote" : " "
+    }
+
+ };
+ let cops ={
+    0 :
+    {
+        "Name" : "Rtr. Prem Oswal",
+        "Post" : "Cops President",
+        "Img" :"",
+        "Quote" : " "
+    },
+    1 :
+    {
+        "Name" : "Rtr. Mayuri Chavan",
+        "Post" : "Cops Secretary",
+        "Img" :"",
+        "Quote" : " "
+    }
+ };
+ let ad={
+    0 :
+    {
+        "Name" : "Rtr. Vaishnavi Kalbhor",
+        "Post" : "District Director - Professional Development",
+        "Img" :"",
+        "Quote" : " "
+    },
+    1 :
+    {
+        "Name" : "Rtr. Piyush Jangle",
+        "Post" : "District Director - Club Service",
+        "Img" :"",
+        "Quote" : " "
+    },
+    2 :
+    {
+        "Name" : "Rtr. Pratyush Das",
+        "Post" : "District Joint Director - Club Service",
+        "Img" :"",
+        "Quote" : " "
+    },
+    3 :
+    {
+        "Name" : "Rtr. Sattyajeet Karale Patil",
+        "Post" : "District Director - Community Service",
+        "Img" :"",
+        "Quote" : " "
+    },
+    4 :
+    {
+        "Name" : "Rtr. Pooja Tambe",
+        "Post" : "District Joint Director - Community Service",
+        "Img" :"",
+        "Quote" : " "
+    },
+    5 :
+    {
+        "Name" : "Rtr. Rhugwed Kandpile",
+        "Post" : "District Director - International Service",
+        "Img" :"",
+        "Quote" : " "
+    },
+    6 :
+    {
+        "Name" : "Rtr. Tulna Gupta",
+        "Post" : "District Joint Director - International Service",
+        "Img" :"",
+        "Quote" : " "
+    },
+    7 :
+    {
+        "Name" : "Rtr. Vijay Chavan",
+        "Post" : "Dsitrict Director - Membership Development",
+        "Img" :"",
+        "Quote" : " "
+    },
+    8 :
+    {
+        "Name" : "Rtr. Harshal Solankar",
+        "Post" : "District Sports Head",
+        "Img" :"",
+        "Quote" : " "
+    },
+    9 :
+    {
+        "Name" : "Rtr. Rishikesh Borse",
+        "Post" : "District Snapper",
+        "Img" :"",
+        "Quote" : " "
+    },
+    10 :
+    {
+        "Name" : "Rtr. Purab Oswal",
+        "Post" : "District Director - Public Image",
+        "Img" :"",
+        "Quote" : " "
+    },
+    11 :
+    {
+        "Name" : "Rtr. Rochak Singla",
+        "Post" : "District Director - Finances",
+        "Img" :"",
+        "Quote" : " "
+    },
+    12 :
+    {
+        "Name" : "Rtr. Nishant Yadav",
+        "Post" : "District Seargeant At Arms",
+        "Img" :"",
+        "Quote" : " "
+    },
+    13 :
+    {
+        "Name" : "Rtr. Karishma Awari",
+        "Post" : "District Officer - Rotary Rotaract Relations",
+        "Img" :"",
+        "Quote" : " "
+    },
+    14 :
+    {
+        "Name" : "Rtr. Punithjoline Mane",
+        "Post" : "District Women's Representative",
+        "Img" :"",
+        "Quote" : " "
+    },
+    15 :
+    {
+        "Name" : "Rtr. Kedar Basatwar",
+        "Post" : "District Director - Communication(Whatsapp)",
+        "Img" :"",
+        "Quote" : " "
+    },
+    16 :
+    {
+        "Name" : "Rtr. Jamila Vohra",
+        "Post" : "District Rotasia Coordinator",
+        "Img" :"",
+        "Quote" : " "
+    },
+    17 :
+    {
+        "Name" : "Rtr. Lalit Desale",
+        "Post" : "District World Rotaract Week Chairperson",
+        "Img" :"",
+        "Quote" : " "
+    },
+    18 :
+    {
+        "Name" : "Rtr. Sanjana Singh",
+        "Post" : "District E-Ryla Chairperson",
+        "Img" :"",
+        "Quote" : " "
+    },
+    19 :
+    {
+        "Name" : "Rtr. Aniket Salunkhe",
+        "Post" : "Director without Portfolio",
+        "Img" :"",
+        "Quote" : " "
+    }
+ };
+ let misc = {
+    2 :
+    {
+        "Name" : "Rtr. Akash Badade",
+        "Post" : "District Editor",
+        "Img" :"",
+        "Quote" : " "
+    },
+    0 :
+    {
+        "Name" : "Rtr. Amaraja Sathe",
+        "Post" : "District Editor",
+        "Img" :"",
+        "Quote" : " "
+    },
+    1 :
+    {
+        "Name" : "Rtr. B. Akshita",
+        "Post" : "District Editor",
+        "Img" :"",
+        "Quote" : " "
+    },
+    4 :
+    {
+        "Name" : "Rtr. Madhu Pimprikar",
+        "Post" : "District Website Coordinator",
+        "Img" :"",
+        "Quote" : " "
+    },
+    3 :
+    {
+        "Name" : "Rtr. Saurabh Satavalekar",
+        "Post" : "District Website Coordinator",
+        "Img" :"",
+        "Quote" : " "
+    },
+    5 :
+    {
+        "Name" : "Rtr. Prathamesh Patil",
+        "Post" : "District Website Coordinator",
+        "Img" :"",
+        "Quote" : " "
+    },
+    7 :
+    {
+        "Name" : "Rtr. Niharika Chaturvedi",
+        "Post" : "District Public Relations Officer",
+        "Img" :"",
+        "Quote" : " "
+    },
+    6 :
+    {
+        "Name" : "Rtr. Kabir Makhija",
+        "Post" : "District Public Relations Officer",
+        "Img" :"",
+        "Quote" : " "
+    },
+    8 :
+    {
+        "Name" : "Rtr. Vandit Jain",
+        "Post" : "District Public Relations Officer",
+        "Img" :"",
+        "Quote" : " "
+    },
+    11 :
+    {
+        "Name" : "Rtr. D R Shashank",
+        "Post" : "District Professional Assistance Officer",
+        "Img" :"",
+        "Quote" : " "
+    },
+    10 :
+    {
+        "Name" : "Rtr. Chirag Ghadge",
+        "Post" : "District Professional Assistance Officer",
+        "Img" :"",
+        "Quote" : " "
+    },
+    9 :
+    {
+        "Name" : "Rtr. Siddhesh Tilekar",
+        "Post" : "District Professional Assistance Officer",
+        "Img" :"",
+        "Quote" : " "
+    }
+
+ }
+
+let conveners = {
+    0 :
+    {
+        "Name" : "Rtr. Shubham Savale",
+        "Post" : "District Training Presidents & BOD",
+        "Img" :"",
+        "Quote" : " "
+    },
+    1 : {
+        "Name" : "Rtr. Gaurav Borse ",
+        "Post" : "District Sports Meet",
+        "Img" :"",
+        "Quote" : " "
+
+    },
+    2 : {
+
+        "Name" : "Rtr. Amisha Chauhan",
+        "Post" : "District Culturals",
+        "Img" :"",
+        "Quote" : " "
+    },
+    3 : {
+        "Name" : "Rtr. Vidisha Nayak",
+        "Post" : "The Talk",
+        "Img" :"",
+        "Quote" : " "
+    },
+    4 : {
+        "Name" : "Rtr. Ishwari Hade",
+        "Post" : "Abhipray",
+        "Img" :"",
+        "Quote" : " "
+    },
+    5 : {
+        "Name" : "Rtr. Indranil Matapurkar",
+        "Post" : "District Awards Night",
+        "Img" :"",
+        "Quote" : " "
+    },
+    6 : {
+        "Name" : "Rtr. Anilkumar Saini",
+        "Post" : "District Awards Night",
+        "Img" :"",
+        "Quote" : " "
+    },
+    7 : {
+        "Name" : "Rtr. Jeenal Mehta",
+        "Post" : "District Fellowship Meet",
+        "Img" :"",
+        "Quote" : " "
+    },
+    8 : {
+        "Name" : "Rtr. Anindita Mukherjee",
+        "Post" : "District Multi -DFM",
+        "Img" :"",
+        "Quote" : " "
+    },
+    9 : {
+        "Name" : "Rtr. Ajinkya Astekar",
+        "Post" : "District Trek",
+        "Img" :"",
+        "Quote" : " "
+    }
+
+
+    
+}
+
+
     document.addEventListener('DOMContentLoaded', function() {
             var options = {
                 "onCycleTo" : function() {
@@ -79,6 +522,75 @@
             };
             var elems = document.querySelectorAll('#coreCouncilCarousel');
             var instances = M.Carousel.init(elems, options);
+
+            var options = {
+                "onCycleTo" : function() {
+                    $("#dzrPost").html("<b>"+dzr[this.center]["Post"]+"</b>");
+                    $("#dzrName").html("<small>"+dzr[this.center]["Name"]+"</small>");
+                    $("#dzrQuote").html(dzr[this.center]["Quote"]);
+                },
+                'noWrap' :true,
+            };
+            var elems = document.querySelectorAll('#dzrCarousel');
+            var instances = M.Carousel.init(elems, options);
+
+            var options = {
+                "onCycleTo" : function() {
+                    $("#azrPost").html("<b>"+azr[this.center]["Post"]+"</b>");
+                    $("#azrName").html("<small>"+azr[this.center]["Name"]+"</small>");
+                    $("#azrQuote").html(azr[this.center]["Quote"]);
+                },
+                'noWrap' :true,
+            };
+            var elems = document.querySelectorAll('#azrCarousel');
+            var instances = M.Carousel.init(elems, options);
+            
+            var options = {
+                "onCycleTo" : function() {
+                    $("#copsPost").html("<b>"+cops[this.center]["Post"]+"</b>");
+                    $("#copsName").html("<small>"+cops[this.center]["Name"]+"</small>");
+                    $("#copsQuote").html(cops[this.center]["Quote"]);
+                },
+                'noWrap' :true,
+            };
+            var elems = document.querySelectorAll('#copsCarousel');
+            var instances = M.Carousel.init(elems, options);
+            
+
+
+            var options = {
+                "onCycleTo" : function() {
+                    $("#adPost").html("<b>"+ad[this.center]["Post"]+"</b>");
+                    $("#adName").html("<small>"+ad[this.center]["Name"]+"</small>");
+                    $("#adQuote").html(ad[this.center]["Quote"]);
+                },
+                'noWrap' :true,
+            };
+            var elems = document.querySelectorAll('#adCarousel');
+            var instances = M.Carousel.init(elems, options);
+            
+            var options = {
+                "onCycleTo" : function() {
+                    $("#miscPost").html("<b>"+misc[this.center]["Post"]+"</b>");
+                    $("#miscName").html("<small>"+misc[this.center]["Name"]+"</small>");
+                    $("#miscQuote").html(misc[this.center]["Quote"]);
+                },
+                'noWrap' :true,
+            };
+            var elems = document.querySelectorAll('#miscCarousel');
+            var instances = M.Carousel.init(elems, options);
+            
+            var options = {
+                "onCycleTo" : function() {
+                    $("#convenersPost").html("<b>"+conveners[this.center]["Post"]+"</b>");
+                    $("#convenersName").html("<small>"+conveners[this.center]["Name"]+"</small>");
+                    $("#convenersQuote").html(conveners[this.center]["Quote"]);
+                },
+                'noWrap' :true,
+            };
+            var elems = document.querySelectorAll('#convenersCarousel');
+            var instances = M.Carousel.init(elems, options);
+            
             
     });
             // for(let instance of instances) {
