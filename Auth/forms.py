@@ -45,11 +45,12 @@ class LoginForm(AuthenticationForm):
         super(LoginForm, self).__init__(*args, **kwargs)
 
     username = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Username','autocomplete':'off'}))
+        attrs={'id':'','class': 'ifb','autocomplete':'off','placeholder':'Username'}))
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={
-            'class': 'form-control',
-            'placeholder': 'Password'
+            'class': 'ifb',
+            'id' : 'password',
+            'placeholder':'Password'
         }
 ))
 

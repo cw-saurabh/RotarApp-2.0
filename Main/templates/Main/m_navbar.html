@@ -9,8 +9,27 @@
     <li><a href="{% url 'main_home1' %}" id="mobile-home" class="black-text">HOME</a></li>
     <li><a href="{% url 'main_aboutUs' %}" id="mobile-aboutUs" class="black-text">ABOUT US</a></li>
     <li><a href="{% url 'main_council' %}" id="mobile-council" class="black-text">COUNCIL</a></li>
-    <li><a href="#" class="black-text">WHAT WE DO</a></li>
-    <li><a href="#" class="black-text">LOGIN</a></li>
+    <li><a href="{% url 'main_whatWeDo' %}" id="mobile-whatWeDo" class="black-text">WHAT WE DO</a></li>
+    {% if user.is_authenticated %}
+        {% if user.loginType == '0' %}
+            {% if DRole == '4' %}
+            <li><a href="{% url 'distReport_a_getMonth' %}"  target="_blank" id="mobile-Tasks" class="black-text">ADMIN</a></li>
+                <li><a href="{% url 'distReport_a_manageAccess' %}" target="_blank"  id="mobile-Access" class="black-text">ACCESS</a></li>
+            {% elif DRole == '44' %}
+            <li><a href="{% url 'secReport_responses' %}"  target="_blank" id="mobile-s_responses" class="black-text">REPORTS</a></li>
+                <li><a href="{% url 'secReport_manageAccess' %}" target="_blank"  id="mobile-s_access" class="black-text">ACCESS</a></li>
+            {% endif %}
+            {% if DRole != None %}
+            <li><a href="{% url 'distReport_c_index' %}"  target="_blank" id="mobile-Tasks" class="black-text">TASKS</a></li>
+            {% endif %}
+        {% elif user.loginType == '1' %}
+        <li><a href="{% url 'secReport_presentReport1' %}" target="_blank"  id="mobile-Reporting" class="black-text">REPORTING</a></li>
+        {% endif %}
+        <li><a href="{% url 'auth_logout' %}" id="mobile-logout" class="black-text">LOGOUT</a></li>
+        {% else %}
+        <li><a href="{% url 'auth_login' %}" id="mobile-login" class="black-text">LOGIN</a></li>
+        {% endif %}
+    
 </ul>
 <div class="navbar-fixed">
     <nav class="nav-wrapper white z-depth-3">
@@ -25,8 +44,28 @@
             <li><a href="{% url 'main_home1' %}" id="desktop-home" class="black-text">HOME</a></li>
             <li><a href="{% url 'main_aboutUs' %}" id="desktop-aboutUs" class="black-text">ABOUT US</a></li>
             <li><a href="{% url 'main_council' %}" id="desktop-council" class="black-text">COUNCIL</a></li>
-            <li><a href="#" class="black-text">WHAT WE DO</a></li>
-            <li><a href="#" class="black-text">LOGIN</a></li>
+            <li><a href="{% url 'main_whatWeDo' %}" id="desktop-whatWeDo" class="black-text">WHAT WE DO</a></li>
+            {% if user.is_authenticated %}
+            {% if user.loginType == '0' %}
+                {% if DRole == '4' %}
+                <li><a href="{% url 'distReport_a_getMonth' %}"  target="_blank" id="desktop-Tasks" class="black-text">ADMIN</a></li>
+                    <li><a href="{% url 'distReport_a_manageAccess' %}" target="_blank"  id="desktop-Access" class="black-text">ACCESS</a></li>
+                {% elif DRole == '44' %}
+                <li><a href="{% url 'secReport_responses' %}"  target="_blank" id="desktop-s_responses" class="black-text">REPORTS</a></li>
+                    <li><a href="{% url 'secReport_manageAccess' %}" target="_blank"  id="desktop-s_access" class="black-text">ACCESS</a></li>
+                {% endif %}
+                {% if DRole != None %}
+                <li><a href="{% url 'distReport_c_index' %}"  target="_blank" id="desktop-Tasks" class="black-text">TASKS</a></li>
+                {% endif %}
+            {% elif user.loginType == '1' %}
+            <li><a href="{% url 'secReport_presentReport1' %}" target="_blank"  id="desktop-Reporting" class="black-text">REPORTING</a></li>
+            {% endif %}
+            <li><a href="{% url 'auth_logout' %}" id="desktop-logout" class="black-text">LOGOUT</a></li>
+            {% else %}
+            <li><a href="{% url 'auth_login' %}" id="desktop-login" class="black-text">LOGIN</a></li>
+            {% endif %}
+    
         </ul>
     </nav>
 </div>
+      

@@ -46,30 +46,59 @@
         // var instance = M.Carousel.getInstance($('.carousel'));
         
     });
+    let coreCouncil = {
+        0 : {
+            "Name" : "Rtr. Bhavesh Joshi",
+            "Post" : "Deputy DRR",
+            "Quote" : ""
+        },
+        1 : {
+            "Name" : "Rtr. Ramesh Joshi",
+            "Post" : "DRR",
+            "Quote" : ""
+        },
+        2 : {
+            "Name" : "Rtr. Bhavesh",
+            "Post" : "Deputy DRR",
+            "Quote" : ""
+        },
+        3 : {
+            "Name" : "Rtr. Joshi",
+            "Post" : "Deputy Secretary",
+            "Quote" : "Fuck you"
+        }
+    }
     document.addEventListener('DOMContentLoaded', function() {
             var options = {
                 "onCycleTo" : function() {
-                    console.log(this.el.id);
+                    $("#coreCouncilPost").html("<b>"+coreCouncil[this.center]["Post"]+"</b>");
+                    $("#coreCouncilName").html("<small>"+coreCouncil[this.center]["Name"]+"</small>");
+                    $("#coreCouncilQuote").html(coreCouncil[this.center]["Quote"]);
                 },
                 'noWrap' :true,
             };
-            var elems = document.querySelectorAll('.carousel');
+            var elems = document.querySelectorAll('#coreCouncilCarousel');
             var instances = M.Carousel.init(elems, options);
-            for(let instance of instances) {
-                var mq = window.matchMedia( "(min-width: 1000px)" );
-                if (mq.matches) {
-                    instance.next(3);
-                }
-                
-            }
+            
     });
+            // for(let instance of instances) {
+            //     var mq = window.matchMedia( "(min-width: 1000px)" );
+            //     if (mq.matches) {
+            //         instance.next(3);
+            //     }
     </script>
     <script>
         $(document).ready(function() {
             $("a").removeClass("active");
             $("#desktop-{{Tab}}").addClass("active");
             $("#mobile-{{Tab}}").addClass("active");
-            
+            $("div.input-field").click(function (e) {
+            $(this).removeClass("ifb");
+                e.stopPropagation();
+            });
+            $(document).click(function () {
+                // $("div.input-field").addClass("ifb");
+            });
         });
       </script>
     {% block javascript %}{% endblock %}

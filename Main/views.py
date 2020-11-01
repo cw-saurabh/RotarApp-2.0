@@ -16,18 +16,25 @@ def home1(request):
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    return render(request, 'Main/m_home.html',{'Tab':'home'})
+    return render(request, 'Main/m_home.html',{'Tab':'home','DRole':dRole})
 
 def aboutUs(request):
     dRole = None
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    return render(request, 'Main/m_aboutUs.html',{'Tab':'aboutUs'})
+    return render(request, 'Main/m_aboutUs.html',{'Tab':'aboutUs','DRole':dRole})
 
 def council(request):
     dRole = None
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    return render(request, 'Main/m_council.html',{'Tab':'council'})
+    return render(request, 'Main/m_council.html',{'Tab':'council','DRole':dRole})
+
+def whatWeDo(request):
+    dRole = None
+    if request.user.is_authenticated :
+        dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
+        dRole = dRole.districtRole.distRoleId if dRole!=None else None
+    return render(request, 'Main/m_whatWeDo.html',{'Tab':'whatWeDo','DRole':dRole})

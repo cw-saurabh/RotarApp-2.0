@@ -1,0 +1,140 @@
+{% extends "Main/m_base.html" %}
+
+{% load static %}
+{% block content %}
+<style>
+
+.input-field {
+  width:80%;
+  height: 80%;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+.btn {
+  border-radius: 4rem 4rem;
+  padding: 0 2rem;
+  width: 80%;
+  background-color: #c2185b;
+  color: white !important;
+}
+
+.img-container {
+  padding: 0.5rem;
+  margin: 2px;
+  width: 80%;
+}
+
+.ifb {
+  border: 1px solid #9e9e9e !important;
+  border-radius: 4rem 4rem !important;
+  height:3rem;
+  padding-top:1rem;
+  width:100% !important;
+  margin:0 !important;
+}
+
+input {
+  border: none !important;
+}
+
+.input-field {
+  margin: 2rem 0;
+  width : 80%;
+  padding :0 !important;
+}
+
+.input-field label {
+  padding-left : 1rem;
+}
+
+.input-field input[type=text], #password {
+  padding-left : 3%;
+  width:80% !important;
+}
+.input-field input[type=text]:focus, input[type=password]:focus {
+    border:none !important;
+    border-radius: 0% !important; 
+    border-bottom: 1px solid !important;
+
+    box-shadow: 0 0 0 0 #000 !important;
+    padding-left : 3%;
+}
+.error input[type=text],.error#password, .error input[type=password], .error ::placeholder {
+  color :red !important;
+  border-color: red !important;
+}
+@media only screen and (min-width: 993px) {
+  .vertical-line {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    bottom: 20%;
+    border-left: 2px solid rgba(0, 0, 0, 0.4);
+  }
+  form {
+  padding: 3rem 2rem;
+  margin-top: 3rem;
+  height: inherit;
+
+}
+
+}
+
+@media only screen and (max-width: 993px) {
+  .img-container {
+    /* display: none; */
+    height:13rem;
+    width:13rem;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  
+  form {
+    margin-top : 1rem;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    width : 80% !important;
+  }
+  
+
+
+}
+
+</style>
+<div class="row center-align">
+    <div class="col l6 m12 s12">
+      <img src="{% static 'Main/images/login.jpeg' %}" alt="bg-img" class="img-container center-align"/>
+    </div>
+    <div class="col l6 m12 s12 center-align">
+        <form action="{% url 'auth_login' %}" method="POST" class="center-align">
+        {% csrf_token %}
+        {% if form.errors %}
+        <div class="error">
+          <div class="input-field">
+            {{ form.username }}
+          </div>
+          <div class="input-field">
+            {{ form.password }}
+          </div>
+        </div>
+        {% else %}
+        <div class="input-field">
+          {{ form.username }}
+        </div>
+        <div class="input-field">
+          {{ form.password }}
+        </div>
+        {% endif %}
+        <button class="waves-effect waves-light btn white-text" 
+          style="width:70% !important;color: white; ">
+        Log in
+        </button>
+        <br/>
+      </form>
+</div>
+<div class="vertical-line"></div>
+   
+</div>
+
+{% endblock content%}
