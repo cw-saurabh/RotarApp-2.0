@@ -437,11 +437,10 @@ def submit_report(request, reportId) :
 @has_Access
 def email_report(request,reportId):
 
-    emailId = request.user.email
-    print(emailId)
     Report1 = Report.objects.filter(reportId=reportId).all().first()
     Club = Report1.reportingClub.clubName
-    Month = Report1.reportingMonth
+    emailId = Report1.reportingClub.login.email
+    Month = Report1.month.month+'-'+Report1.month.year
 
     wb = xlwt.Workbook(encoding='utf-8')
 
@@ -456,7 +455,7 @@ def email_report(request,reportId):
         ws.write(row_num, col_num, columns[col_num], font_style)
     font_style = xlwt.XFStyle()
     font_style.alignment.wrap = 1
-    rows = Report.objects.filter(reportId=reportId).all().values_list('reportingMonth','reportingDate','duesPaidAlready','duesPaidInThisMonth','suggestions')
+    rows = Report.objects.filter(reportId=reportId).all().values_list('month__month','reportingDate','duesPaidAlready','duesPaidInThisMonth','suggestions')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
@@ -583,10 +582,10 @@ def email_report(request,reportId):
     subject = 'Secretarial Report Received'
     message = 'We have received your report for the previous month. Find a copy of your report that has been attached herewith.<br><br>For any queries, Contact - <br><br>Rtr. Prasad Seth (District Secretary - Reporting)<br>Call : +91 - 9623134392<br>Whatsapp : +91 - 9623134392<br>Mail Id: rtrprasadseth@gmail.com'
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['saurabh.s1999@gmail.com']
+    recipient_list = ['rtrprasadseth@gmail.com']
     recipient_list.append(emailId)
     # send_mail( subject, message, email_from, recipient_list )
-
+    print(recipient_list)
 
     message = EmailMessage(subject=subject, body=message,
         from_email=email_from,
@@ -605,7 +604,7 @@ def export_report(request,reportId):
         response = HttpResponse(content_type='application/ms-excel')
         Report1 = Report.objects.filter(reportId=reportId).all().first()
         Club = Report1.reportingClub.clubName
-        Month = Report1.reportingMonth
+        Month = Report1.month.month+'-'+Report1.month.year
         response['Content-Disposition'] = 'attachment; filename="'+str(Club)+"-"+str(Month)+'.xls"'
         wb = xlwt.Workbook(encoding='utf-8')
         colwidth = int(13*260)
@@ -623,7 +622,7 @@ def export_report(request,reportId):
             ws.write(row_num, col_num, columns[col_num], font_style)
         font_style = xlwt.XFStyle()
         font_style.alignment.wrap = 1
-        rows = Report.objects.filter(reportId=reportId).all().values_list('reportingMonth','reportingDate','duesPaidAlready','duesPaidInThisMonth','suggestions')
+        rows = Report.objects.filter(reportId=reportId).all().values_list('month__month','reportingDate','duesPaidAlready','duesPaidInThisMonth','suggestions')
         for row in rows:
             row_num += 1
             for col_num in range(len(row)):
