@@ -10,6 +10,7 @@
     <li><a href="{% url 'main_aboutUs' %}" id="mobile-aboutUs" class="black-text">ABOUT US</a></li>
     <li><a href="{% url 'main_council' %}" id="mobile-council" class="black-text">COUNCIL</a></li>
     <li><a href="{% url 'main_whatWeDo' %}" id="mobile-whatWeDo" class="black-text">WHAT WE DO</a></li>
+    <li><a href="{% url 'main_resources' %}" id="mobile-resources" class="black-text">RESOURCES</a></li>
     {% if user.is_authenticated %}
         {% if user.loginType == '0' %}
             {% if DRole == '4' %}
@@ -45,6 +46,7 @@
             <li><a href="{% url 'main_aboutUs' %}" id="desktop-aboutUs" class="black-text">ABOUT US</a></li>
             <li><a href="{% url 'main_council' %}" id="desktop-council" class="black-text">COUNCIL</a></li>
             <li><a href="{% url 'main_whatWeDo' %}" id="desktop-whatWeDo" class="black-text">WHAT WE DO</a></li>
+            <li><a href="{% url 'main_resources' %}" id="desktop-resources" class="black-text">RESOURCES</a></li>
             {% if user.is_authenticated %}
             {% if user.loginType == '0' %}
                 {% if DRole == '4' %}

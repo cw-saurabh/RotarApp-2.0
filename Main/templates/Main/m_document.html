@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">  
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rotaract</title>
+        <link rel="icon" href="{% static 'Main/images/district_logo.png' %}" type="image/icon type">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    </head>
+    <body>
+        <!-- <iframe id="iframepdf" src="{% static 'Main/images/council/shraddha.jpg' %}" style="height:100vh;width:100%"></iframe> -->
+        {% if document == "0" %}
+        <object data="{% static 'Main/resources/District Directory RIY 2020-21.pdf' %}" type="application/pdf" style="height:100vh;width:100%;">
+            <embed src="{% static 'Main/resources/District Directory RIY 2020-21.pdf' %}" type="application/pdf" style="height:100vh;width:100%" />
+        </object>
+        {% elif document == "1" %}
+        <object data="{% static 'Main/resources/Rotaract Handbook .pdf' %}" type="application/pdf" style="height:100vh;width:100%;">
+            <embed src="{% static 'Main/resources/Rotaract Handbook .pdf' %}" type="application/pdf" style="height:100vh;width:100%" />
+        </object>
+        {% elif document == "2" %}
+        <object data="{% static 'Main/resources/Rotaract Standard Constitution.pdf' %}" type="application/pdf" style="height:100vh;width:100%;">
+            <embed src="{% static 'Main/resources/Rotaract Standard Constitution.pdf' %}" type="application/pdf" style="height:100vh;width:100%" />
+        </object>
+        {% elif document == "3" %}
+        <object data="{% static 'Main/resources/Bylaws of Rotary International.pdf' %}" type="application/pdf" style="height:100vh;width:100%;">
+            <embed src="{% static 'Main/resources/Bylaws of Rotary International.pdf' %}" type="application/pdf" style="height:100vh;width:100%" />
+        </object>
+        {% elif document == "4" %}
+        <object data="{% static 'Main/resources/Constitution of Rotary International.pdf' %}" type="application/pdf" style="height:100vh;width:100%;">
+            <embed src="{% static 'Main/resources/Constitution of Rotary International.pdf' %}" type="application/pdf" style="height:100vh;width:100%" />
+        </object>
+        {% elif document == "5" %}
+        <object data="{% static 'Main/resources/Rotary Code of Policies.pdf' %}" type="application/pdf" style="height:100vh;width:100%;">
+            <embed src="{% static 'Main/resources/Rotary Code of Policies.pdf' %}" type="application/pdf" style="height:100vh;width:100%" />
+        </object>
+        
+        {% endif %}
+    </body>
+</html>

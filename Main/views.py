@@ -38,3 +38,17 @@ def whatWeDo(request):
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
     return render(request, 'Main/m_whatWeDo.html',{'Tab':'whatWeDo','DRole':dRole})
+
+def resources(request):
+    dRole = None
+    if request.user.is_authenticated :
+        dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
+        dRole = dRole.districtRole.distRoleId if dRole!=None else None
+    return render(request, 'Main/m_resources.html',{'Tab':'resources','DRole':dRole,'document':document})
+
+def document(request,document):
+    dRole = None
+    if request.user.is_authenticated :
+        dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
+        dRole = dRole.districtRole.distRoleId if dRole!=None else None
+    return render(request, 'Main/m_document.html',{'DRole':dRole,'document':document})

@@ -14,7 +14,7 @@ class AccountAdmin(UserAdmin):
     'password1', 'password2'), 'classes': ('wide',)}),)
     form = AccountChangeForm
     model = Account
-    list_display = ['username','password','loginType']
+    list_display = ['username','email','password','loginType']
     exclude = ('first_name','last_name')
     fieldsets = (
         ('Personal info', {'fields': ('username','password','loginType','email')}),
