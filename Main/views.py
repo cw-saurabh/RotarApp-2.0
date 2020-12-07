@@ -25,6 +25,13 @@ def aboutUs(request):
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
     return render(request, 'Main/m_aboutUs.html',{'Tab':'aboutUs','DRole':dRole})
 
+def eRyla(request):
+    dRole = None
+    if request.user.is_authenticated :
+        dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
+        dRole = dRole.districtRole.distRoleId if dRole!=None else None
+    return render(request, 'Main/m_eRyla.html',{'Tab':'aboutUs','DRole':dRole})
+
 def council(request):
     dRole = None
     if request.user.is_authenticated :
