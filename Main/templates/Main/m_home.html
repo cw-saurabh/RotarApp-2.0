@@ -120,3 +120,14 @@
 
 
 {% endblock content%}
+
+{% block javascript %}
+
+<script>
+    var mq = window.matchMedia( "(max-width: 1000px)" );
+    if (mq.matches) {
+      $('.row').removeClass('flex');
+    }
+</script>
+
+{% endblock %}

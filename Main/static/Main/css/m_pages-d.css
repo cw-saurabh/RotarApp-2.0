@@ -344,3 +344,13 @@ nav, .nav-wrapper, .nav-wrapper a {
 }
 
 
+
+
+#imageLoader{
+  background-image: url("{% static 'Main/images/landing2.jpg' %}");
+  background-position:center center;
+  background-repeat:no-repeat;
+  background-clip:content-box;
+}
+
+
