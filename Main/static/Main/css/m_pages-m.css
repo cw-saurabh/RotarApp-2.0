@@ -5,6 +5,17 @@
   .sidenav-trigger {
     margin-left: 0.01rem !important;
   }
+
+
+  .slides{
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+    background-color: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));
+  }
+
+
   .sidenav a.active {
     color: white !important;
     font-size: 1.1rem !important;
