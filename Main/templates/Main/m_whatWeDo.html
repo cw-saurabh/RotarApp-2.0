@@ -2,83 +2,136 @@
 
 {% load static %}
 {% block content %}
-<style>
-    #events .container {
-        width:95%;padding-top:2%;
-    }
-    .instagram-media {
-        max-width:100% !important;width:100% !important;min-width:100% !important;
-    }
-    hr {
-        width:85%;border-width: 1px;border-color: black;background-color: black;margin-bottom:5%;margin-top:5%;
-    }
-    .eventName {
-        line-height: 3rem; padding-bottom: 10px;
-    }
-    .eventCategory {
-        padding-bottom: 10px;color:#3897f0;
-    }
-    @media screen and (max-width: 1000px) {
-        hr {
-            width:40%;
-            margin-top:10%;
-            margin-bottom:10%;
-        }
-        h4 {
-            font-size: 2.3em;
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;"><b>Yugarambh</b></h4>
+        <br>
+        <p>They say, "In every end, there is also a beginning."
+            <br>We say, "There is nothing such as an end or a beginning, everything is in the form or an endless circle, things just pass from one form to another."
+            <br>Yugarambh was a remarkable event occasion wherein the charge was passed from the hands of the outgoing council into the hands of the incoming council. Yugarambh was beautifully organized on the 28th of June, 2020 by the Incoming Council, pioneered by DRR Rtr Shraddha Lamkhede. 
+            <br>With the fulfillment of the tenure of our very own IPDRR Rtr Akshay More we hade DRR Rtr Shraddha Lamkhede stepping up as the DRR of RID 3131, on one side we were bidding farewell to a phenomenal council of RIY 2019 - 20 at the same time on the other side we had the enthusiastic council of RIY 2020 - 21 joining in.
             
-        }
-        .instagram-media {
-            margin-top:15% !important;
-        }
-        .eventInformation {
-            padding:0%;
-            margin:0%;
-        }
-    }
-    @media screen and (min-width: 1000px) {
-        .eventInformation {
-            padding-right:6% !important;
-        }
-        
-    }
-</style>
-<section class="section" id="events">
-    <div class="container">
-    {% for event in events %}
-        {% if event.eventVisibility %}
-            <div class="row flex">
-                <div class="col s12 l9 m12 eventInformation">
-                    <h4 class="eventName"><b>{{event.eventName}}</b></h4>
-                    <h6 class="eventCategory">A {{event.get_eventCategory_display}} Project</h6>
-                    <p class="eventDescription">
-                        {{event.eventDescription |safe}}
-                    </p>
-                </div>
-                <div class="col s12 l3 m12">
-                    <div>
-                        {{event.eventInstagramPost |safe}}
-                    </div>
-                </div>
-            </div>
-            {% ifnotequal forloop.counter events.count %}
-                <hr>
-            {% endifnotequal %}
-        {% endif %}
-    {% endfor %}
-    </div>
-</section>
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;"><b>STAR : SET TO AUGMENT RESULT</b></h4>
+        <br>
+        <p>
+            STAR: Set to Augment Reality was our very first event as the "District Executive Council," to be honest all of us were a bit nervous after the announcement of STAR, it was during this event when we as the "District Executive Council," were to be trained to lead a set of more than two thousand Rotaractors of our glorious 3131. 
+            <br>We still remember it was three days to STAR  when we got a message from the core to ace this event like a pro, as it was our first event, that message made us a bit more nervous. 
+            <br>This very event marked the beginning of our tenure as council members, we learned a lot in this event, from the minutest detail about the history of Rotary and Rotaract to various important things such as various procedures and protocols. 
+            <br>Now that most of you have experienced at least one district event, you must be aware of the fact that 3131 works as hard as possible during our working hours but when it comes to chilling and bonding no other organization is even near to us, during STAR the bond that we made with other council members was the strongest bond you can ever witness in any professional organization.
+            
+            
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;"><b>KEY : KEEP ENHANCING YOURSELF</b></h4>
+        <br>
+        <p>
+            Under the standing committee Professional Development, we wanted to give Rotaractors something that would add to their CV and help them build a career.
+            <br>It is with this thought in mind that we came up with a novel District PD initiative - K.E.Y. ,i.e. Keep Enhancing Yourself.
+            <br>The world has various opportunities to offer all we have to do is find the Key to it!
+            <br>District 3131 this year shall attempt to bring variously modules across various disciplines under this initiative and enable Rotaractors to unlock opportunities!
+            <br>We have already launched our Module 1- Lingua Franca under which we are bringing foreign language courses at a low price. We already have started with 2 chapters of our Module 1 of Lingua France, under which, we have our French and German classes running in full momentum.
+
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;"><b>Ambulance Donation</b></h4>
+        <br>
+        <p>
+            It is a big responsibility for the District Community Director. We have dreamed to see the RID 3131's Ambulance serving the needy ones. We will be donating Ambulance to the hospitals located in Pune with the help of all our Rotaractors and clubs of RID 3131. In this pandemic situation, it's really necessary for our community to have prompt medical services. As responsible citizens of this country, we are coming forward to help society and do our duty. We are expecting support from everyone to fulfill this cause.
+            <br>I am sure this initiative will definitely make a mark globally. We believe in the principle, "Fake it till you make it" and will work as One team with Once Dream to make this project successful.
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;"><b>Ganpati Bappa Morya</b></h4>
+        <br>
+        <p>
+            In these 11 days of Ganpati Festival our District PRO's conducted an event to celebrate this festival as one team even during this pandemic.
+            <br>All our rotaractors were asked to click pictures of themselves while celebrating this festival and put up the same on their stories and tag our district account. A video having all these pictures was put up on YouTube as well. 
+            <br>This was an initiative to celebrate this festival as a team and stay connected during this pandemic.
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;"><b>Our visit to the Shrimant Bhausaheb Rangari Trust</b></h4>
+        <br>
+        <p>
+            During this Ganpati Festival, we did not let this pandemic stop us. 
+            <br>We as an unified organization visited and presented a citation to "Shrimant Bhausaheb Rangari Trust", (India's first Sarvajanik Ganesha) for their exemplary performance in the field of Ganesha Celebration and social work during this pandemic. We were also gifted a replica of the idol as a token of their love. This event also marked the beginning of Public Image in our district.
+
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;">
+            <b>E-District Fellowship Meet</b>
+        </h4>
+        <br>
+        <p>
+            Every year we organize a fellowship meeting for all the Rotaractors of our District to meet and bind together. We include various activities for all the participants so that through these activities they bond with each other and develop a lifelong connection with each other. 
+            <br>Due to the ongoing pandemic, this year we had to organize our annual District Fellowship Meeting (DFM) virtually with the help of the ZOOM platform, thus calling it E - District Fellowship Meeting (EDFM)
+            <br>EDFM was phenomenally organized by the Rotaract Club of Pune Camp Pioneers and the Rotaract Club of Indira College on the 14th, 15th, and the 16th of August, 2020. As the first District event, EDFM was a blockbuster that shattered all the records and aced the opportunity.
+            <br>The overall theme for EDFM was Rise Through Rotaract (abbreviated as RTR) which explains the overall motive of our Rotaract Movement.
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;">
+            <b>A.C.T.I.O.N</b>
+        </h4>
+        <br>
+        <p>
+            The first Rotaract District 3131 PAO Project- A.C.T.I.O.N: Active Congregation of Talented, Innovative & Organised Networks, A Masterclass on Entrepreneurship has been successfully running for two months has set the motive to infuse the ability and readiness to develop, organize & run an enterprise through innovative ideas and strategies through Rotaractors. It has always given importance to research, the pursuit of knowledge dissemination, and practical thinking, which continues to be the lynchpin of its legacy. The initiative has been attracting participants across Intra-District as well as Inter-District over the globe namely Nepal, Sri Lanka, Bhutan, United Kingdom, Canada, and many more. The sessions
+            have been graced by renowned trainers Rtn Pradeep Wagh, Mr.Santosh Sali, Rtn Surendra Patwardhan, Rtn Dr Kamaljeet Kaur, and many more. With the intension of diffusing the feeling of “I AM AN OWNER” through the time of Pandemic, we are glad to share that the team has received an affirmative reply for a funding opportunity for the Best Business Plans from Solanki Group of Companies based in Canada through the initiative “INDIA-Rotaract-Startup-Funding Program”. We are delighted to create such suitable conditions needed for a dynamic professional world through this masterclass that is conducted every Second Sunday over virtual space and facilitate Rotapreneurs to make their dream come true.
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;">
+            <b>BINOD</b>
+        </h4>
+        <br>
+        <p>
+            A platform created by the Club Service Directors for Rotaract District 3131 and 3170 to come together with their District Council members and Club Service Directors.
+            <br>The idea was to get to know each other and establish a bond stronger than we already had. It was a difficult task to do it online but then Club Service Directors of RID3131 made it possible with all their innovative and fun ideas. We started with general games like Caption This, Baby Words, and Tongue Twisters where around 90 Rotaracts participated from both the districts. It became more fun when we started nominating each other for tongue twisters. After that, we randomly divided everyone into smaller groups where Council members were divided into two groups and asked to act out an advertisement. While the CSDs were divided into smaller groups where they got to interact with each other and get to know how differently they function.
+            <br>Once the breakout rooms were dissolved into one single room the Council members presented the funniest ways to sell a product. The event was concluded with a rapid-fire round with Core council members of both the districts where they had to imagine being in weird situations. And then a Review and congratulatory note from both District's side for the organizing team.
+    </div>    
+</div>
+<hr style="width:50%;text-align:center;height :1px ;background-color:black">
+<div class="row flex container"> 
+    <div class="col l12 m12">
+        <br>
+        <h4 class="center-align" style="letter-spacing: 0.3rem;line-height: 3rem;">
+            <b>ANVISHIKI : Rotary-Rotaract Youth Leadership Awards</b>
+        </h4>
+        <br>
+        <p>
+            Innovation distinguishes between a leader and a follower. With that being said, Rotary-Rotaract District 3131 organized the E- Rotary-Rotaract Youth Leadership Awards on the 4th, 5th and, the 6th of September, 2020. ANVISHIKI was a three-day event, filled with phenomenal activities and beautiful sessions from various experienced speakers that turned out to be very nice and fruitful.
+    </div>    
+</div>
+
 {% endblock content%}
-
-{% block javascript %}
-
-<script>
-    var mq = window.matchMedia("(max-width: 1000px)");
-    if (mq.matches) {
-        $('.row').removeClass('flex');
-        $('h4').addClass("center-align");
-        $('h6').addClass("center-align");
-    }
-</script>
-
-{% endblock %}
