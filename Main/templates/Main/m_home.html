@@ -1,193 +1,162 @@
-{% extends "Main/m_base.html" %}
-
-{% load static %}
-
+{% extends "Main/m_base.html" %} 
+{% load static %} 
 {% block content %}
-
-
-
-<section id ="home" class = "col-sm-12 col-md-12">
-<div class="slider">
-    <ul class="slides">
-        <li>
-            <img src="{% static 'Main/images/landing2.jpg' %}"> <!-- random image -->
-            <div class="caption center-align">
-                <h2>Rotaract District 3131</h2>
-                <br>
-                <h5 class="light grey-text text-lighten-3">Excelling and growing through opportunities</h5>
-            </div>
-        </li>
-        <li>
-            <img src="{% static 'Main/images/1.jpeg' %}" > <!-- random image -->
-            {% comment %} <div class="caption center-align">
-                <h2>Rotaract District 3131</h2>
-                <br>
-                <h5 class="light grey-text text-lighten-3">Excelling and growing through opportunities</h5>
-            </div> {% endcomment %}
-        </li>
-        <li>
-            <img src="{% static 'Main/images/2.jpeg' %}" > <!-- random image -->
-            {% comment %} <div class="caption center-align">
-                <h2>Rotaract District 3131</h2>
-                <br>
-                <h5 class="light grey-text text-lighten-3">Excelling and growing through opportunities</h5>
-            </div> {% endcomment %}
-        </li>
-        <li>
-            <img src="{% static 'Main/images/3.jpeg' %}" > <!-- random image -->
-            {% comment %} <div class="caption center-align">
-                <h2>Rotaract District 3131</h2>
-                <br>
-                <h5 class="light grey-text text-lighten-3">Excelling and growing through opportunities</h5>
-            </div> {% endcomment %}
-        </li>
-        <li>
-            <img src="{% static 'Main/images/4.jpeg' %}" > <!-- random image -->
-            {% comment %} <div class="caption center-align">
-                <h2>Rotaract District 3131</h2>
-                <br>
-                <h5 class="light grey-text text-lighten-3">Excelling and growing through opportunities</h5>
-            </div> {% endcomment %}
-        </li>
-        <li>
-            <img src="{% static 'Main/images/5.jpeg' %}" > <!-- random image -->
-            {% comment %} <div class="caption center-align">
-                <h2>Rotaract District 3131</h2>
-                <br>
-                <h5 class="light grey-text text-lighten-3">Excelling and growing through opportunities</h5>
-            </div> {% endcomment %}
-        </li>
-        <li>
-            <img src="{% static 'Main/images/6.jpeg' %}"> <!-- random image -->
-            {% comment %} <div class="caption center-align">
-                <h2>Rotaract District 3131</h2>
-                <br>
-                <h5 class="light grey-text text-lighten-3">Excelling and growing through opportunities</h5>
-            </div> {% endcomment %}
-        </li>
-        <!-- <li>
-        <img src="{% static 'Main/images/landing2.jpg' %}"> 
-        <div class="caption center-align">
-            <h3>Community Service</h3>
-            <h5 class="light grey-text text-lighten-3">along with Professional Development</h5>
-        </div>
-        </li> -->
-    </ul>
-</div>
-</section>
-
-<section id="hero">
-    <div class="hero-container">
-      <div id="heroCarousel" class="carousel slide carousel-fade" data-ride="carousel">
-
-        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
-
-        <div class="carousel-inner" role="listbox">
-
-          <!-- Slide 1 -->
-          <div class="carousel-item active" style="background-image: url(`{% static 'Main/images/1.jpeg'%}`);">
-            <div class="carousel-container">
-              <div class="carousel-content container">
-                <h2 class="animated fadeInDown">Welcome to <span>Insignia</span></h2>
-                <p class="animated fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-                <a href="#about" class="btn-get-started animated fadeInUp scrollto">Read More</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 2 -->
-          <div class="carousel-item" style="background-image: url({% static 'Main/images/landing2.jpg' %});">
-            <div class="carousel-container">
-              <div class="carousel-content container">
-                <h2 class="animated fadeInDown">Lorem Ipsum Dolor</h2>
-                <p class="animated fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-                <a href="#about" class="btn-get-started animated fadeInUp scrollto">Read More</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 3 -->
-          <div class="carousel-item" style="background-image: url({% static 'Main/images/landing2.jpg' %});">
-            <div class="carousel-container">
-              <div class="carousel-content container">
-                <h2 class="animated fadeInDown">Sequi ea ut et est quaerat</h2>
-                <p class="animated fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-                <a href="#about" class="btn-get-started animated fadeInUp scrollto">Read More</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon icofont-rounded-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
-          <span class="carousel-control-next-icon icofont-rounded-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-        <br>
-      </div>
+<style>
+    @media screen and (max-width: 1000px) {
+        h3 {
+            font-size: 2em;
+        }
+    }
+</style>
+<section id="home">
+    <div class="slider">
+        <ul class="slides">
+            <li>
+                <img src="{% static 'Main/images/1.jpeg' %}">
+            </li>
+            <li>
+                <img src="{% static 'Main/images/2.jpeg' %}">
+            </li>
+            <li>
+                <img src="{% static 'Main/images/3.jpeg' %}">
+            </li>
+            <li>
+                <img src="{% static 'Main/images/4.jpeg' %}">
+            </li>
+            <li>
+                <img src="{% static 'Main/images/5.jpeg' %}">
+            </li>
+            <li>
+                <img src="{% static 'Main/images/6.jpeg' %}">
+            </li>
+        </ul>
     </div>
-  </section>
-
+</section>
 <div id="aboutUs">
     <section class="section">
-    <div class="container">
-        <div class="row flex">
-            <div class="col l3 s12 card-wrapper">
-                <div class="card z-depth-3" style="background-color: #D41367; padding: 10">
-                    <h5 class="center-align white-text card-header">
-                        Clubs
-                    </h5>
-                    <hr>
-                    <h1 class="white-text center-align card-number">91</h1>
+        <div class="container">
+            <h3 class="center-align" class="section-header"><b>ABOUT ROTARACT 3131</b></h3>
+            <br class="hide-on-med-and-down">
+            <div class="row flex">
+                <div class="col l12 s12 section-text">
+                    <p class="center-align">
+                        Rotaract District 3131 is a non- profit organization striving to bring a change in the world by working in various distinctive standing committees along with Rotary International District 3131. (referred to as RID 3131) It functions directly under the
+                        guidance of Rotary International.
+                        <br><br>Rotaract District 3131 emerged at the beginning of Rotary International Year (abbreviated as RIY) 2008 - 09 when RID 3130 was bifurcated into two separate districts. Upon the formation of the district, the Rotary and Rotaract
+                        organization was given the charge of areas under of Raigad and Pune districts.
+                    </p>
                 </div>
             </div>
-            <div class="col l3 s12 card-wrapper">
-                <div class="card z-depth-3" style="background-color: #D41367;">
-                    <h5 class="center-align white-text card-header">
-                        Rotaractors
-                    </h5>
-                    <hr>
-                    <h1 class="white-text center-align card-number">2153</h1>
+            <div class="row flex">
+                <div class="col l12 s12 valign-wrapper">
+                    <img class="center-align section-image" src="{% static 'Main/images/district_logo.png' %}" alt="Rotaract">
                 </div>
             </div>
-            <div class="col l3 s12 card-wrapper">
-                <div class="card z-depth-3" style="background-color: #D41367;">
-                    <h5 class="center-align white-text card-header">
-                        Projects
-                    </h5>
-                    <hr>
-                    <h1 class="white-text center-align card-number">512</h1>
-                </div>
-            </div>
-            <div class="col l3 s12 card-wrapper">
-                <div class="card z-depth-3" style="background-color: #D41367;">
-                    <h5 class="center-align white-text card-header">
-                        Volunteer Hours
-                    </h5>
-                    <hr>
-                    <h1 class="white-text center-align card-number">2560</h1>
+            <div class="row flex">
+                <div class="col l12 s12 section-text">
+                    <p class="center-align">
+                        Rotaractors belong to an age group of above18 years (no age limit) and primarily work in the standing committees of Professional Development, Club Service, International Services, Community Service, Foundation, and Finance Services. Presently, 80+ Rotaract
+                        clubs are functioning cooperatively in RID 3131.
+                        <br><br>Rotaractors believe in relishing the work in which they invest their time. We Rotaractors of RID 3131 want to contribute to this world and make it a sustainable place to live for the upcoming generations.
+                        <br><br>With a phenomenal history in the above-stated avenues and a vast network, we Rotaractors want to make a statement out there through our Rotaract Movement by Excelling and Growing Through Opportunities Together.
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
-
-</section>
-
-
-{% endblock content%}
-
+        <hr style="width:90%;margin-top:5%;" class="numbers">
+        <br>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="row flex">
+                <div class="col l3 s12 card-wrapper">
+                    <div class="card z-depth-3" style="background-color: #D41367; padding: 10">
+                        <h5 class="center-align white-text card-header">
+                            Clubs
+                        </h5>
+                        <hr>
+                        <h1 class="white-text center-align card-number" id="clubsCount">91</h1>
+                    </div>
+                </div>
+                <div class="col l3 s12 card-wrapper">
+                    <div class="card z-depth-3" style="background-color: #D41367;">
+                        <h5 class="center-align white-text card-header">
+                            Rotaractors
+                        </h5>
+                        <hr>
+                        <h1 class="white-text center-align card-number" id="rtrCount">2153</h1>
+                    </div>
+                </div>
+                <div class="col l3 s12 card-wrapper">
+                    <div class="card z-depth-3" style="background-color: #D41367;">
+                        <h5 class="center-align white-text card-header">
+                            Projects
+                        </h5>
+                        <hr>
+                        <h1 class="white-text center-align card-number" id="eventsCount">512</h1>
+                    </div>
+                </div>
+                <div class="col l3 s12 card-wrapper">
+                    <div class="card z-depth-3" style="background-color: #D41367;">
+                        <h5 class="center-align white-text card-header">
+                            Volunteer Hours
+                        </h5>
+                        <hr>
+                        <h1 class="white-text center-align card-number" id="hours">2560</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </section>
+</div>
+{% endblock content%} 
 {% block javascript %}
-
 <script>
-    var mq = window.matchMedia( "(max-width: 1000px)" );
+    var mq = window.matchMedia("(max-width: 1000px)");
     if (mq.matches) {
-      $('.row').removeClass('flex');
+        $('.row').removeClass('flex');
     }
 </script>
+<script>
+$(window).scroll(testScroll);
+var properties = {
+    "clubsCount":false,
+    "eventsCount":false,
+    "hours":false,
+    "rtrCount":false
+};
+var viewed = false;
 
+function isScrolledIntoView(elem) {
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
+function animateNumber(elem) {  
+    $(elem).prop('Counter',0).animate({
+        Counter: $(elem).text()
+    }, {
+        duration: 1000,
+        easing: 'swing',
+        step: function (now) {
+            $(elem).text(Math.ceil(now));
+        }
+    });
+}
+
+function testScroll() {
+    for(let property in properties)
+    {
+        if (isScrolledIntoView($("#"+property)) && !properties[property]) {
+            properties[property] = true;
+            animateNumber($("#"+property));
+        };
+    }
+}
+</script>
 {% endblock %}

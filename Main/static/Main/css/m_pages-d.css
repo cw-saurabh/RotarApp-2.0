@@ -15,12 +15,15 @@ p {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Anton';
-  letter-spacing: 2.5px;
+  font-family: 'Poppins';
 }
 
 main {
   flex: 1 0 auto !important;
+}
+
+.hideAll {
+  visibility: hidden;
 }
 
 .flex {
@@ -149,10 +152,6 @@ nav, .nav-wrapper, .nav-wrapper a {
 #council .divider-section {
   height: 8vh;
   padding: 1%;
-}
-
-#council h1 {
-  font-family: 'Sofia';
 }
 
 #council .carousel {

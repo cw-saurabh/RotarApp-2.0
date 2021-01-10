@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from Auth.models import DistrictCouncil
+from Main.models import WhatWeDo
 
 # Create your views here.
 
@@ -44,7 +45,8 @@ def whatWeDo(request):
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    return render(request, 'Main/m_whatWeDo.html',{'Tab':'whatWeDo','DRole':dRole})
+    events = WhatWeDo.objects.all()
+    return render(request, 'Main/m_whatWeDo.html',{'Tab':'whatWeDo','DRole':dRole,'events':events})
 
 def resources(request):
     dRole = None

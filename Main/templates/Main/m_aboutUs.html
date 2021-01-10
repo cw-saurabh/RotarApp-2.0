@@ -42,7 +42,7 @@
     <br>
 </section>
 
-<section class="section black">
+<!-- <section class="section black">
     <div class="container">
         <h3 class="center-align white-text" class="section-header">ABOUT ROTARACT 3131</h3>
         <hr class="hide-on-med-and-up">
@@ -62,10 +62,10 @@
     </div>
     <br>
     <br>
-</section>
+</section> -->
 <br>
 <br>
- <section class="section">
+{% comment %} <section class="section">
     <div class="container">
         <div class="row flex">
             <div class="col l3 s12 card-wrapper">
@@ -106,18 +106,7 @@
             </div>
         </div>
     </div>
-</section> 
+</section> {% endcomment %}
 <br><br>
 </div>
 {% endblock content%}
-
-{% block javascript %}
-
-<script>
-    var mq = window.matchMedia( "(max-width: 1000px)" );
-    if (mq.matches) {
-      $('.row').removeClass('flex');
-    }
-</script>
-
-{% endblock %}
