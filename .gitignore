@@ -2,4 +2,4 @@
 /.vscode/*
 /venv/*
 /RotarApp/static*
-__pycache__/*
+*.pyc

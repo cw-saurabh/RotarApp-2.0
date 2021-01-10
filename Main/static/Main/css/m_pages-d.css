@@ -352,4 +352,6 @@ nav, .nav-wrapper, .nav-wrapper a {
   background-clip:content-box;
 }
 
-
+.indicators .active {
+    background-color: #D41367 !important;
+}

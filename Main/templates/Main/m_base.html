@@ -2,10 +2,11 @@
 {% load static %}
 <html lang="en">
     <head>
+        <title>Rotaract</title>
+        {% block description %}{% endblock %}
         <meta name="google-site-verification" content="iMTaFl6E5zCIsxlp0ocqGVKPqsKX8585i4pb44LPghE" />
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Rotaract</title>
         <link rel="icon" href="{% static 'Main/images/district_logo.png' %}" type="image/icon type">
 
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -17,7 +18,7 @@
         <link rel="stylesheet" href="{% static 'Main/css/m_pages-m.css' %}">
     </head>
     <main>
-        <body id="body">
+        <body id="body" class="hideAll">
             {% include "Main/m_navbar.html" %}
             {% block content %}{% endblock %}
         </body>

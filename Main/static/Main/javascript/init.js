@@ -25,5 +25,5 @@ $(document).ready(function(){
 });
 
 $(window).on('load', function () {
-    // $("#body").removeClass("hideAll");
+    $("#body").removeClass("hideAll");
 });
