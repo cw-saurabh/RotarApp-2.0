@@ -23,7 +23,7 @@ def has_Access(function):
         admin = Account.objects.get(username='Superuser')
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-        if request.user == admin or request.user == report.reportingClub.login or dRole=='44':
+        if request.user == admin or request.user == report.reportingClub.login or dRole=='6':
             return function(request, *args, **kwargs)
         else:
             return HttpResponseNotFound("Page not found") 
@@ -37,7 +37,7 @@ def is_DSR(function) :
         admin = Account.objects.get(username='Superuser')
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-        if request.user == admin or dRole == '44':
+        if request.user == admin or dRole == '6':
             return function(request, *args, **kwargs)
         else:
             print(dRole)

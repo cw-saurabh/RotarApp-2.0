@@ -19,7 +19,7 @@
             {% if DRole == '4' %}
             <li><a href="{% url 'distReport_a_getMonth' %}"  target="_blank" id="mobile-Tasks" class="black-text">ADMIN</a></li>
                 <li><a href="{% url 'distReport_a_manageAccess' %}" target="_blank"  id="mobile-Access" class="black-text">ACCESS</a></li>
-            {% elif DRole == '44' %}
+            {% elif DRole == '6' %}
             <li><a href="{% url 'secReport_responses' %}"  target="_blank" id="mobile-s_responses" class="black-text">REPORTS</a></li>
                 <li><a href="{% url 'secReport_manageAccess' %}" target="_blank"  id="mobile-s_access" class="black-text">ACCESS</a></li>
             {% endif %}
@@ -57,7 +57,7 @@
                 {% if DRole == '4' %}
                 <li><a href="{% url 'distReport_a_getMonth' %}"  target="_blank" id="desktop-Tasks" class="black-text">ADMIN</a></li>
                     <li><a href="{% url 'distReport_a_manageAccess' %}" target="_blank"  id="desktop-Access" class="black-text">ACCESS</a></li>
-                {% elif DRole == '44' %}
+                {% elif DRole == '6' %}
                 <li><a href="{% url 'secReport_responses' %}"  target="_blank" id="desktop-s_responses" class="black-text">REPORTS</a></li>
                     <li><a href="{% url 'secReport_manageAccess' %}" target="_blank"  id="desktop-s_access" class="black-text">ACCESS</a></li>
                 {% endif %}
