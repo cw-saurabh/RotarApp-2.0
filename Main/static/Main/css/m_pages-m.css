@@ -5,8 +5,12 @@
   .sidenav-trigger {
     margin-left: 0.01rem !important;
   }
-
-
+  html, body {
+  overflow-x: hidden;
+  }
+  body {
+    position: relative
+  }
   .slides{
     background-repeat: no-repeat;
     background-attachment: scroll;

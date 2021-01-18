@@ -3,6 +3,7 @@ body {
   min-height: 100vh !important;
   flex-direction: column !important;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body, p, a {
@@ -23,7 +24,17 @@ main {
 }
 
 .hideAll {
-  visibility: hidden;
+  display:none;
+}
+
+#quote {
+  display: none;
+  margin:5%;
+  color : #D41367;
+  font-weight: bold;
+}
+.spinner-layer {
+  border-color : #D41367 !important;
 }
 
 .flex {

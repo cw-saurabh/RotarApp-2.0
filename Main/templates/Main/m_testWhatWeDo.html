@@ -1,0 +1,78 @@
+{% extends "Main/m_base.html" %}
+
+{% load static %}
+{% block content %}
+<style>
+    #events .container {
+        width:95%;padding-top:2%;
+    }
+    .instagram-media {
+        max-width:100% !important;width:100% !important;min-width:100% !important;
+    }
+    hr {
+        width:85%;border-width: 1px;border-color: black;background-color: black;margin-bottom:5%;margin-top:5%;
+    }
+    .eventName {
+        line-height: 3rem; padding-bottom: 10px;
+    }
+    .eventCategory {
+        padding-bottom: 10px;color:#3897f0;
+    }
+    @media screen and (max-width: 1000px) {
+        hr {
+            width:40%;
+            margin-top:10%;
+            margin-bottom:10%;
+        }
+        h4 {
+            font-size: 2.3em;
+            
+        }
+        .instagram-media {
+            margin-top:15% !important;
+        }
+        .eventInformation {
+            padding:0%;
+            margin:0%;
+        }
+    }
+    @media screen and (min-width: 1000px) {
+        .eventInformation {
+            padding-right:6% !important;
+        }
+        
+    }
+</style>
+<section class="section hideAll" id="events">
+    <div class="container">
+        <div class="row flex">
+            <div class="col s12 l9 m12 eventInformation">
+                <h4 class="eventName"><b>{{event.eventName}}</b></h4>
+                <h6 class="eventCategory">A {{event.get_eventCategory_display}} Project</h6>
+                <p class="eventDescription">
+                    {{event.eventDescription |safe}}
+                </p>
+            </div>
+            <div class="col s12 l3 m12">
+                <div>
+                    {{event.eventInstagramPost |safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% include "Main/m_loader.html" %}
+{% endblock content%}
+
+{% block javascript %}
+
+<script>
+    var mq = window.matchMedia("(max-width: 1000px)");
+    if (mq.matches) {
+        $('.row').removeClass('flex');
+        $('h4').addClass("center-align");
+        $('h6').addClass("center-align");
+    }
+</script>
+
+{% endblock %}

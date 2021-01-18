@@ -26,32 +26,32 @@
             "12" : "December",
     };
     $(document).ready(function(){
-        
+
         $('#reportHeading1').html('<b>Secretarial Reporting : '+monthNames["{{Report.month}}"]+' {{Report.year}}</b>');
-        $("#suggestion00").val(`{{Report.suggestions}}`);
+        $("#suggestion00").val(`{{Report.suggestions|escapejs}}`);
 
         {% for key, value in Report.GBMData.items %}
-            appendGeneralBodyMeeting(`{{value.meetingId}}`,`{{value.meetingNo}}`,`{{value.meetingDate|date:"Y-m-d"}}`,`{{value.meetingAgenda}}`,`{{value.bylawsBoolean}}`,`{{value.budgetBoolean}}`,`{{value.meetingAttendance}}`);
+            appendGeneralBodyMeeting(`{{value.meetingId}}`,`{{value.meetingNo}}`,`{{value.meetingDate|date:"Y-m-d"}}`,`{{value.meetingAgenda|escapejs}}`,`{{value.bylawsBoolean}}`,`{{value.budgetBoolean}}`,`{{value.meetingAttendance}}`);
         {% endfor %}
 
         {% for key, value in Report.BODData.items %}
-            appendBODMeeting(`{{value.meetingId}}`,`{{value.meetingNo}}`,`{{value.meetingDate|date:"Y-m-d"}}`,`{{value.meetingAgenda}}`,`{{value.bylawsBoolean}}`,`{{value.budgetBoolean}}`,`{{value.meetingAttendance}}`);
+            appendBODMeeting(`{{value.meetingId}}`,`{{value.meetingNo}}`,`{{value.meetingDate|date:"Y-m-d"}}`,`{{value.meetingAgenda|escapejs}}`,`{{value.bylawsBoolean}}`,`{{value.budgetBoolean}}`,`{{value.meetingAttendance}}`);
         {% endfor %}
 
         {% for key, value in Report.EventData.items %}
-            appendEvent(`{{value.eventId}}`,`{{value.eventName}}`,`{{value.eventStartDate|date:"Y-m-d"}}`,`{{value.eventEndDate|date:"Y-m-d"}}`,`{{value.eventAvenue}}`,`{{value.eventAttendance}}`,`{{value.eventHours}}`,`{{value.eventFundRaised}}`,`{{value.eventDescription}}`,`{{value.eventLink}}`);
+            appendEvent(`{{value.eventId}}`,`{{value.eventName|escapejs}}`,`{{value.eventStartDate|date:"Y-m-d"}}`,`{{value.eventEndDate|date:"Y-m-d"}}`,`{{value.eventAvenue}}`,`{{value.eventAttendance}}`,`{{value.eventHours}}`,`{{value.eventFundRaised}}`,`{{value.eventDescription|escapejs}}`,`{{value.eventLink|escapejs}}`);
         {% endfor %}
 
         {% for key, value in Report.FEventData.items %}
-            appendFEvent(`{{value.eventId}}`,`{{value.eventName}}`,`{{value.eventStartDate|date:"Y-m-d"}}`,`{{value.eventEndDate|date:"Y-m-d"}}`,`{{value.eventAvenue}}`,`{{value.eventDescription}}`);
+            appendFEvent(`{{value.eventId}}`,`{{value.eventName|escapejs}}`,`{{value.eventStartDate|date:"Y-m-d"}}`,`{{value.eventEndDate|date:"Y-m-d"}}`,`{{value.eventAvenue}}`,`{{value.eventDescription|escapejs}}`);
         {% endfor %}
 
         {% for Question in Report.Questions %}
-            appendFeedback(`{{Question.feedbackQuestion__questionText}}`,`{{Question.feedbackQuestion__id}}`,`{{Question.booleanResponse}}`);
+            appendFeedback(`{{Question.feedbackQuestion__questionText|escapejs}}`,`{{Question.feedbackQuestion__id}}`,`{{Question.booleanResponse}}`);
         {% endfor %}
 
         {% if Report.Bulletin %}
-            appendBulletin(`{{Report.Bulletin.bulletinId}}`,`{{Report.Bulletin.bulletinName}}`,`{{Report.Bulletin.bulletinType}}`,`{{Report.Bulletin.bulletinLink}}`,`{{Report.Bulletin.bulletinIssuedOn|date:"Y-m-d"}}`,`{{Report.Bulletin.lastBulletinIssuedOn|date:"Y-m-d"}}`,`{{Report.Bulletin.bulletinFrequency}}`);
+            appendBulletin(`{{Report.Bulletin.bulletinId}}`,`{{Report.Bulletin.bulletinName|escapejs}}`,`{{Report.Bulletin.bulletinType|escapejs}}`,`{{Report.Bulletin.bulletinLink|escapejs}}`,`{{Report.Bulletin.bulletinIssuedOn|date:"Y-m-d"}}`,`{{Report.Bulletin.lastBulletinIssuedOn|date:"Y-m-d"}}`,`{{Report.Bulletin.bulletinFrequency|escapejs}}`);
         {% else %}
             appendBulletin();
         {% endif %}
