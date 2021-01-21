@@ -45,6 +45,7 @@
 </style>
 <section class="section hideAll" id="events">
     <div class="container">
+    {% for event in events %}
         <div class="row flex">
             <div class="col s12 l9 m12 eventInformation">
                 <h4 class="eventName"><b>{{event.eventName}}</b></h4>
@@ -59,6 +60,10 @@
                 </div>
             </div>
         </div>
+        {% ifnotequal forloop.counter events.count %}
+            <hr>
+        {% endifnotequal %}
+    {% endfor %}
     </div>
 </section>
 {% include "Main/m_loader.html" %}

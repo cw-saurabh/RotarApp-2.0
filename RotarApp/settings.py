@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv('KEY')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['www.rotaractdistrict3131.org']
 

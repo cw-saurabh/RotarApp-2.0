@@ -48,13 +48,13 @@ def whatWeDo(request):
     events = WhatWeDo.objects.all()
     return render(request, 'Main/m_whatWeDo.html',{'Tab':'whatWeDo','DRole':dRole,'events':events})
 
-def testWhatWeDo(request, eventId):
+def testWhatWeDo(request, eventId=-1):
     dRole = None
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    event = WhatWeDo.objects.filter(id=eventId).first()
-    return render(request, 'Main/m_testWhatWeDo.html',{'Tab':'whatWeDo','DRole':dRole,'event':event})
+    events = WhatWeDo.objects.filter(id=eventId).all() if int(eventId)>=0 else WhatWeDo.objects.all()
+    return render(request, 'Main/m_testWhatWeDo.html',{'Tab':'whatWeDo','DRole':dRole,'events':events})
 
 def resources(request):
     dRole = None
