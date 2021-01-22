@@ -14,13 +14,9 @@
     <li>
       <div class="collapsible-header black-text" id="mobile-whatWeDo" >WHAT WE DO</div>
       <div class="collapsible-body">
-            <a href="{% url 'main_whatWeDo' avenue=1 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-ProfessionalDevelopment">Professional Development</a>
-            <a href="{% url 'main_whatWeDo' avenue=2 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-ClubService">Club Service</a>
-            <a href="{% url 'main_whatWeDo' avenue=3 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-InternationalService">International Service</a>
-            <a href="{% url 'main_whatWeDo' avenue=4 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-CommunityService">Community Service</a>
-            <a href="{% url 'main_whatWeDo' avenue=5 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-Foundation">Foundation</a>
-            <a href="{% url 'main_whatWeDo' avenue=6 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-FinancialService">Financial Service</a>
-            <a href="{% url 'main_whatWeDo' avenue=7 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-PublicImage">Public Image</a>
+        {% for key, value in EventNavLinks.items %}
+            <a href="{% url 'main_whatWeDo' avenue=key %}"  style="display:inline-block;" class="black-text col s3 truncate" id="mobile-{{value.SubTab}}">{{value.Title}}</a>
+        {% endfor %}
       </div>
     </li>
     {% comment %} <li><a href="{% url 'main_whatWeDo' %}"  style="display:inline-block;" id="mobile-zone" class="black-text">ZONE</a></li> {% endcomment %}
@@ -46,14 +42,17 @@
         {% endif %}
     
 </ul>
-<div id="dropdown1" class="dropdown-content row" style="min-width:100%;max-height:15rem;padding:2%;white-space:nowrap">
-    <a href="{% url 'main_whatWeDo' avenue=1 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-ProfessionalDevelopment">Professional Development</a>
-    <a href="{% url 'main_whatWeDo' avenue=2 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-ClubService">Club Service</a>
-    <a href="{% url 'main_whatWeDo' avenue=3 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-InternationalService">International Service</a>
-    <a href="{% url 'main_whatWeDo' avenue=4 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-CommunityService">Community Service</a>
-    <a href="{% url 'main_whatWeDo' avenue=5 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-Foundation">Foundation</a>
-    <a href="{% url 'main_whatWeDo' avenue=6 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-FinancialService">Finacial Service</a>
-    <a href="{% url 'main_whatWeDo' avenue=7 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-PublicImage">Public Image</a>
+<div id="dropdown1" class="dropdown-content" style="min-width:100%;max-height:15rem;padding:2%;white-space:nowrap">
+    <div class="row flex">
+        <div class="col l2 center-align" style="background-color: #d41362;padding:1%;">
+            <h5 class="white-text truncate"><b>Standing<br>Committees</b></h5>
+        </div>
+        <div class="col l10">
+        {% for key, value in EventNavLinks.items %}
+                <a href="{% url 'main_whatWeDo' avenue=key %}"  style="display:inline-block;" class="black-text col s3 truncate" id="desktop-{{value.SubTab}}">{{value.Title}}</a>
+        {% endfor %}
+        </div>
+    </div>
 </div>
 <div class="navbar-fixed">
     <nav class="nav-wrapper white z-depth-2">
@@ -91,10 +90,7 @@
                 {% else %}
                 <li><a href="{% url 'auth_login' %}" id="desktop-login" class="black-text">LOGIN</a></li>
                 {% endif %}
-        
             </ul>
-        
-            
         </div>
     </nav>
 </div>   
