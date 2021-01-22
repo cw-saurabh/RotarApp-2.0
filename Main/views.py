@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from Auth.models import DistrictCouncil
-from Main.models import WhatWeDo
+from Main.models import WhatWeDo, avenues
+from django.http import HttpResponseNotFound
 
 # Create your views here.
 
@@ -40,13 +41,15 @@ def council(request):
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
     return render(request, 'Main/m_council.html',{'Tab':'council','DRole':dRole})
 
-def whatWeDo(request):
+def whatWeDo(request, avenue = "0"):
+    if avenue not in avenues.keys() :
+        return HttpResponseNotFound("Page not found") 
     dRole = None
     if request.user.is_authenticated :
         dRole = DistrictCouncil.objects.filter(accountId = request.user).first()
         dRole = dRole.districtRole.distRoleId if dRole!=None else None
-    events = WhatWeDo.objects.all()
-    return render(request, 'Main/m_whatWeDo.html',{'Tab':'whatWeDo','DRole':dRole,'events':events})
+    events = WhatWeDo.objects.filter(eventCategory=str(avenue)).all()
+    return render(request, 'Main/m_whatWeDo.html',{'Tab':'whatWeDo','SubTab':avenues[str(avenue)].replace(" ",''),'Header':avenues[str(avenue)],'DRole':dRole,'events':events})
 
 def testWhatWeDo(request, eventId=-1):
     dRole = None

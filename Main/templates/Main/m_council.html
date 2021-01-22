@@ -1,16 +1,11 @@
 {% extends "Main/m_base.html" %}
 {% load static %}
 {% block content %}
+{% include "Main/m_headerSection.html" with text="District Exceutive Council" %}
 <div id="council">
-<section class="container" style="min-width:95%;min-height:100vh">
-    <div class="row flex header"> 
-        <div class="col s12">
-            <h1 class="black-text center-align">District Executive Council</h1><h5 class="black-text center-align">RIY 2020</h5>
-        </div>
-    </div>
-    <hr class="center-align" style="width:50%">
+<section class="container" style="min-width:95%;">
      <div class="row flex drr-section hide-on-med-and-down">
-        <div class="col l6 m12 s12 valign-wrapper hide-on-med-and-down">
+        <div class="col l6 m12 s12 valign-wrapper hide-on-med-and-down" style="padding-top:5vh !important;">
             <img class="section-image z-depth-2" src="{% static 'Main/images/council/shraddha.jpg' %}">
             <div class="card z-depth-3">
                 <div class="card-content white-text">
@@ -21,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="col l6 m12 s12 valign-wrapper hide-on-med-and-down">
+        <div class="col l6 m12 s12 valign-wrapper hide-on-med-and-down"  style="padding-top:5vh !important;">
             <img class="section-image z-depth-2" src="{% static 'Main/images/council/drishti.jpg' %}">
             <div class="card z-depth-3">
                 <div class="card-content white-text">

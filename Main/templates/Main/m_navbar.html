@@ -7,12 +7,23 @@
     height: 3.8rem !important;
     }
 </style>
-<ul class="sidenav" id="mobile-demo">
+<ul class="sidenav collapsible" id="mobile-demo">
     <li><a href="{% url 'main_home1' %}" id="mobile-home" class="black-text">HOME</a></li>
     <li><a href="{% url 'main_aboutUs' %}" id="mobile-aboutUs" class="black-text">ABOUT US</a></li>
     <li><a href="{% url 'main_council' %}" id="mobile-council" class="black-text">COUNCIL</a></li>
-    <li><a href="{% url 'main_whatWeDo' %}" id="mobile-whatWeDo" class="black-text">WHAT WE DO</a></li>
-    {% comment %} <li><a href="{% url 'main_whatWeDo' %}" id="mobile-zone" class="black-text">ZONE</a></li> {% endcomment %}
+    <li>
+      <div class="collapsible-header black-text" id="mobile-whatWeDo" >WHAT WE DO</div>
+      <div class="collapsible-body">
+            <a href="{% url 'main_whatWeDo' avenue=1 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-ProfessionalDevelopment">Professional Development</a>
+            <a href="{% url 'main_whatWeDo' avenue=2 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-ClubService">Club Service</a>
+            <a href="{% url 'main_whatWeDo' avenue=3 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-InternationalService">International Service</a>
+            <a href="{% url 'main_whatWeDo' avenue=4 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-CommunityService">Community Service</a>
+            <a href="{% url 'main_whatWeDo' avenue=5 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-Foundation">Foundation</a>
+            <a href="{% url 'main_whatWeDo' avenue=6 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-FinancialService">Financial Service</a>
+            <a href="{% url 'main_whatWeDo' avenue=7 %}"  style="display:inline-block;" class="black-text col s3" id="mobile-PublicImage">Public Image</a>
+      </div>
+    </li>
+    {% comment %} <li><a href="{% url 'main_whatWeDo' %}"  style="display:inline-block;" id="mobile-zone" class="black-text">ZONE</a></li> {% endcomment %}
     <li><a href="{% url 'main_resources' %}" id="mobile-resources" class="black-text">RESOURCES</a></li>
     {% if user.is_authenticated %}
         {% if user.loginType == '0' %}
@@ -35,44 +46,57 @@
         {% endif %}
     
 </ul>
-<div class="navbar-fixed">
-    <nav class="nav-wrapper white z-depth-3">
-        <div class="container white" style="min-width:90%;">
-        <a href="{% url 'main_home1' %}" class="brand-logo">
-            <img src="{% static 'Main/images/Rotaract Logo-min.png' %}" alt="District 3131 - Rotaract" class="img-logo"/>
-        </a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger pink-text text-darken-1">
-            <i class="medium material-icons">menu</i>
-        </a>
-        <ul class="right hide-on-med-and-down">
-            <li><a href="{% url 'main_home1' %}" id="desktop-home" class="black-text">HOME</a></li>
-            <li><a href="{% url 'main_aboutUs' %}" id="desktop-aboutUs" class="black-text">ABOUT US</a></li>
-            <li><a href="{% url 'main_council' %}" id="desktop-council" class="black-text">COUNCIL</a></li>
-            <li><a href="{% url 'main_whatWeDo' %}" id="desktop-whatWeDo" class="black-text">WHAT WE DO</a></li>
-            {% comment %} ./RotarApp-2.0/Main/templates/Main/m_zones.html {% endcomment %}
-            {% comment %} <li><a href="{% url 'main_whatWeDo' %}" id="mobile-zone" class="black-text">ZONE</a></li> {% endcomment %}
-            <li><a href="{% url 'main_resources' %}" id="desktop-resources" class="black-text">RESOURCES</a></li>
-            {% if user.is_authenticated %}
-            {% if user.loginType == '0' %}
-                {% if DRole == '4' %}
-                <li><a href="{% url 'distReport_a_getMonth' %}"  target="_blank" id="desktop-Tasks" class="black-text">ADMIN</a></li>
-                    <li><a href="{% url 'distReport_a_manageAccess' %}" target="_blank"  id="desktop-Access" class="black-text">ACCESS</a></li>
-                {% elif DRole == '6' %}
-                <li><a href="{% url 'secReport_responses' %}"  target="_blank" id="desktop-s_responses" class="black-text">REPORTS</a></li>
-                    <li><a href="{% url 'secReport_manageAccess' %}" target="_blank"  id="desktop-s_access" class="black-text">ACCESS</a></li>
-                {% endif %}
-                {% if DRole != None %}
-                <li><a href="{% url 'distReport_c_index' %}"  target="_blank" id="desktop-Tasks" class="black-text">TASKS</a></li>
-                {% endif %}
-            {% elif user.loginType == '1' %}
-            <li><a href="{% url 'secReport_presentReport1' %}" target="_blank"  id="desktop-Reporting" class="black-text">REPORTING</a></li>
-            {% endif %}
-            <li><a href="{% url 'auth_logout' %}" id="desktop-logout" class="black-text">LOGOUT</a></li>
-            {% else %}
-            <li><a href="{% url 'auth_login' %}" id="desktop-login" class="black-text">LOGIN</a></li>
-            {% endif %}
-    
-        </ul>
-    </nav>
+<div id="dropdown1" class="dropdown-content row" style="min-width:100%;max-height:15rem;padding:2%;white-space:nowrap">
+    <a href="{% url 'main_whatWeDo' avenue=1 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-ProfessionalDevelopment">Professional Development</a>
+    <a href="{% url 'main_whatWeDo' avenue=2 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-ClubService">Club Service</a>
+    <a href="{% url 'main_whatWeDo' avenue=3 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-InternationalService">International Service</a>
+    <a href="{% url 'main_whatWeDo' avenue=4 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-CommunityService">Community Service</a>
+    <a href="{% url 'main_whatWeDo' avenue=5 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-Foundation">Foundation</a>
+    <a href="{% url 'main_whatWeDo' avenue=6 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-FinancialService">Finacial Service</a>
+    <a href="{% url 'main_whatWeDo' avenue=7 %}"  style="display:inline-block;" class="black-text col s3" id="desktop-PublicImage">Public Image</a>
 </div>
+<div class="navbar-fixed">
+    <nav class="nav-wrapper white z-depth-2">
+        <div class="container white" style="min-width:90%;">
+            <a href="{% url 'main_home1' %}" class="brand-logo">
+                <img src="{% static 'Main/images/Rotaract Logo-min.png' %}" alt="District 3131 - Rotaract" class="img-logo"/>
+            </a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger pink-text text-darken-1">
+                <i class="medium material-icons">menu</i>
+            </a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'main_home1' %}" id="desktop-home" class="black-text">HOME</a></li>
+                <li><a href="{% url 'main_aboutUs' %}" id="desktop-aboutUs" class="black-text">ABOUT US</a></li>
+                <li><a href="{% url 'main_council' %}" id="desktop-council" class="black-text">COUNCIL</a></li>
+                <li><a id="desktop-whatWeDo" class="black-text dropdown-trigger" href="#!" data-target="dropdown1">WHAT WE DO<i class="material-icons right" style="margin:0;padding-top:2%">arrow_drop_down</i></a></li>
+                {% comment %} ./RotarApp-2.0/Main/templates/Main/m_zones.html {% endcomment %}
+                {% comment %} <li><a href="{% url 'main_whatWeDo' %}"  style="display:inline-block;" id="mobile-zone" class="black-text">ZONE</a></li> {% endcomment %}
+                <li><a href="{% url 'main_resources' %}" id="desktop-resources" class="black-text">RESOURCES</a></li>
+                {% if user.is_authenticated %}
+                {% if user.loginType == '0' %}
+                    {% if DRole == '4' %}
+                    <li><a href="{% url 'distReport_a_getMonth' %}"  target="_blank" id="desktop-Tasks" class="black-text">ADMIN</a></li>
+                        <li><a href="{% url 'distReport_a_manageAccess' %}" target="_blank"  id="desktop-Access" class="black-text">ACCESS</a></li>
+                    {% elif DRole == '6' %}
+                    <li><a href="{% url 'secReport_responses' %}"  target="_blank" id="desktop-s_responses" class="black-text">REPORTS</a></li>
+                        <li><a href="{% url 'secReport_manageAccess' %}" target="_blank"  id="desktop-s_access" class="black-text">ACCESS</a></li>
+                    {% endif %}
+                    {% if DRole != None %}
+                    <li><a href="{% url 'distReport_c_index' %}"  target="_blank" id="desktop-Tasks" class="black-text">TASKS</a></li>
+                    {% endif %}
+                {% elif user.loginType == '1' %}
+                <li><a href="{% url 'secReport_presentReport1' %}" target="_blank"  id="desktop-Reporting" class="black-text">REPORTING</a></li>
+                {% endif %}
+                <li><a href="{% url 'auth_logout' %}" id="desktop-logout" class="black-text">LOGOUT</a></li>
+                {% else %}
+                <li><a href="{% url 'auth_login' %}" id="desktop-login" class="black-text">LOGIN</a></li>
+                {% endif %}
+        
+            </ul>
+        
+            
+        </div>
+    </nav>
+</div>   
+</script>
       

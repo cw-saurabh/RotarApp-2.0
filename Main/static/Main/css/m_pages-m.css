@@ -11,6 +11,15 @@
   body {
     position: relative;
   }
+  .header-section {
+    min-height: 20vh !important;
+  }
+  .header-section h1, .header-section h2, .header-section h3, .header-section h4, .header-section h5, .header-section h6 {
+    font-size: 8vw !important;
+  }
+  .header-section hr {
+    display: none;
+  }
   .slides {
     background-repeat: no-repeat;
     background-attachment: scroll;
@@ -18,7 +27,13 @@
     background-size: cover;
     background-color: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
   }
-  .sidenav a.active {
+  .sidenav a, .sidenav div.collapsible-header {
+    padding-left: 2rem !important;
+  }
+  .sidenav div.collapsible-body {
+    padding-left: 1rem;
+  }
+  .sidenav a.active, .sidenav div.active {
     color: white !important;
     font-size: 1.1rem !important;
     font-weight: bold !important;

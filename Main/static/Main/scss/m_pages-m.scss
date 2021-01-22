@@ -1,3 +1,4 @@
+@import 'Main/scss/globals';
 @media screen and (max-width: 1000px) {
     
     .container {
@@ -16,6 +17,18 @@
         position: relative
     }
 
+    .header-section {
+        min-height: 20vh !important;
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-size: $m-large !important;
+        }
+
+        hr {
+            display: none;
+        }
+    }
+
     .slides{
         background-repeat: no-repeat;
         background-attachment: scroll;
@@ -25,7 +38,13 @@
     }
 
     .sidenav {
-        a.active {
+        a, div.collapsible-header {
+            padding-left:2rem !important;
+        }
+        div.collapsible-body {
+            padding-left: 1rem;
+        }
+        a.active, div.active {
             color : white !important;
             font-size: 1.1rem !important;
             font-weight: bold !important;
@@ -56,8 +75,7 @@
         }
         .header {
             h1 {
-                font-size :2.5rem; 
-                // font-family: 'Sofia';
+                font-size :2.2rem; 
             }
         }
         

@@ -20,38 +20,32 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 main {
-flex: 1 0 auto !important;
+    flex: 1 0 auto !important;
 }
+
+// Utils
 
 .hideAll {
-  display:none;
-}
-
-#quote {
-  display: none;
-  margin:5%;
-  color : #D41367;
-  font-weight: bold;
-}
-.spinner-layer {
-  border-color : #D41367 !important;
-}
-  
-.flex {
-    display: flex;
-    /* flex-wrap: wrap; */
+    display: none;
 }
 
 .border {
     border:solid !important;
 }
 
-.container {
-    width:90%;
-}
-
 .almost-full-screen {
     min-height:90vh;
+}
+
+.spinner-layer {
+  border-color : #D41367 !important;
+}
+  
+.flex {
+    display: flex;
+}
+.container {
+    width:90%;
 }
 
 .img-logo {
@@ -64,7 +58,6 @@ flex: 1 0 auto !important;
 nav, .nav-wrapper, .nav-wrapper a {
     height: 3.8rem;
 }
-
 
 .nav-wrapper {
     a:hover {
@@ -79,6 +72,19 @@ nav, .nav-wrapper, .nav-wrapper a {
         font-weight: bold !important;
         border-bottom: solid 4px #D41367;
     }
+}
+
+a.pink-text, a.pink-text:hover {
+    color : #D41367 !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+}
+
+#quote {
+    display: none;
+    margin:5%;
+    color : #D41367;
+    font-weight: bold;
 }
 
 #aboutUs {
@@ -136,9 +142,11 @@ nav, .nav-wrapper, .nav-wrapper a {
     }
 
     .drr-section {
+        
         .col{
             padding:5% !important;
         }
+        
         .card {
             background-color: #D41367;
             margin-left:-5rem;
@@ -174,10 +182,6 @@ nav, .nav-wrapper, .nav-wrapper a {
         padding:1%;
     }
     
-    h1 {
-        // font-family: 'Sofia';
-    }
-
     .carousel {
         max-height:20rem;
     }
@@ -197,6 +201,7 @@ nav, .nav-wrapper, .nav-wrapper a {
         margin:auto;
         text-align: center;
     }
+
     .post {
         color : #D41367;
     }
@@ -216,7 +221,22 @@ nav, .nav-wrapper, .nav-wrapper a {
     }
 }
 
-#login {
+.header-section {
+    min-height: 15vh;
+    background-color: #032f55;
+    color:white !important;
+    padding:3%;
+    hr {
+        width:8%;
+        border: solid white 1.5px !important;
+        background-color: white;
+        margin-top:2%;
+        margin-bottom:2%;
+        margin-left:auto;
+        margin-right:auto;
+    }
+}
 
-
+* {
+	outline: none;
 }

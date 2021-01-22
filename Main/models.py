@@ -11,11 +11,21 @@ class FAQ(models.Model):
     def __str__(self):
         return f'{self.question}'
 
+avenues = {
+    "1":"Professional Development",
+    "2":"Club Service",
+    "3":"International Service",
+    "4":"Community Service",
+    "5":"Foundation",
+    "6":"Financial Service",
+    "7":"Public Image",
+}
+
 class WhatWeDo(models.Model):
     eventNo = models.CharField(verbose_name = "Serial Number", max_length = 2, default = "99")
     eventName = models.CharField(verbose_name = "Name", max_length = 50)
     eventDescription = models.TextField(verbose_name = "Event Description")
-    eventCategory = models.CharField(verbose_name = "Avenue", choices = (("1","Professional Development"),("2","Community Service"),("3","International Service")), max_length = 2, default="0")
+    eventCategory = models.CharField(verbose_name = "Avenue", choices = avenues.items(), max_length = 2, default="0")
     eventInstagramPost = models.TextField(verbose_name = "Instagram Post")
     eventVisibility = models.BooleanField(verbose_name = "Status", default = True)
 

@@ -2,6 +2,7 @@
 
 {% load static %}
 {% block content %}
+{% include "Main/m_headerSection.html" with text="About Us" %}
 <div id="aboutUs">
 <section class="section">
     <div class="container">
@@ -20,7 +21,11 @@
         </div>
     </div>
     <br>
-    <hr class="hide-on-med-and-down" style="width:85%;border-width: 1px;border-color: black;background-color: black;">
+    <!-- <hr class="hide-on-med-and-down" style="width:85%;border-width: 1px;border-color: black;background-color: black;"> -->
+    <br>
+    <section class="black valign-wrapper divider-section">
+        <h5 class="white-text center-align" style="margin:auto;min-height:5vh"></h5>
+    </section>
     <br>
     <div class="container">
         <h3 class="center-align section-header">ABOUT ROTARACT</h3>
@@ -38,8 +43,6 @@
             </div>
         </div>
     </div>
-    <br>
-    <br>
 </section>
 
 <!-- <section class="section black">
