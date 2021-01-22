@@ -90,10 +90,9 @@ proud to be a part of it!`
 },
 4 :
 {
-    "Name" : "Rtr. Darpan Jadhav",
+    "Name" : "Rtr. Sanskruti More",
     "Post" : "DZR - Zone 5",
-    "Quote" : `Rising By Lifting Others", is what I'll always strive to stick
-by, as I have been following this since past few years.`
+    "Quote" : `My vision is to always work for betterment of the Rotaract Movement and I believe on a quote that "A winner is a dreamer who never gives up".`
 },
 5 :
 {
@@ -141,9 +140,13 @@ many times I have to.`
 },
 4 :
 {
-    "Name" : "Rtr. Sanskruti More",
+    "Name" : "Rtr. Niharika Chaturvedi",
     "Post" : "AZR - Zone 5",
-    "Quote" : `My vision is to always work for betterment of the Rotaract Movement and I believe on a quote that "A winner is a dreamer who never gives up".`
+    "Quote" : `My motto in Rotaract is to create a
+safe place for everyone to express
+themselves and be able to help in
+building and becoming responsible
+citizens for this country.`
 },
 5 :
 {
@@ -379,37 +382,27 @@ act like a man of thought.`
 },
 6 :
 {
-    "Name" : "Rtr. Niharika Chaturvedi",
-    "Post" : "District Public Relations Officer",
-    "Quote" : `My motto in Rotaract is to create a
-safe place for everyone to express
-themselves and be able to help in
-building and becoming responsible
-citizens for this country.`
-},
-7 :
-{
     "Name" : "Rtr. Vandit Jain",
     "Post" : "District Public Relations Officer",
     "Quote" : `Big or small, make your contribution count because if it can't
 make a change, it ain't worth it`
 },
-8 :
+7 :
 {
     "Name" : "Rtr. Siddhesh Tilekar",
     "Post" : "District Professional Assistance Officer",
     "Quote" : `A Self Sustaining Rotaract District from all
 means to leave life to the fullest!`
 },
-9 :
+8 :
 {
-    "Name" : "Rtr. Chirag Ghadge",
+    "Name" : "Rtr. Chirag Gadge",
     "Post" : "District Professional Assistance Officer",
     "Quote" : `Live, Learn, Laugh that's what
 Rotaract is about, also it will give you
 memories that you can cherish for life!`
 },
-10 :
+9 :
 {
     "Name" : "Rtr. D R Shashank",
     "Post" : "District Professional Assistance Officer",

@@ -8,10 +8,12 @@
     }
     .instagram-media {
         max-width:100% !important;width:100% !important;min-width:100% !important;
+        border-radius: 15px !important;
     }
     iframe.yt {
         max-width:100% !important;width:100% !important;min-width:100% !important;
         height:auto !important;
+        border-radius: 15px;
     }
     hr {
         width:85%;border-width: 1px;border-color: black;background-color: black;margin-bottom:5%;margin-top:5%;
@@ -32,7 +34,7 @@
             font-size: 2.3em;
             
         }
-        .instagram-media {
+        .instagram-media, iframe.yt {
             margin-top:15% !important;
         }
         .eventInformation {
@@ -56,11 +58,12 @@
                     <div class="col s12 l9 m12 eventInformation">
                         <h4 class="eventName"><b>{{event.eventName}}</b></h4>
                         <!-- <h6 class="eventCategory">A {{event.get_eventCategory_display}} Project</h6> -->
+                        <br>
                         <p class="eventDescription">
                             {{event.eventDescription |safe}}
                         </p>
                     </div>
-                    <div class="col s12 l3 m12">
+                    <div class="col s12 l3 m12 valign-wrapper">
                         <div>
                             {{event.eventInstagramPost |safe}}
                         </div>
@@ -72,6 +75,7 @@
                 <section class="black valign-wrapper divider-section">
                     <h5 class="white-text center-align" style="margin:auto;min-height:5vh"></h5>
                 </section>
+                <br><br>
             {% endifnotequal %}
         {% endif %}
     {% endfor %}
