@@ -15,7 +15,7 @@
       <div class="collapsible-header black-text" id="mobile-whatWeDo" >WHAT WE DO</div>
       <div class="collapsible-body">
         {% for key, value in EventNavLinks.items %}
-            <a href="{% url 'main_whatWeDo' avenue=key %}"  style="display:inline-block;" class="black-text col s3 truncate" id="mobile-{{value.SubTab}}">{{value.Title}}</a>
+            <a href="{% url 'main_whatWeDo' avenue=key %}"  style="display:inline-block;" class="black-text col s3" id="mobile-{{value.SubTab}}">{{value.Title}}</a><br>
         {% endfor %}
       </div>
     </li>
