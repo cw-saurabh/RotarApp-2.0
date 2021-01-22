@@ -8,6 +8,22 @@
         margin-left:0.01rem !important;
     }
 
+    html, body {
+        overflow-x: hidden;
+    }
+  
+    body {
+        position: relative
+    }
+
+    .slides{
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center center;
+        background-size: cover;
+        background-color: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5));
+    }
+
     .sidenav {
         a.active {
             color : white !important;
