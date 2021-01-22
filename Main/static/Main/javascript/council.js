@@ -52,7 +52,7 @@ and get inspired from your deeds.`
 {
     "Name" : "Rtr. Pranav Tukshetti",
     "Post" : "District Treasurer",
-    "Quote" : ``
+    "Quote" : `“IN ORDER TO SUCCEED, WE MUST FIRST BELIEVE THAT WE CAN”. <br>Rotaract is an astonishing platform we have, to build our self, to grab the opportunity, to share our ideas & knowledge and to grow in every possible manner.`
 },
 8 : 
 {
@@ -67,7 +67,7 @@ let districtZonalReps = {
     {
     "Name" : "Rtr. Tejal Naik",
     "Post" : "DZR - Zone 1",
-    "Quote" : " "
+    "Quote" : `Rotaract brings you together to exchange your ideas with leaders in the community, develop leadership and professional skills and have fun though service.`
 },
 1 :
 {

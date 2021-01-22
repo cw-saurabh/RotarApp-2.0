@@ -3,7 +3,8 @@ from django.conf import settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.getenv('KEY')
+# SECRET_KEY = os.getenv('KEY')
+SECRET_KEY = "h5l%fev*eb22%3!2wf0e^&57-c^ke5c__5ea8kj-phdabqs)4p"
 
 DEBUG = False
 
