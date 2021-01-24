@@ -14,7 +14,7 @@
     }
   
     body {
-        position: relative
+        position: relative;
     }
 
     .header-section {
@@ -128,4 +128,70 @@
         }
     }
 
+    .zone-drop-down {
+
+        width:100% !important;
+        margin-left:auto !important;
+        margin-right:auto !important;
+        text-align:left;
+
+        .collapsible-header {
+            font-weight: bold;
+            border: solid #d41367;
+            box-shadow: none !important;
+            border-radius: 15px;
+        }
+
+        .collapsible-header:focus, .collapsible-header:hover {
+            background-color: #d41367 !important;
+            border-color: #d41367 !important;
+            color:white;
+        }
+
+        .collapsible-body {
+            padding : 5% 0;
+            li {
+                border-bottom: solid #f1f1f1 1px;
+                font-weight: 500;
+                padding:5%;
+                margin:0 !important;
+            }
+        
+        }
+
+        i {
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    }
+
+    #zones {
+        
+        .row {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+    }
+    #clubInformation {
+
+        border-radius: 15px;
+        max-height:80vh !important;
+        height:80vh !important;
+        
+        #clubName {
+            font-size: 6vw;
+        }
+        
+        #clubLogo {
+            img {
+                margin: 5% auto !important;
+                height: auto;
+                width: 40vw;
+            }
+        }
+    }
+    .modal-content {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
 }

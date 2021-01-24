@@ -1,0 +1,154 @@
+{% extends "Main/m_base.html" %} 
+{% load static %} 
+{% block content %}
+{% autoescape off %}
+{% include "Main/m_headerSection.html" with text="Zones" %}
+<section style="padding:3%" id="zones">
+{% for zonePair in zones %}
+<div class="container center-align">
+  <div class="row">
+    {% for zone in zonePair %}
+    <div class="col s12 m6 l6 center-align">
+      <ul class="collapsible no-shadows no-border zone-drop-down">
+          <li>
+            <div class="collapsible-header center-align">
+              <div class="col s10 left-align">
+                ZONE 0{{zone.0}}
+              </div>
+              <div class="col s2" style="padding:0">
+                <i class="material-icons">arrow_drop_down</i>
+              </div>
+            </div>
+            <div class="collapsible-body no-border">
+              <ul>
+                {% for key, club in zone.1.items %}
+                  <li class="custom-anchor-tag" onclick="loadClubInformation('{{club.clubId}}')">
+                    <div class="row">
+                      <div class="col s10 left-align">
+                        {{key}}
+                      </div>
+                      <div class="col s2" style="padding:0">
+                        <i class="material-icons">keyboard_arrow_right</i>
+                      </div>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>         
+            </div>
+          </li>
+      </ul>                               
+    </div>
+    {% endfor %}
+  </div>
+</div>  
+{% endfor %}
+</section> 
+<div id="clubInformation" class="modal no-border white">
+  <div class="modal-content container">
+    <div id="clubName">
+    </div>
+    <div id="clubLogo" class="center-align">
+    </div>
+    <ul class="collapsible no-shadows no-border expandable">
+      <li id="aboutCollapsible">
+        <div class="collapsible-header row">
+          <div class="col s11" style="padding:0">
+            ABOUT
+          </div>
+          <div class="col s1" style="padding:0">
+            <i class="material-icons">arrow_drop_down</i>
+          </div>
+        </div>
+        <div class="collapsible-body no-border" id="about"></div>
+      </li>
+      <li id="charterDateCollapsible">
+        <div class="collapsible-header row">
+          <div class="col s11" style="padding:0">
+            CHARTER DATE
+          </div>
+          <div class="col s1" style="padding:0">
+            <i class="material-icons">arrow_drop_down</i>
+          </div>
+        </div>
+        <div class="collapsible-body no-border" id="charterDate"></div>
+      </li>
+      <li id="clubIdCollapsible">
+        <div class="collapsible-header row">
+          <div class="col s11" style="padding:0">
+            ROTARY ID
+          </div>
+          <div class="col s1" style="padding:0">
+            <i class="material-icons">arrow_drop_down</i>
+          </div>
+        </div>
+        <div class="collapsible-body no-border" id="clubId"></div>
+      </li>
+    </ul>
+    <br><br>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat red-text">Close</a>
+    </div>
+  </div>
+</div>
+{% endautoescape %}
+{% endblock content%} 
+{% block javascript %}
+
+<script>
+  var clubs = {};
+
+  {% for key, club in clubs.items %}
+    clubs["{{key}}"] = {
+      "clubId":`{{club.clubId}}`,
+      "charterDate":`{{club.charterDate}}`,
+      "clubLogo":`{{club.clubLogo}}`,
+      "clubName":`{{club.clubName}}`,
+      "about": `{{club.about}}`
+  };
+  {% endfor %}
+  
+
+  function loadClubInformation(clubId="214399") {
+    if(clubs[clubId])
+    {
+      if(clubs[clubId]["about"])
+      {
+        $("#about").html(clubs[clubId]["about"]);
+      }
+      else {
+        $("#aboutCollapsible").hide();
+      }
+      if(clubs[clubId]["charterDate"]!="None")
+      {
+        $("#charterDate").html(clubs[clubId]["charterDate"]);
+      }
+      else {
+        $("#charterDateCollapsible").hide();
+      }
+      if(clubs[clubId]["clubId"]!="None")
+      {
+        $("#clubId").html(clubs[clubId]["clubId"]);
+      }
+      else {
+        $("#clubIdCollapsible").hide();
+      }
+      if(clubs[clubId]["clubName"] && clubs[clubId]["clubName"]!="None")
+      {
+        $("#clubName").html(clubs[clubId]["clubName"]);
+      }
+      if(clubs[clubId]["clubLogo"] && clubs[clubId]["clubLogo"]!="None")
+      {
+        $("#clubLogo").html("<img src='/media/"+clubs[clubId]["clubLogo"]+"' alt='Club Logo' class='center-align'>");
+      }
+      
+    }
+    $('#clubInformation').modal('open');
+  }
+</script>
+<script>
+  $(document).ready(function(){
+    loadClubInformation();
+  });
+</script>
+
+{% endblock javascript %}

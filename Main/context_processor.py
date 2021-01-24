@@ -9,5 +9,4 @@ def navbar_processor(request):
                 "Title" : avenues[avenue],
                 "SubTab" : avenues[avenue].replace(" ",'')
             }
-    print(links)
     return {'EventNavLinks': links}

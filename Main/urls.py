@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^whatWeDo/test/(?P<eventId>.+?)/$', views.testWhatWeDo, name='main_testWhatWeDo'),
     path('resources/', views.resources, name = 'main_resources'),
     url(r'^document/(?P<document>.+?)/$', views.document, name='main_document'),
+    path('zones/', views.zone, name = 'main_zones'),
 
        
 ]

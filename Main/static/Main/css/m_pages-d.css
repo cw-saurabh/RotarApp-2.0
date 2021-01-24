@@ -229,3 +229,85 @@ a.pink-text, a.pink-text:hover {
 * {
   outline: none;
 }
+
+.custom-anchor-tag {
+  cursor: pointer;
+}
+
+.zone-drop-down {
+  width: 80% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: left;
+}
+
+.zone-drop-down .collapsible-header {
+  font-weight: bold;
+  border: solid #d41367;
+  box-shadow: none !important;
+  border-radius: 15px;
+}
+
+.zone-drop-down .collapsible-header:focus, .zone-drop-down .collapsible-header:hover {
+  background-color: #d41367 !important;
+  border-color: #d41367 !important;
+  color: white;
+}
+
+.zone-drop-down .collapsible-body li {
+  border-bottom: solid #f1f1f1 1px;
+  font-weight: 500;
+  padding: 3% 0 3% 5%;
+}
+
+.zone-drop-down .collapsible-body li .row {
+  margin: 0 !important;
+}
+
+.no-shadows {
+  box-shadow: none !important;
+}
+
+.no-border {
+  border: none !important;
+}
+
+#clubInformation {
+  width: 90%;
+  height: 80vh !important;
+  max-height: 80vh !important;
+}
+
+#clubInformation #clubName {
+  font-weight: bold;
+  font-size: 2.5vw;
+  color: #D41367;
+  text-align: center;
+}
+
+#clubInformation #clubLogo img {
+  height: auto;
+  width: 10vw;
+}
+
+#clubInformation img {
+  height: 100px;
+}
+
+#clubInformation .collapsible-header {
+  font-weight: 900;
+  border-bottom: solid #032f55 thick;
+  padding-left: 0% !important;
+  padding-right: 0% !important;
+}
+
+#clubInformation .collapsible-header i {
+  float: right;
+  color: #D41367;
+}
+
+#clubInformation .collapsible-body {
+  padding: 0 !important;
+  padding-bottom: 2% !important;
+  text-align: justify;
+}

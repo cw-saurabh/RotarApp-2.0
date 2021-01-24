@@ -19,7 +19,7 @@
         {% endfor %}
       </div>
     </li>
-    {% comment %} <li><a href="{% url 'main_whatWeDo' %}"  style="display:inline-block;" id="mobile-zone" class="black-text">ZONE</a></li> {% endcomment %}
+    <li><a href="{% url 'main_zones' %}"  style="display:inline-block;" id="mobile-zones" class="black-text">ZONES</a></li>
     <li><a href="{% url 'main_resources' %}" id="mobile-resources" class="black-text">RESOURCES</a></li>
     {% if user.is_authenticated %}
         {% if user.loginType == '0' %}
@@ -69,7 +69,7 @@
                 <li><a href="{% url 'main_council' %}" id="desktop-council" class="black-text">COUNCIL</a></li>
                 <li><a id="desktop-whatWeDo" class="black-text dropdown-trigger" href="#!" data-target="dropdown1">WHAT WE DO<i class="material-icons right" style="margin:0;padding-top:2%">arrow_drop_down</i></a></li>
                 {% comment %} ./RotarApp-2.0/Main/templates/Main/m_zones.html {% endcomment %}
-                {% comment %} <li><a href="{% url 'main_whatWeDo' %}"  style="display:inline-block;" id="mobile-zone" class="black-text">ZONE</a></li> {% endcomment %}
+                <li><a href="{% url 'main_zones' %}"  style="display:inline-block;" id="desktop-zones" class="black-text">ZONES</a></li>
                 <li><a href="{% url 'main_resources' %}" id="desktop-resources" class="black-text">RESOURCES</a></li>
                 {% if user.is_authenticated %}
                 {% if user.loginType == '0' %}

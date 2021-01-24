@@ -1,3 +1,5 @@
+@import 'Main/scss/globals';
+
 body {
     display: flex !important;
     min-height: 100vh !important;
@@ -223,7 +225,7 @@ a.pink-text, a.pink-text:hover {
 
 .header-section {
     min-height: 15vh;
-    background-color: #032f55;
+    background-color: #032f55; //#1c54a3;
     color:white !important;
     padding:3%;
     hr {
@@ -239,4 +241,92 @@ a.pink-text, a.pink-text:hover {
 
 * {
 	outline: none;
+}
+
+.custom-anchor-tag {
+    cursor: pointer;
+}
+
+.zone-drop-down {
+    width:80% !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    text-align:left;
+
+    .collapsible-header {
+        font-weight: bold;
+        border: solid #d41367;
+        box-shadow: none !important;
+        border-radius: 15px;
+    }
+
+    .collapsible-header:focus, .collapsible-header:hover {
+        background-color: #d41367 !important;
+        border-color: #d41367 !important;
+        color:white;
+    }
+
+    .collapsible-body {
+        
+        li {
+            border-bottom: solid #f1f1f1 1px;
+            font-weight: 500;
+            padding:3% 0 3% 5%;
+            
+            .row {
+                margin:0 !important;
+            }
+        }
+
+    }
+}
+
+.no-shadows {
+    box-shadow: none!important;
+}
+
+.no-border {
+    border:none !important;
+}
+
+#clubInformation {
+    
+    width:90%;
+    height:80vh !important;
+    max-height:80vh !important;
+
+    #clubName {
+        font-weight: bold;
+        font-size: $d-extraMedium;
+        color:#D41367;
+        text-align: center;
+    }
+
+    #clubLogo {
+        img {
+            height: auto;
+            width: 10vw;
+        }
+    }
+
+    img {
+        height: 100px;
+    }
+
+    .collapsible-header {
+        i {
+            float: right;
+            color:#D41367;
+        }
+        font-weight: 900;
+        border-bottom: solid #032f55 thick;
+        padding-left: 0% !important;
+        padding-right: 0% !important;
+    }
+
+    .collapsible-body {
+        padding:0 !important;
+        padding-bottom: 2% !important;
+        text-align: justify;
+    }
 }

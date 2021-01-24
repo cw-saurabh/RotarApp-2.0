@@ -6,7 +6,33 @@ $(document).ready(function(){
             "constrainWidth" : false,
         }
     );
-    $('.collapsible').collapsible();
+    $('#zones .collapsible').collapsible(
+        {
+            "onOpenStart" : function() {
+                $("#zones .collapsible").collapsible('close');
+            },
+            "accordion" : false
+        }
+    );
+    $('#clubInformation .collapsible').collapsible(
+        {
+            "accordion" : false
+        }
+    );
+    $('.modal').modal(
+        {
+            "preventScrolling":true
+        }
+    );
+    $('#clubInformation.modal').modal(
+        {
+            "preventScrolling":true,
+            "onCloseStart": function() {
+                $("#clubInformation .collapsible").collapsible('close');
+            }
+        }
+    );
+
     var mq = window.matchMedia("(max-width: 1000px)");
     if (mq.matches) {
         $('.slider').slider(
@@ -46,7 +72,6 @@ setTimeout(function(){
     {
         $("#quote").fadeOut();
         setTimeout(function(){$("#quote").html("Be patient ..");$("#quote").fadeIn();},1000);
-        
     }
     else
     {
